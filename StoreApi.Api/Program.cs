@@ -5,6 +5,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using StoreSystem.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
+using StoreSystem.Application;
+using StoreApi.Api.Middleware;
 
 // Load environment variables from .env file
 DotNetEnv.Env.Load();
@@ -13,7 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer(); 
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddApplicationServices(); 
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -55,5 +58,6 @@ app.UseCors("AllowAll");
 
 app.UseAuthentication(); 
 app.UseAuthorization();
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.MapControllers();
 app.Run();

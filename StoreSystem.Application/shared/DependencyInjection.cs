@@ -1,0 +1,24 @@
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using StoreSystem.Application.Common.Behaviors;
+using System.Reflection;
+
+namespace StoreSystem.Application
+{
+    public static class DependencyInjection
+    {
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            services.AddAutoMapper(assembly);
+            services.AddValidatorsFromAssembly(assembly);
+            services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(assembly);
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            });
+            return services;
+        }
+    }
+}
