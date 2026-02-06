@@ -1,7 +1,7 @@
 namespace StoreSystem.Core.enums
 {
-    public enum enDebtType
+    public enum enOrderType
     {
-        partial , NotPaid
+        Sell , Debt
     }
 }
