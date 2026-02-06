@@ -12,6 +12,7 @@ namespace StoreSystem.Core.Entities
     {
         [Key]
         public int Id { get; set; }
+        Public enOrderType OrderType {get;Set;} = enOrderType.Sell;
         public int ClientId { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Total Must be greather than 0")]
         [Column(TypeName = "numeric(18,2)")]
