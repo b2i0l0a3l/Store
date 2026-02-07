@@ -2,7 +2,7 @@ namespace StoreSystem.Core.enums
 {
     public enum ErrorType
     {
-           NotFound,
+        NotFound,
         Validation,
         General
     }

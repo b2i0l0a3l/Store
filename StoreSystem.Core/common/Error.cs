@@ -11,6 +11,7 @@ namespace StoreSystem.Core.common
         public static Error UserNotFoundError { get; } = new("UserNotFound", ErrorType.NotFound, "User Not Found.");
         public static Error EmailAlreadyExistsError { get; } = new("EmailFoundError", ErrorType.General, "Email already exists.");
         public static Error DataNotFoundError { get; } = new("NoRecordFound", ErrorType.General, "No Record Found.");
+        public static Error InvalidCredError { get; } = new("InvalidCredError", ErrorType.General, "Invalid Credintial.");
        
     }
 }

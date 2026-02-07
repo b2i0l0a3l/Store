@@ -16,7 +16,7 @@ namespace StoreSystem.Core.Entities
         public int ClientId { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Total Must be greather than 0")]
         [Column(TypeName = "numeric(18,2)")]
-
+        public enOrderType OrderType { get; set; }
         public decimal Total { get; set; } 
         [ForeignKey("ClientId")]
         public Client? Client { get; set; }

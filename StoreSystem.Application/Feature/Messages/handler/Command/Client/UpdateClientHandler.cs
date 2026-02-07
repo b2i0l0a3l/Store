@@ -21,7 +21,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result<bool>> Handle(UpdateClientRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.Update(request.Id, c =>
+            Result<bool> result = await _Repo.Update(request.Id, c =>
             {
                 c.Name = request.Name;
                 c.PhoneNumber = request.PhoneNumber;
