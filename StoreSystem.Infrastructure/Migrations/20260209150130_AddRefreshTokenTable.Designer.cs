@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StoreSystem.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using StoreSystem.Infrastructure.Persistence;
 namespace StoreSystem.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260209150130_AddRefreshTokenTable")]
+    partial class AddRefreshTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,20 +250,11 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("OrderStatus")
-                        .HasColumnType("integer");
-
                     b.Property<int>("OrderType")
                         .HasColumnType("integer");
 
                     b.Property<decimal>("Total")
                         .HasColumnType("numeric(18,2)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -277,24 +271,13 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(18,2)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -346,9 +329,6 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("numeric(18,2)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -597,19 +577,11 @@ namespace StoreSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("StoreSystem.Core.Entities.OrderItem", b =>
                 {
-                    b.HasOne("StoreSystem.Core.Entities.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("StoreSystem.Core.Entities.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Order");
 
                     b.Navigation("Product");
                 });

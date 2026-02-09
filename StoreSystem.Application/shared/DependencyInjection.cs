@@ -14,6 +14,7 @@ namespace StoreSystem.Application
         {
             var assembly = Assembly.GetExecutingAssembly();
             services.AddScoped<IGenerateJwtToken,GenerateJwtToken>();
+            services.AddScoped<IGenerateRefreshToken, GenerateRefreshToken>();
             services.AddAutoMapper(assembly);
             services.AddValidatorsFromAssembly(assembly);
             services.AddMediatR(assembly);

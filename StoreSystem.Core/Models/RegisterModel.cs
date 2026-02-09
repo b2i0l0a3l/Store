@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
-namespace StoreSystem.Core.Entities
+namespace StoreSystem.Core.Models
 {
-    public class User : IdentityUser
+    public class RegisterModel
     {
         [Required]
-        [MaxLength(30)]
-        public string FullName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        [Required]
         public string Role { get; set; } = string.Empty;
-
     }
 }

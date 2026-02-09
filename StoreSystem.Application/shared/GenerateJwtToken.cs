@@ -21,7 +21,7 @@ namespace StoreSystem.Application.shared
                 issuer: _Configuration["JWT:Issuer"]!,
                 audience: _Configuration["JWT:Audience"]!,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);

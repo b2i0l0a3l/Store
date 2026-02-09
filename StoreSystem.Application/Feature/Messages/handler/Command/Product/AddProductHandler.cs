@@ -25,15 +25,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result<ProductModel>> Handle(AddProductRequest request, CancellationToken cancellationToken)
         {
-            var product = new Product
-            {
-                Name = request.Name,
-                Price = request.Price,
-                Cost = request.Cost,
-                CategoryId = request.CategoryId
-            };
-
-            var result = await _Repo.Add(product);
+     
+            var result = await _Repo.Add(_Mapper.Map<Product>(request));
             if (!result.IsSuccess) return result.Error!;
 
             return _Mapper.Map<ProductModel>(result.Value);

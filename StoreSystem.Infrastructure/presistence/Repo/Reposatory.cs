@@ -17,12 +17,10 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
     {
         protected readonly AppDbContext _Context;
         protected DbSet<T> _Set;
-        private ILogger<Repository<T>> _Logger;
-        public Repository(AppDbContext context,ILogger<Repository<T>> logger)
+        public Repository(AppDbContext context)
         {
             _Context = context;
             _Set = _Context.Set<T>();
-            _Logger = logger;
         }
 
         public async Task<Result<T>> Add(T Entity)
@@ -30,12 +28,10 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 await _Set.AddAsync(Entity);
-                await Save();
                 return Entity;
             }
             catch (Exception ex)
             {
-                _Logger.LogError("Error happend While adding Data: {0}", ex.Message);
                 return new Error("AddFailed",ErrorType.General,ex.Message);
             }
         }
@@ -48,11 +44,9 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 var result = await findAsync(Id);
                 if (result == null) return new Error("DeleteFaild",ErrorType.General,"Entity Not Found");;
                 _Set.Remove(result);
-                await Save();
                 return true;
             }catch(Exception ex)
             {
-                _Logger.LogError("Error happend While Deleting Data: {0}", ex.Message);
 
                 return new Error("DeleteFaild",ErrorType.General,ex.Message);
             }
@@ -65,7 +59,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 int TotoalItems = await _Set.CountAsync();
                 if (TotoalItems <= 0) return new Error("GetFaild", ErrorType.General, "Entity Not Found");
                 
-                List<T> items = await _Set
+                List<T> items = await _Set.AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).
                 Take(pageSize).ToListAsync();
                 
@@ -78,7 +72,6 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 };
             }catch(Exception ex)
             {
-                _Logger.LogError("Error happend While Getting All Data : {0}", ex.Message);
                 return new Error("GetFaild",ErrorType.General,ex.Message);
             }
         }
@@ -92,7 +85,6 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 return result;
             }catch(Exception ex)
             {
-                _Logger.LogError("Error happend While Getting Data by Condition : {0}", ex.Message);
                 return new Error("GetFaild",ErrorType.General,ex.Message);
             }
         }
@@ -106,7 +98,6 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 return result;
             }catch(Exception ex)
             {
-                _Logger.LogError("Error happend While Getting Data By Id: {0}", ex.Message);
                 return new Error("GetByIdFaild",ErrorType.General,ex.Message);;
             }
         }
@@ -119,21 +110,19 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 if (result == null) return new Error("UpdateFaild", ErrorType.General, "Entity Not Found"); ;
                 UpdateAction(result);
 
-                await Save();
                 return true;
             }
             catch (Exception ex)
             {
-                _Logger.LogError("Error happend While Updating Data: {0}", ex.Message);
                 return new Error("UpdateFaild", ErrorType.General, ex.Message); ;
             }
         }
       
         private async Task<T?> findAsync(int Id)
         => await _Set.FindAsync(Id);
-        private async Task<int> Save()
+        public async Task<int> Save()
          => await _Context.SaveChangesAsync();
-        
-       
+
+     
     }
 }

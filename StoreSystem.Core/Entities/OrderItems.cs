@@ -9,12 +9,17 @@ namespace StoreSystem.Core.Entities
 {
     public class OrderItem
     {
-        public int Id{ get; set; }
+        public int Id { get; set; }
+        public int OrderId { get; set; }
         public int ProductId { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Price Must be greather than 0")]
         [Column(TypeName = "numeric(18,2)")]
         public decimal Price { get; set; }
+        public int Quantity { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        [ForeignKey("OrderId")]
 
+        public Order? Order { get; set; }
         [ForeignKey("ProductId")]
         public Product? Product { get; set; }
 

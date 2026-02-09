@@ -18,6 +18,9 @@ namespace StoreSystem.Core.Entities
         [Column(TypeName = "numeric(18,2)")]
         public decimal Cost { get; set; }
         [Required]
+        [Range(0,int.MaxValue,ErrorMessage ="Quantity must be greather or equal 0")]
+        public int Quantity { get; set; }
+        [Required]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
         public Category? Category { get; set; }

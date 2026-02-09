@@ -25,15 +25,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result<OrderItemModel>> Handle(AddOrderItemRequest request, CancellationToken cancellationToken)
         {
-            var orderItem = new OrderItem
-            {
-                ProductId = request.ProductId,
-                Price = request.Price
-            };
-
-            var result = await _Repo.Add(orderItem);
+            var result = await _Repo.Add(_Mapper.Map<OrderItem>(request));
             if (!result.IsSuccess) return result.Error!;
-
             return _Mapper.Map<OrderItemModel>(result.Value);
         }
     }

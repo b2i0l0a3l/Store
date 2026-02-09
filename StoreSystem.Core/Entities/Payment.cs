@@ -13,10 +13,6 @@ namespace StoreSystem.Core.Entities
         public int DebtID { get; set; }
         [Column(TypeName = "numeric(18,2)")]
         public decimal Amount { get; set; }
-
-
-        
-
         public Debt? Debt { get; set; }
     }
 }

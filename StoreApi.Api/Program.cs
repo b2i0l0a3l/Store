@@ -1,12 +1,7 @@
-using System.Reflection;
-using StoreSystem.Core.Entities;
-using MediatR;
-using Npgsql.EntityFrameworkCore.PostgreSQL;
-using Microsoft.EntityFrameworkCore;
-using StoreSystem.Infrastructure.Persistence;
-using Microsoft.AspNetCore.Identity;
+
 using StoreSystem.Application;
 using StoreApi.Api.Middleware;
+using StoreSystem.Infrastructure.shared;
 
 // Load environment variables from .env file
 DotNetEnv.Env.Load();
@@ -16,11 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddApplicationServices(); 
+builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 
 builder.Services.AddCors(options =>
@@ -34,13 +28,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddIdentity<User, Microsoft.AspNetCore.Identity.IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
 
 
 
-
+builder.Services.AddInfrastructurServiceRegistration(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

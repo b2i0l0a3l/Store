@@ -15,5 +15,6 @@ namespace StoreSystem.Core.interfaces
         Task<Result<T?>> GetById(int Id);
         Task<Result<T?>> GetByCondition(Expression<Func<T, bool>> exp);
         Task<Result<PagedResult<T>?>> GetAll(int pageNumber, int pageSize);
+        Task<int> Save();
     }
 }

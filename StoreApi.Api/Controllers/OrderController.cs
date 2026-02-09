@@ -4,10 +4,11 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
+using StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Order")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -19,13 +20,15 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAll([FromQuery]GetOrdersRequest req)
         {
-            var result = await _mediator.Send(new GetOrdersRequest());
+            var result = await _mediator.Send(req);
             return Ok(result);
         }
 
         [HttpPost("Add")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Add([FromBody] AddOrderRequest request)
         {
             var result = await _mediator.Send(request);
@@ -35,6 +38,7 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Update([FromBody] UpdateOrderRequest request)
         {
             var result = await _mediator.Send(request);
@@ -44,12 +48,24 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteOrderRequest { Id = id });
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result.Value);
+        }
+
+        [HttpPost("AddOrderWithItems")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddOrderWithItems([FromBody]AddOrderWithItemRequest request)
+        {
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result);
+
         }
     }
 }

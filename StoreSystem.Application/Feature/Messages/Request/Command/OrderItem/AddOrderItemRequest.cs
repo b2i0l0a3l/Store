@@ -10,7 +10,9 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command
 {
     public class AddOrderItemRequest : IRequest<Result<OrderItemModel>>
     {
+        public int OrderId { get; set; }
         public int ProductId { get; set; }
         public decimal Price { get; set; }
+        public int Quantity { get; set; }
     }
 }

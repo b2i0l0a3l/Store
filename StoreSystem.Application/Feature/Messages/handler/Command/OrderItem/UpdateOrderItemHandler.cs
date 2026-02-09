@@ -23,6 +23,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
         {
             var result = await _Repo.Update(request.Id, o =>
             {
+                o.OrderId = request.OrderId;
                 o.ProductId = request.ProductId;
                 o.Price = request.Price;
             });

@@ -16,6 +16,8 @@ namespace StoreSystem.Application.Feature.Messages.Validators.Product
 
             RuleFor(x => x.Cost)
                 .GreaterThanOrEqualTo(0).WithMessage("تكلفة المنتج يجب أن تكون صفر أو أكبر");
+            RuleFor(x => x.Cost)
+                .GreaterThanOrEqualTo(0).WithMessage("كمية المنتج يجب أن تكون أكبر من 0 ");
 
             RuleFor(x => x.CategoryId)
                 .GreaterThan(0).WithMessage("يجب اختيار تصنيف صالح");

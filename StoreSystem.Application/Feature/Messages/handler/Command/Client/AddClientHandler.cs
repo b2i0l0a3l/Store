@@ -24,8 +24,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
         }
 
         public async Task<Result<ClientModel>> Handle(AddClientRequest request, CancellationToken cancellationToken)
-        {   
+        {
             var result = await _Repo.Add(_Mapper.Map<Client>(request));
+            await _Repo.Save();
             if (!result.IsSuccess) return result.Error!;
             return _Mapper.Map<ClientModel>(result.Value);
         }
