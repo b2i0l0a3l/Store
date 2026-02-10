@@ -1,13 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
+using StoreSystem.Application.Feature.Messages.Request.Command.Payment;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Payment")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
@@ -19,10 +20,19 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] GetPaymentsRequest req)
         {
-            var result = await _mediator.Send(new GetPaymentsRequest());
+            var result = await _mediator.Send(req);
             return Ok(result);
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetPaymentByIdRequest { Id = id });
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result.Value);
         }
 
         [HttpPost("Add")]
@@ -50,6 +60,15 @@ namespace StoreApi.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result.Value);
+        }
+
+        [HttpPost("MakePayment")]
+        public async Task<IActionResult> MakePayment([FromBody] MakePaymentRequest request)
+        {
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result);
         }
     }
 }

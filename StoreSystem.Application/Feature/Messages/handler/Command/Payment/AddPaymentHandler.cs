@@ -9,15 +9,16 @@ using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
 using StoreSystem.Core.Models;
+using PaymentEntity = StoreSystem.Core.Entities.Payment;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class AddPaymentHandler : IRequestHandler<AddPaymentRequest, Result<PaymentModel>>
     {
-        private readonly IRepository<Payment> _Repo;
+        private readonly IRepository<PaymentEntity> _Repo;
         private readonly IMapper _Mapper;
 
-        public AddPaymentHandler(IRepository<Payment> Repo, IMapper Mapper)
+        public AddPaymentHandler(IRepository<PaymentEntity> Repo, IMapper Mapper)
         {
             _Repo = Repo;
             _Mapper = Mapper;
@@ -25,7 +26,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result<PaymentModel>> Handle(AddPaymentRequest request, CancellationToken cancellationToken)
         {
-            var payment = new Payment
+            var payment = new PaymentEntity
             {
                 DebtID = request.DebtID,
                 Amount = request.Amount,
@@ -39,3 +40,4 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
         }
     }
 }
+

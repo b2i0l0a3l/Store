@@ -7,7 +7,7 @@ using StoreSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Supplier")]
     [ApiController]
     public class SupplierController : ControllerBase
     {
@@ -19,10 +19,19 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]GetOrderItemsRequest req)
         {
-            var result = await _mediator.Send(new GetSuppliersRequest());
+            var result = await _mediator.Send(req);
             return Ok(result);
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetSupplierByIdRequest { Id = id });
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result.Value);
         }
 
         [HttpPost("Add")]

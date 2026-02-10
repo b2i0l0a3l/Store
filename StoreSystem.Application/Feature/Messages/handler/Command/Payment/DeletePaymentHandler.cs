@@ -7,14 +7,15 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
+using PaymentEntity = StoreSystem.Core.Entities.Payment;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class DeletePaymentHandler : IRequestHandler<DeletePaymentRequest, Result<bool>>
     {
-        private readonly IRepository<Payment> _Repo;
+        private readonly IRepository<PaymentEntity> _Repo;
 
-        public DeletePaymentHandler(IRepository<Payment> Repo)
+        public DeletePaymentHandler(IRepository<PaymentEntity> Repo)
         {
             _Repo = Repo;
         }
@@ -25,3 +26,4 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
         }
     }
 }
+

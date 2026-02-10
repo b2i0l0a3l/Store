@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
+using StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
-using StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem;
 
 namespace StoreApi.Api.Controllers
 {
@@ -25,6 +25,15 @@ namespace StoreApi.Api.Controllers
         {
             var result = await _mediator.Send(req);
             return Ok(result);
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetOrderByIdRequest { Id = id });
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result.Value);
         }
 
         [HttpPost("Add")]
@@ -65,7 +74,7 @@ namespace StoreApi.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result);
-
         }
     }
 }
+

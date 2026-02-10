@@ -21,6 +21,8 @@ namespace StoreSystem.Infrastructure.Persistence
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<RefreshToken> RefreshToken { get; set; }
         public DbSet<SupplierProduct> SupplierProducts { get; set; }
+        public DbSet<Return> Returns { get; set; }
+        public DbSet<ReturnItem> ReturnItems { get; set; }
 
    
     }

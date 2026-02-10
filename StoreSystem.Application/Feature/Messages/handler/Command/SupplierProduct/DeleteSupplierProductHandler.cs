@@ -7,21 +7,23 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
+using SupplierProductEntity = StoreSystem.Core.Entities.SupplierProduct;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class DeleteSupplierProductHandler : IRequestHandler<DeleteSupplierProductRequest, Result<bool>>
     {
-        private readonly IRepository<SupplierProduct> _Repo;
+        private readonly IUniteOfWork _Uow;
 
-        public DeleteSupplierProductHandler(IRepository<SupplierProduct> Repo)
+        public DeleteSupplierProductHandler(IUniteOfWork uow)
         {
-            _Repo = Repo;
+            _Uow = uow;
         }
 
         public async Task<Result<bool>> Handle(DeleteSupplierProductRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.Delete(request.Id);
+            return await _Uow.SupplierProduct.Delete(request.Id);
         }
     }
 }
+

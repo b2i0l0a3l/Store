@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using StoreSystem.Core.common;
 using StoreSystem.Core.enums;
+using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem
 {
@@ -15,10 +16,5 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem
         public enOrderType OrderType { get; set; }
         public required List<OrderItemList> OrderItem { get; set; }
     }
-    public class OrderItemList{
-        public int? OrderId { get; set; }
-        public int ProductId { get; set; }
-        public decimal Price { get; set; }
-        public int Quantity { get; set; }
-    }
+    
 }

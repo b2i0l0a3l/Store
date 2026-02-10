@@ -11,6 +11,9 @@ namespace StoreSystem.Core.Entities
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int SupplierId { get; set; }
+        public int Quantity { get; set; }
+        [Column(TypeName = "numeric(18,2)")]
+        public decimal CostPrice { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("SupplierId")]

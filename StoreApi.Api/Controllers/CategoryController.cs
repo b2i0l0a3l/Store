@@ -7,7 +7,7 @@ using StoreSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Category")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -19,10 +19,19 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery]GetCategoriesRequest req)
         {
-            var result = await _mediator.Send(new GetCategoriesRequest());
+            var result = await _mediator.Send(req);
             return Ok(result);
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await _mediator.Send(new GetCategoryByIdRequest { Id = id });
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result.Value);
         }
 
         [HttpPost("Add")]

@@ -20,7 +20,15 @@ namespace StoreSystem.Infrastructure.presistence.Repo
          private IDbContextTransaction? _transaction;
 
         public IRepository<OrderItem> OrderItem { get; }
-        public UniteOfWork(IRepository<Debt> debt,IRepository<Product> product,IOrderWithItemRepo orderWithItemRepo,AppDbContext context, IRepository<Order> order , IRepository<OrderItem> orderItem)
+
+        public IRepository<Payment> Payment { get; }
+
+        public IRepository<SupplierProduct> SupplierProduct { get; }
+        public IRepository<Return> Return { get; }
+        public IRepository<ReturnItem> ReturnItem { get; }
+        public IRepository<RefreshToken> RefreshTokenRepo { get; }
+
+        public UniteOfWork(AppDbContext context)
         {
             _Context = context;
             Order = new Repository<Order>(_Context);
@@ -28,6 +36,11 @@ namespace StoreSystem.Infrastructure.presistence.Repo
             Product = new Repository<Product>(_Context);
             Debt = new Repository<Debt>(_Context);
             OrderWithItemRepo = new OrderWithItemRepo(_Context);
+            Payment = new Repository<Payment>(_Context); 
+            SupplierProduct = new Repository<SupplierProduct>(_Context);
+            Return = new Repository<Return>(_Context);
+            ReturnItem = new Repository<ReturnItem>(_Context);
+            RefreshTokenRepo = new Repository<RefreshToken>(_Context);
 
         }
 
