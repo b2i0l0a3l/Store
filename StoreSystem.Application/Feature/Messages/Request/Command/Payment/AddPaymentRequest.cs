@@ -8,9 +8,8 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command
 {
-    public class AddPaymentRequest : IRequest<Result<PaymentModel>>
+    public class AddPaymentRequest : IRequest<Result>
     {
-        public int DebtID { get; set; }
-        public decimal Amount { get; set; }
+        public required AddPaymentModel Model { get; set; }
     }
 }

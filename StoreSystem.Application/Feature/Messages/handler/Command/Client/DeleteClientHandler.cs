@@ -21,7 +21,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result<bool>> Handle(DeleteClientRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.Delete(request.Id);
+            var result = await _Repo.Delete(request.Id);
+            return result;
         }
     }
 }

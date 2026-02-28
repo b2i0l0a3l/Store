@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using StoreSystem.Core.common;
+using StoreSystem.Core.enums;
+using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command
 {
-    public class UpdateOrderRequest : IRequest<Result<bool>>
+    public class UpdateOrderRequest : IRequest<Result>
     {
-        public int Id { get; set; }
-        public int ClientId { get; set; }
-        public decimal Total { get; set; }
+        public required UpdateOrderModel Model { get; set; }
     }
 }

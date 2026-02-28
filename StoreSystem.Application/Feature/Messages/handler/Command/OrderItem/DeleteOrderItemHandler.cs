@@ -10,18 +10,19 @@ using StoreSystem.Core.interfaces;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class DeleteOrderItemHandler : IRequestHandler<DeleteOrderItemRequest, Result<bool>>
+    public class DeleteOrderItemHandler : IRequestHandler<DeleteOrderItemRequest, Result>
     {
-        private readonly IRepository<OrderItem> _Repo;
+        private readonly IDeleteOrderItemProcedure _Repo;
 
-        public DeleteOrderItemHandler(IRepository<OrderItem> Repo)
+        public DeleteOrderItemHandler(IDeleteOrderItemProcedure Repo)
         {
             _Repo = Repo;
         }
 
-        public async Task<Result<bool>> Handle(DeleteOrderItemRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(DeleteOrderItemRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.Delete(request.Id);
+            var result = await _Repo.Handle(request.Id);
+            return result;
         }
     }
 }

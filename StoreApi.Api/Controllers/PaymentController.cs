@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
-using StoreSystem.Application.Feature.Messages.Request.Command.Payment;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
@@ -41,7 +40,7 @@ namespace StoreApi.Api.Controllers
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
-            return Ok(result.Value);
+            return Ok(result);
         }
 
         [HttpPut("Update")]
@@ -60,15 +59,6 @@ namespace StoreApi.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result.Value);
-        }
-
-        [HttpPost("MakePayment")]
-        public async Task<IActionResult> MakePayment([FromBody] MakePaymentRequest request)
-        {
-            var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
         }
     }
 }

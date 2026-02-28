@@ -34,14 +34,6 @@ namespace StoreApi.Api.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] AddDebtRequest request)
-        {
-            var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
-        }
 
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] UpdateDebtRequest request)

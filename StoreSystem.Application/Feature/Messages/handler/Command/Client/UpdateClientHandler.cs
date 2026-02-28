@@ -26,7 +26,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 c.Name = request.Name;
                 c.PhoneNumber = request.PhoneNumber;
             });
-
             return result;
         }
     }

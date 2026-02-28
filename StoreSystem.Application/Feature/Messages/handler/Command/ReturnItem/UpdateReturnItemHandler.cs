@@ -12,16 +12,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class UpdateReturnItemHandler : IRequestHandler<UpdateReturnItemRequest, Result<bool>>
     {
-        private readonly IUniteOfWork _Uow;
+        private readonly IRepository<ReturnItem> _Repo;
 
-        public UpdateReturnItemHandler(IUniteOfWork uow)
+        public UpdateReturnItemHandler(IRepository<ReturnItem> repo)
         {
-            _Uow = uow;
+            _Repo = repo;
         }
 
         public async Task<Result<bool>> Handle(UpdateReturnItemRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Uow.ReturnItem.Update(request.Id, ri =>
+            var result = await _Repo.Update(request.Id, ri =>
             {
                 ri.ReturnId = request.ReturnId;
                 ri.ProductId = request.ProductId;

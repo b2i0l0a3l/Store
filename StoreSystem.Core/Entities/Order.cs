@@ -16,7 +16,7 @@ namespace StoreSystem.Core.Entities
         public enOrderType OrderType { get; set; } = enOrderType.Sell;
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Total Must be greather than 0")]
         [Column(TypeName = "numeric(18,2)")]
         public decimal Total { get; set; } 

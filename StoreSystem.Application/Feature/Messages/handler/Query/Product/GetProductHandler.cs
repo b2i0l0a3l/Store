@@ -12,30 +12,16 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
-    public class GetProductHandler : IRequestHandler<GetProductsRequest, Result<PagedResult<ProductModel>>>
+    public class GetProductHandler : IRequestHandler<GetProductsRequest, Result<PagedResult<ProductsModel>>>
     {
-        private readonly IRepository<Product> _Repo;
-        private readonly IMapper _Mapper;
-        public GetProductHandler(IRepository<Product> Repo,IMapper Mapper)
+        private readonly IGetProductsFucntion _Repo;
+        public GetProductHandler(IGetProductsFucntion Repo)
         {
             _Repo = Repo;
-            _Mapper = Mapper;
         }
-        public async Task<Result<PagedResult<ProductModel>>> Handle(GetProductsRequest request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<ProductsModel>>> Handle(GetProductsRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<Product>?> result = await _Repo.GetAll(request.PageNumber, request.PageSize);
-            if (!result.IsSuccess) return result.Error!;
-          
-            PagedResult<ProductModel> records = new()
-            {
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Items = result.Value!.Items.Select(x => _Mapper.Map<ProductModel>(x)),
-                TotalItems = result.Value.TotalItems,
-            };
-
-
-            return records;
+            return await  _Repo.GetProductsAsync(request.PageNumber,request.PageSize);
         }
     }
 }

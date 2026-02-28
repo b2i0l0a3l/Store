@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using StoreSystem.Application.Feature.Messages.Request.Command;
-using StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.Models;
 
@@ -15,7 +14,6 @@ namespace StoreSystem.Application.shared.Profiles
         public OrderItemProfile()
         {
             CreateMap<OrderItem, OrderItemModel>().ReverseMap();
-            CreateMap<OrderItem, AddOrderItemRequest>().ReverseMap();
             CreateMap<OrderItem, OrderItemList>().ReverseMap();
         }
     }

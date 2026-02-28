@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
-using StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
+using StoreSystem.Application.Feature.Messages.Request.Command.Return;
 
 namespace StoreApi.Api.Controllers
 {
@@ -35,15 +35,6 @@ namespace StoreApi.Api.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost("Add")]
-        public async Task<IActionResult> Add([FromBody] AddReturnRequest request)
-        {
-            var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
-        }
-
         [HttpPut("Update")]
         public async Task<IActionResult> Update([FromBody] UpdateReturnRequest request)
         {
@@ -61,15 +52,18 @@ namespace StoreApi.Api.Controllers
                 return BadRequest(result.Error);
             return Ok(result.Value);
         }
-
-        [HttpPost("ReturnItem")]
-        public async Task<IActionResult> ReturnItem([FromBody] ReturnOrderItemRequest request)
+        [HttpPost("ReturnItems")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ReturnItems([FromBody] AddReturnWithItemsRequest request)
         {
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result);
+
         }
+
     }
 }
 

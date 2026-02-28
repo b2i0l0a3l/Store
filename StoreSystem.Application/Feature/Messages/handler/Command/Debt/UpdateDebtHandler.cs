@@ -28,7 +28,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 d.Remaining = request.Remaining;
                 d.UpdatedAt = DateTime.UtcNow;
             });
-
             return result;
         }
     }

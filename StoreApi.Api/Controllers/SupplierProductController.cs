@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
-using StoreSystem.Application.Feature.Messages.Request.Command.SupplierProduct;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
@@ -60,15 +59,6 @@ namespace StoreApi.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result.Value);
-        }
-
-        [HttpPost("ReceiveProduct")]
-        public async Task<IActionResult> ReceiveProduct([FromBody] ReceiveSupplierProductRequest request)
-        {
-            var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
         }
     }
 }

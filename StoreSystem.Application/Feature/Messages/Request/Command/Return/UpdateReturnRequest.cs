@@ -11,7 +11,6 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
-        public int ClientId { get; set; }
         public decimal TotalRefund { get; set; }
     }
 }

@@ -10,7 +10,10 @@ using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
 using StoreSystem.Infrastructure.Persistence;
 using StoreSystem.Infrastructure.Persistence.Repo;
-using StoreSystem.Infrastructure.presistence.Repo;
+using StoreSystem.Infrastructure.presistence.database.procedures;
+using StoreSystem.Infrastructure.presistence.database.functions;
+using StoreSystem.Infrastructure.presistence.database.functions.OrderItemFunctions;
+using StoreSystem.Infrastructure.presistence.database.functions.OrderFunctions;
 
 namespace StoreSystem.Infrastructure.shared
 {
@@ -27,9 +30,16 @@ namespace StoreSystem.Infrastructure.shared
             .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IOrderWithItemRepo, OrderWithItemRepo>();
-            services.AddScoped<IUniteOfWork, UniteOfWork>();
-
+            services.AddScoped<IHandleOrderWithHisItemsProcedure, HandleOrderWithHisItems>();
+            services.AddScoped<IHandleReturnProcedure, HandleReturn>();
+            services.AddScoped<IUpdateOrderItemProcedure, UpdateOrderItem>();
+            services.AddScoped<IDeleteOrderItemProcedure, DeleteOrderItem>();
+            services.AddScoped<IAddPaymentProcedure, AddPayment>();
+            services.AddScoped<IUpdateOrderProcedure, UpdateOrder>();
+            services.AddScoped<IGetProductsFucntion, GetProducts>();
+            services.AddScoped<IGetOrderItemFunction, GetOrderItemByOrderIdFunction>();
+            services.AddScoped<IGetOrderCardFunction, GetOrderCardFunction>();
+            
         }
     }
 }

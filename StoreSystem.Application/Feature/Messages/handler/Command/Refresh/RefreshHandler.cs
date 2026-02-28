@@ -54,11 +54,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             string newAccessToken = _GenerateJwtToken.Generate(claims);
             string newRefreshToken = _GenerateRefreshToken.Generate();
 
-            
-            refreshToken.RefreshTokenHash =  BCrypt.Net.BCrypt.HashPassword(newRefreshToken);
-            refreshToken.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
-            refreshToken.RefreshTokenRevokedAt = null;
-            await _Repo.Save();
+            await _Repo.Update(refreshToken.Id, rt =>
+            {
+                rt.RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken);
+                rt.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
+                rt.RefreshTokenRevokedAt = null;
+            });
             TokenModel model = new()
             {
                 AccessToken = newAccessToken,

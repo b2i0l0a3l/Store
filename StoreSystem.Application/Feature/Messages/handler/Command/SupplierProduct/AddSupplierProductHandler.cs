@@ -15,12 +15,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class AddSupplierProductHandler : IRequestHandler<AddSupplierProductRequest, Result<SupplierProductModel>>
     {
-        private readonly IUniteOfWork _Uow;
+        private readonly IRepository<SupplierProductEntity> _Repo;
         private readonly IMapper _Mapper;
 
-        public AddSupplierProductHandler(IUniteOfWork uow, IMapper Mapper)
+        public AddSupplierProductHandler(IRepository<SupplierProductEntity> repo, IMapper Mapper)
         {
-            _Uow = uow;
+            _Repo = repo;
             _Mapper = Mapper;
         }
 
@@ -33,11 +33,10 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 CreatedAt = DateTime.UtcNow
             };
 
-            var result = await _Uow.SupplierProduct.Add(supplierProduct);
+            var result = await _Repo.Add(supplierProduct);
             if (!result.IsSuccess) return result.Error!;
 
             return _Mapper.Map<SupplierProductModel>(result.Value);
         }
     }
 }
-

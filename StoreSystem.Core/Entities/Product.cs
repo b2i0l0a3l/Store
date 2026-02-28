@@ -20,6 +20,7 @@ namespace StoreSystem.Core.Entities
         [Required]
         [Range(0,int.MaxValue,ErrorMessage ="Quantity must be greather or equal 0")]
         public int Quantity { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [Required]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]

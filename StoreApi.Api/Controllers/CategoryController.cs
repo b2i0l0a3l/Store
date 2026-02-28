@@ -19,22 +19,29 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetAll")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAll([FromQuery]GetCategoriesRequest req)
         {
             var result = await _mediator.Send(req);
+            if (result.Value == null) return NotFound(result);
             return Ok(result);
         }
 
         [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetCategoryByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
+            if (result.Value ==null)
+                return NotFound(result.Error);
             return Ok(result.Value);
         }
 
         [HttpPost("Add")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Add([FromBody] AddCategoryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -44,6 +51,8 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest request)
         {
             var result = await _mediator.Send(request);
@@ -53,11 +62,13 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteCategoryRequest { Id = id });
              if (!result.IsSuccess)
-                return BadRequest(result.Error);
+                return NotFound(result.Error);
             return Ok(result.Value);
         }
     }

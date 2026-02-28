@@ -4,6 +4,7 @@ using StoreSystem.Application.Feature.Messages.Request.Command.Login;
 using StoreSystem.Application.Feature.Messages.Request.Command.Refresh;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
+using StoreSystem.Application.Feature.Messages.Request.Command.Logout;
 
 namespace StoreApi.Api.Controllers
 {
@@ -38,6 +39,17 @@ namespace StoreApi.Api.Controllers
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result.Value);
+        }
+
+        [HttpPost("Logout")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
+        {
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result);
         }
     }
 }

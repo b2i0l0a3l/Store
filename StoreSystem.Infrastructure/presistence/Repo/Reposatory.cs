@@ -28,6 +28,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 await _Set.AddAsync(Entity);
+                await _Context.SaveChangesAsync();
                 return Entity;
             }
             catch (Exception ex)
@@ -44,6 +45,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 var result = await findAsync(Id);
                 if (result == null) return new Error("DeleteFaild",ErrorType.General,"Entity Not Found");;
                 _Set.Remove(result);
+                await _Context.SaveChangesAsync();
                 return true;
             }catch(Exception ex)
             {
@@ -109,7 +111,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 var result = await findAsync(Id);
                 if (result == null) return new Error("UpdateFaild", ErrorType.General, "Entity Not Found"); ;
                 UpdateAction(result);
-
+                await _Context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -120,9 +122,31 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
       
         private async Task<T?> findAsync(int Id)
         => await _Set.FindAsync(Id);
-        public async Task<int> Save()
-         => await _Context.SaveChangesAsync();
 
-     
+        public async Task<Result<PagedResult<T>?>> GetAllById(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate )
+        {
+            try
+            {
+                int TotoalItems = await _Set.CountAsync();
+                if (TotoalItems <= 0) return new Error("GetFaild", ErrorType.General, "Entity Not Found");
+
+                List<T> items = await _Set.AsNoTracking().Where(predicate)
+                .Skip((pageNumber - 1) * pageSize).
+                Take(pageSize).OrderDescending().ToListAsync();
+
+                return new PagedResult<T>
+                {
+                    Items = items,
+                    TotalItems = TotoalItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Error("GetFaild", ErrorType.General, ex.Message);
+            }
+        }
+
     }
 }

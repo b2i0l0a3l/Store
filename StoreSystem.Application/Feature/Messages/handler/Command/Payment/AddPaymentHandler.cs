@@ -4,40 +4,30 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using StoreSystem.Application.Common;
 using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
+using StoreSystem.Core.enums;
 using StoreSystem.Core.interfaces;
 using StoreSystem.Core.Models;
 using PaymentEntity = StoreSystem.Core.Entities.Payment;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class AddPaymentHandler : IRequestHandler<AddPaymentRequest, Result<PaymentModel>>
+    public class AddPaymentHandler : IRequestHandler<AddPaymentRequest, Result>
     {
-        private readonly IRepository<PaymentEntity> _Repo;
-        private readonly IMapper _Mapper;
+        private readonly IAddPaymentProcedure _Repo;
 
-        public AddPaymentHandler(IRepository<PaymentEntity> Repo, IMapper Mapper)
+        public AddPaymentHandler(IAddPaymentProcedure Repo)
         {
             _Repo = Repo;
-            _Mapper = Mapper;
         }
 
-        public async Task<Result<PaymentModel>> Handle(AddPaymentRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(AddPaymentRequest request, CancellationToken cancellationToken)
         {
-            var payment = new PaymentEntity
-            {
-                DebtID = request.DebtID,
-                Amount = request.Amount,
-                PaidAt = DateTime.UtcNow
-            };
-
-            var result = await _Repo.Add(payment);
-            if (!result.IsSuccess) return result.Error!;
-
-            return _Mapper.Map<PaymentModel>(result.Value);
+            var result = await _Repo.Handle(request.Model);
+            return result;
         }
     }
 }
-

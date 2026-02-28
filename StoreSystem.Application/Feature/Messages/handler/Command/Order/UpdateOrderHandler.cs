@@ -10,23 +10,18 @@ using StoreSystem.Core.interfaces;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class UpdateOrderHandler : IRequestHandler<UpdateOrderRequest, Result<bool>>
+    public class UpdateOrderHandler : IRequestHandler<UpdateOrderRequest, Result>
     {
-        private readonly IRepository<Order> _Repo;
+        private readonly IUpdateOrderProcedure _Repo;
 
-        public UpdateOrderHandler(IRepository<Order> Repo)
+        public UpdateOrderHandler(IUpdateOrderProcedure Repo)
         {
             _Repo = Repo;
         }
 
-        public async Task<Result<bool>> Handle(UpdateOrderRequest request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateOrderRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.Update(request.Id, o =>
-            {
-                o.ClientId = request.ClientId;
-                o.Total = request.Total;
-            });
-
+            var result = await _Repo.Handle(request.Model);
             return result;
         }
     }

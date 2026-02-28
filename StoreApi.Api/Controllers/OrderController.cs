@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
-using StoreSystem.Application.Feature.Messages.Request.Command.OrderWithITem;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
+using StoreSystem.Application.Feature.Messages.Request.Query.Order;
+using StoreSystem.Application.Feature.Messages.Request.Command.Order;
 
 namespace StoreApi.Api.Controllers
 {
@@ -53,7 +54,7 @@ namespace StoreApi.Api.Controllers
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
-            return Ok(result.Value);
+            return Ok(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -66,14 +67,25 @@ namespace StoreApi.Api.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost("AddOrderWithItems")]
+        [HttpGet("GetOrderItemsByOrderId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddOrderWithItems([FromBody]AddOrderWithItemRequest request)
+        public async Task<IActionResult> GetOrderItemsByOrderId([FromQuery] GetOrderItemsByOrderIdRequest req)
         {
-            var result = await _mediator.Send(request);
+            var result = await _mediator.Send(req);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
             return Ok(result);
+
+        }
+        [HttpPost("AddOrderWithItems")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AddOrderWithItems([FromBody] AddOrderWithItemsRequest req)
+        {
+            var result = await _mediator.Send(req);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result);
+
         }
     }
 }

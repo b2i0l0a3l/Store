@@ -14,12 +14,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class AddReturnItemHandler : IRequestHandler<AddReturnItemRequest, Result<ReturnItemModel>>
     {
-        private readonly IUniteOfWork _Uow;
+        private readonly IRepository<ReturnItem> _Repo;
         private readonly IMapper _Mapper;
 
-        public AddReturnItemHandler(IUniteOfWork uow, IMapper mapper)
+        public AddReturnItemHandler(IRepository<ReturnItem> repo, IMapper mapper)
         {
-            _Uow = uow;
+            _Repo = repo;
             _Mapper = mapper;
         }
 
@@ -34,7 +34,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 CreatedAt = DateTime.UtcNow
             };
 
-            var result = await _Uow.ReturnItem.Add(returnItem);
+            var result = await _Repo.Add(returnItem);
             if (!result.IsSuccess) return result.Error!;
 
             return _Mapper.Map<ReturnItemModel>(result.Value);

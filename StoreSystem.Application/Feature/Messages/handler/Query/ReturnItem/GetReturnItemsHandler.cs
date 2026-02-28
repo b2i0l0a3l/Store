@@ -14,18 +14,18 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetReturnItemsHandler : IRequestHandler<GetReturnItemsRequest, Result<PagedResult<ReturnItemModel>>>
     {
-        private readonly IUniteOfWork _Uow;
+        private readonly IRepository<ReturnItem> _Repo;
         private readonly IMapper _Mapper;
 
-        public GetReturnItemsHandler(IUniteOfWork uow, IMapper mapper)
+        public GetReturnItemsHandler(IRepository<ReturnItem> repo, IMapper mapper)
         {
-            _Uow = uow;
+            _Repo = repo;
             _Mapper = mapper;
         }
 
         public async Task<Result<PagedResult<ReturnItemModel>>> Handle(GetReturnItemsRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<ReturnItem>?> result = await _Uow.ReturnItem.GetAll(request.PageNumber, request.PageSize);
+            Result<PagedResult<ReturnItem>?> result = await _Repo.GetAll(request.PageNumber, request.PageSize);
             if (!result.IsSuccess) return result.Error!;
 
             PagedResult<ReturnItemModel> records = new()

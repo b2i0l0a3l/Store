@@ -12,16 +12,17 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class DeleteOrderHandler : IRequestHandler<DeleteOrderRequest, Result<bool>>
     {
-        private readonly IRepository<Order> _Repo;
+        private readonly IRepository<Core.Entities.Order> _Repo;
 
-        public DeleteOrderHandler(IRepository<Order> Repo)
+        public DeleteOrderHandler(IRepository<Core.Entities.Order> Repo)
         {
             _Repo = Repo;
         }
 
         public async Task<Result<bool>> Handle(DeleteOrderRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.Delete(request.Id);
+            var result = await _Repo.Delete(request.Id);
+            return result;
         }
     }
 }

@@ -12,16 +12,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class DeleteReturnItemHandler : IRequestHandler<DeleteReturnItemRequest, Result<bool>>
     {
-        private readonly IUniteOfWork _Uow;
+        private readonly IRepository<ReturnItem> _Repo;
 
-        public DeleteReturnItemHandler(IUniteOfWork uow)
+        public DeleteReturnItemHandler(IRepository<ReturnItem> repo)
         {
-            _Uow = uow;
+            _Repo = repo;
         }
 
         public async Task<Result<bool>> Handle(DeleteReturnItemRequest request, CancellationToken cancellationToken)
         {
-            return await _Uow.ReturnItem.Delete(request.Id);
+            return await _Repo.Delete(request.Id);
         }
     }
 }

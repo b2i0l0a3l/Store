@@ -14,10 +14,10 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class AddOrderHandler : IRequestHandler<AddOrderRequest, Result<OrderModel>>
     {
-        private readonly IRepository<Order> _Repo;
+        private readonly IRepository<Core.Entities.Order> _Repo;
         private readonly IMapper _Mapper;
 
-        public AddOrderHandler(IRepository<Order> Repo, IMapper Mapper)
+        public AddOrderHandler(IRepository<Core.Entities.Order> Repo, IMapper Mapper)
         {
             _Repo = Repo;
             _Mapper = Mapper;
@@ -25,9 +25,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result<OrderModel>> Handle(AddOrderRequest request, CancellationToken cancellationToken)
         {
-            var order = new Order
+            var order = new Core.Entities.Order
             {
-                ClientId = request.ClientId,
+                ClientId = request.ClientId ?? null,
                 Total = request.Total
             };
 

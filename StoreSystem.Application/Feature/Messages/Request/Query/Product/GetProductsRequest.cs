@@ -9,7 +9,7 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Query
 {
-    public class GetProductsRequest : IRequest<Result<PagedResult<ProductModel>>>
+    public class GetProductsRequest : IRequest<Result<PagedResult<ProductsModel>>>
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }

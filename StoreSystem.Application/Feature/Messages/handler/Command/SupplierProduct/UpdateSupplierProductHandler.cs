@@ -13,16 +13,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
     public class UpdateSupplierProductHandler : IRequestHandler<UpdateSupplierProductRequest, Result<bool>>
     {
-        private readonly IUniteOfWork _Uow;
+        private readonly IRepository<SupplierProductEntity> _Repo;
 
-        public UpdateSupplierProductHandler(IUniteOfWork uow)
+        public UpdateSupplierProductHandler(IRepository<SupplierProductEntity> repo)
         {
-            _Uow = uow;
+            _Repo = repo;
         }
 
         public async Task<Result<bool>> Handle(UpdateSupplierProductRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Uow.SupplierProduct.Update(request.Id, sp =>
+            var result = await _Repo.Update(request.Id, sp =>
             {
                 sp.ProductId = request.ProductId;
                 sp.SupplierId = request.SupplierId;
@@ -32,4 +32,3 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
         }
     }
 }
-

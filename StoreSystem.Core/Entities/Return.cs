@@ -12,15 +12,12 @@ namespace StoreSystem.Core.Entities
         [Key]
         public int Id { get; set; }
         public int OrderId { get; set; }
-        public int ClientId { get; set; }
         [Column(TypeName = "numeric(18,2)")]
         public decimal TotalRefund { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [ForeignKey("OrderId")]
         public Order? Order { get; set; }
-        [ForeignKey("ClientId")]
-        public Client? Client { get; set; }
 
         public ICollection<ReturnItem>? ReturnItems { get; set; }
     }
