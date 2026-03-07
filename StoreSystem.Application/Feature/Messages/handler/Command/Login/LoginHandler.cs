@@ -51,6 +51,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                 var newRefreshToken = _RefreshToken.Generate();
                 RefreshToken refreshToken = new()
                 {
+                    UserId = user.Id,
                     RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken),
                     RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(30),
                     RefreshTokenRevokedAt = null

@@ -5,6 +5,8 @@ using StoreSystem.Application.Feature.Messages.Request.Command.Refresh;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using StoreSystem.Application.Feature.Messages.Request.Command.Logout;
+using StoreSystem.Application.Feature.Messages.Request.Command.Register;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace StoreApi.Api.Controllers
 {
@@ -18,8 +20,19 @@ namespace StoreApi.Api.Controllers
         {
             _mediator = mediator;
         }
+        [HttpPost("Regisetr")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Login([FromBody] RegisterRequest request)
+        {
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+                return BadRequest(result.Error);
+            return Ok(result.Value);
+        }
 
         [HttpPost("Login")]
+        [EnableRateLimiting("AuthLimiter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
@@ -31,6 +44,7 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpPost("Refresh")]
+        [EnableRateLimiting("AuthLimiter")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)

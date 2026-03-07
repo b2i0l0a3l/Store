@@ -4,6 +4,7 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreApi.Api.Controllers
 {

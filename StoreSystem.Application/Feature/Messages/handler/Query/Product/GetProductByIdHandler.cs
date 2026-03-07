@@ -24,7 +24,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             var result = await _Repo.GetById(request.Id);
             if (!result.IsSuccess || result.Value == null)
                 return new Error("NotFound", Core.enums.ErrorType.General, $"Product with Id {request.Id} not found");
-
             return _Mapper.Map<ProductModel>(result.Value);
         }
     }

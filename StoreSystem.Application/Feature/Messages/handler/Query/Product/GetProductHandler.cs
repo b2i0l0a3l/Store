@@ -14,14 +14,14 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetProductHandler : IRequestHandler<GetProductsRequest, Result<PagedResult<ProductsModel>>>
     {
-        private readonly IGetProductsFucntion _Repo;
-        public GetProductHandler(IGetProductsFucntion Repo)
+        private readonly ISearchProduct _Repo;
+        public GetProductHandler(ISearchProduct Repo)
         {
             _Repo = Repo;
         }
         public async Task<Result<PagedResult<ProductsModel>>> Handle(GetProductsRequest request, CancellationToken cancellationToken)
         {
-            return await  _Repo.GetProductsAsync(request.PageNumber,request.PageSize);
+            return await  _Repo.Handle(request.ProductName, request.CategoryId ,request.PageNumber,request.PageSize);
         }
     }
 }

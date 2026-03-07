@@ -12,29 +12,16 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
-    public class GetOrderItemHandler : IRequestHandler<GetOrderItemsRequest, Result<PagedResult<OrderItemModel>>>
+    public class GetOrderItemHandler : IRequestHandler<GetOrderItemsRequest, Result<PagedResult<OrderItemWithDetials>>>
     {
-        private readonly IRepository<OrderItem> _Repo;
-        private readonly IMapper _Mapper;
-        public GetOrderItemHandler(IRepository<OrderItem> Repo, IMapper Mapper)
+        private readonly IGetOrderItemPagination _itemFunction;
+        public GetOrderItemHandler(IGetOrderItemPagination itemFunction)
         {
-            _Repo = Repo;
-            _Mapper = Mapper;
+            _itemFunction = itemFunction;
         }
-        public async Task<Result<PagedResult<OrderItemModel>>> Handle(GetOrderItemsRequest request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<OrderItemWithDetials>>> Handle(GetOrderItemsRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<OrderItem>?> result = await _Repo.GetAll(request.PageNumber, request.PageSize);
-            if (!result.IsSuccess) return result.Error!;
-
-            PagedResult<OrderItemModel> records = new()
-            {
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Items = result.Value!.Items.Select(x => _Mapper.Map<OrderItemModel>(x)),
-                TotalItems = result.Value.TotalItems,
-            };
-
-            return records;
+            return await _itemFunction.handle(request.PageNumber, request.PageSize);
         }
     }
 }

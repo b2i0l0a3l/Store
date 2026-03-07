@@ -14,6 +14,7 @@ using StoreSystem.Infrastructure.presistence.database.procedures;
 using StoreSystem.Infrastructure.presistence.database.functions;
 using StoreSystem.Infrastructure.presistence.database.functions.OrderItemFunctions;
 using StoreSystem.Infrastructure.presistence.database.functions.OrderFunctions;
+using StoreSystem.Infrastructure.presistence.database.functions.ProductFunctions;
 
 namespace StoreSystem.Infrastructure.shared
 {
@@ -23,7 +24,7 @@ namespace StoreSystem.Infrastructure.shared
         public static void AddInfrastructurServiceRegistration(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(configuration["CONNECTION_STRING"]));
 
             services.AddIdentity<User, Microsoft.AspNetCore.Identity.IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
@@ -37,8 +38,10 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IAddPaymentProcedure, AddPayment>();
             services.AddScoped<IUpdateOrderProcedure, UpdateOrder>();
             services.AddScoped<IGetProductsFucntion, GetProducts>();
+            services.AddScoped<ISearchProduct, SearchProductFunction>();
             services.AddScoped<IGetOrderItemFunction, GetOrderItemByOrderIdFunction>();
             services.AddScoped<IGetOrderCardFunction, GetOrderCardFunction>();
+            services.AddScoped<IGetOrderItemPagination, GetOrderItemPagination>();
             
         }
     }

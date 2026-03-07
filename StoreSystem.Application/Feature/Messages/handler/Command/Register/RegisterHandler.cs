@@ -30,7 +30,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
                 {
                     FullName = request.FullName,
                     UserName = request.Email,
-                    Role = Roles.Admin
+                    Email = request.Email,
+                    Role = Roles.Viewer
                 };
                 var result = await _UserManager.CreateAsync(user, request.Password);
                 if (!result.Succeeded)

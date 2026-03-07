@@ -11,6 +11,8 @@ namespace StoreSystem.Application.Feature.Messages.Request.Query
 {
     public class GetProductsRequest : IRequest<Result<PagedResult<ProductsModel>>>
     {
+        public string? ProductName { get; set; }
+        public int? CategoryId { get; set; }
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
     }
