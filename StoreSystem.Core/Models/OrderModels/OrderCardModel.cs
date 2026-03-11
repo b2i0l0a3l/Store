@@ -9,7 +9,7 @@ namespace StoreSystem.Core.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public decimal Totat { get; set; }
+        public decimal Total { get; set; }
         public decimal Remaining { get; set; }
         public string OrderType { get; set; } = string.Empty;
         public string OrderStatus { get; set; } = string.Empty;

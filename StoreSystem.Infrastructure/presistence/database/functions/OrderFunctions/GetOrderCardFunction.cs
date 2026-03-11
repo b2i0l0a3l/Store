@@ -30,7 +30,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
 
                 parameters.Add("p_order_id", OrderId);
 
-                var result = await connection.QueryAsync<OrderCardModel>("select * from fn_get_client_order_card(@p_order_id)",
+                var result = await connection.QueryFirstOrDefaultAsync<OrderCardModel>("select * from fn_get_client_order_card(@p_order_id)",
                     parameters
                 );
                 if (result == null) return Errors.DataNotFoundError;
@@ -38,7 +38,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
             }
             catch (Exception ex)
             {
-                return new Error("GetOrderItemERROR", ErrorType.General, ex.Message);
+                return new Error("GetOrderCardERROR", ErrorType.General, ex.Message);
             }
         }
     }

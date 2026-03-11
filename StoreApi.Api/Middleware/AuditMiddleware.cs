@@ -55,7 +55,7 @@ namespace StoreApi.Api.Middleware
                 "Request {method} {path} responded {status}  time: {Duration}",
                 context.Request.Method,
                 context.Request.Path,
-                context.Response.StatusCode, Duration);
+                context.Response.StatusCode, Duration.TotalMilliseconds);
         }
 
     }

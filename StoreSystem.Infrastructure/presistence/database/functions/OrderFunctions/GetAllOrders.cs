@@ -26,7 +26,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
                 connection.Open();
             try
             {
-                var result = await connection.QueryAsync<OrderCardModel>("select * from fn_get_all_product()");
+                var result = await connection.QueryAsync<OrderCardModel>("select * from fn_get_all_order()");
                 List<OrderCardModel> orders = result.ToList();
                 if (orders == null || orders.Count <= 0) return Errors.DataNotFoundError;
                 return orders;
