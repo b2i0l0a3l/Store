@@ -148,5 +148,18 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             }
         }
 
+        public async  Task<Result<IEnumerable<T>?>> All()
+        {
+             try
+            {
+                List<T> items = await _Set.AsNoTracking().ToListAsync();
+                if (items.Count <= 0) return Errors.DataNotFoundError;
+                return items;   
+            }
+            catch (Exception ex)
+            {
+                return new Error("AllFaild", ErrorType.General, ex.Message);
+            }
+        }
     }
 }

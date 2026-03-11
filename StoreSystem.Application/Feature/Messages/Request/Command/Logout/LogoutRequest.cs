@@ -14,5 +14,6 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command.Logout
         public string RefreshToken { get; set; } = string.Empty;
         [Required]
         public string Email { get; set; } = string.Empty;
+        public string? TokenId { get; set; } 
     }
 }

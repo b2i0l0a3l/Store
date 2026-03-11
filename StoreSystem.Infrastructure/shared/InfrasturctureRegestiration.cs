@@ -15,6 +15,8 @@ using StoreSystem.Infrastructure.presistence.database.functions;
 using StoreSystem.Infrastructure.presistence.database.functions.OrderItemFunctions;
 using StoreSystem.Infrastructure.presistence.database.functions.OrderFunctions;
 using StoreSystem.Infrastructure.presistence.database.functions.ProductFunctions;
+using StoreSystem.Core.interfaces.functions.OrderFunctions;
+using StoreSystem.Core.interfaces.functions;
 
 namespace StoreSystem.Infrastructure.shared
 {
@@ -37,11 +39,13 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IDeleteOrderItemProcedure, DeleteOrderItem>();
             services.AddScoped<IAddPaymentProcedure, AddPayment>();
             services.AddScoped<IUpdateOrderProcedure, UpdateOrder>();
-            services.AddScoped<IGetProductsFucntion, GetProducts>();
+            services.AddScoped<IGetProductPaginationFucntion, GetProductPagination>();
+            services.AddScoped<IGetAllProductsFunction, GetAllProducts>();
             services.AddScoped<ISearchProduct, SearchProductFunction>();
             services.AddScoped<IGetOrderItemFunction, GetOrderItemByOrderIdFunction>();
             services.AddScoped<IGetOrderCardFunction, GetOrderCardFunction>();
             services.AddScoped<IGetOrderItemPagination, GetOrderItemPagination>();
+            services.AddScoped<IGetAllOrdersFunction, GetAllOrders>();
             
         }
     }

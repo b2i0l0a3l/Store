@@ -12,6 +12,7 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command.Refresh
     {
         public string RefreshToken { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
+        public string? TokenId { get; set; } = string.Empty;
 
     }
 }

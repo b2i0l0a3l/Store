@@ -13,5 +13,7 @@ namespace StoreSystem.Core.Models
         public decimal Total { get; set; }    
         public enOrderStatus OrderStatus { get; set; }
         public enOrderType OrderType { get; set; }
+        public DateTime CreatedAt { get; set; } 
+        public DateTime UpdatedAt { get; set; } 
     }
 }

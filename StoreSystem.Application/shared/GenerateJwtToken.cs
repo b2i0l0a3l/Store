@@ -15,11 +15,11 @@ namespace StoreSystem.Application.shared
     {
         public  string Generate(Claim[] claims)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Configuration["JWT:Key"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Configuration["JWT_SECRET"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
-                issuer: _Configuration["JWT:Issuer"]!,
-                audience: _Configuration["JWT:Audience"]!,
+                issuer: _Configuration["JWT_VALID_ISSUER"]!,
+                audience: _Configuration["JWT_VALID_AUDIENCE"]!,
                 claims: claims,
                 expires: DateTime.Now.AddMinutes(15),
                 signingCredentials: creds

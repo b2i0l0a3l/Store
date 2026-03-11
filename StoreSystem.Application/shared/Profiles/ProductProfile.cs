@@ -15,6 +15,9 @@ namespace StoreSystem.Application.shared.Profiles
         {
             CreateMap<Product, ProductModel>().ReverseMap();
             CreateMap<Product, AddProductRequest>().ReverseMap();
+            CreateMap<Product, ProductsModel>()
+                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category != null ? src.Category.Name : string.Empty))
+                .ForMember(dest => dest.TotalCount, opt => opt.Ignore());
         }
         
     }

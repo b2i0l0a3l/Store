@@ -3,10 +3,11 @@ using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
 using StoreSystem.Application;
 using StoreApi.Api.Middleware;
 using StoreSystem.Infrastructure.shared;
+
+using Microsoft.OpenApi.Models;
 
 var currentDir = Directory.GetCurrentDirectory();
 while (currentDir != null && !File.Exists(Path.Combine(currentDir, ".env")))
@@ -45,34 +46,9 @@ builder.Services.AddRateLimiter(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter your valid token in the text input below.\n\nExample: \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
-    });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
-
+builder.Services.AddInfrastructurServiceRegistration(builder.Configuration);
+builder.Services.AddApplicationServices();
 
 
 builder.Services.AddAuthentication(options =>
@@ -90,8 +66,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["JWT_VALID_ISSUER"],
         ValidAudience = builder.Configuration["JWT_VALID_AUDIENCE"],
+        ClockSkew = TimeSpan.FromMinutes(5),
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"]!))
+            Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"]!)),
     };
 });
 
@@ -107,11 +84,45 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "Store API - V1",
+            Version = "v1",
+            Description = "A sample Student Management API ",
+            TermsOfService = new Uri("http://tempuri.org/terms"),
+            Contact = new OpenApiContact
+            {
+                Name = "Bilal",
+                Email = "belamraoui92@gmail.com"
+            },
+            License = new OpenApiLicense
+            {
+                Name = "Apache 2.0",
+                Url = new Uri("https://www.apache.org/licenses/LICENSE-2.0.html")
+            }
+                
+        }
+    );
+    c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        Description = "JWT Authorization header using the Bearer scheme."
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" } }] = []
+    });
+});
 
 
 
-builder.Services.AddInfrastructurServiceRegistration(builder.Configuration);
-builder.Services.AddApplicationServices();
+
+
 
 var app = builder.Build();
 
@@ -141,5 +152,6 @@ app.UseCors("Allow");
 app.UseAuthentication(); 
 app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<AuditMiddleware>();
 app.MapControllers();
 app.Run();

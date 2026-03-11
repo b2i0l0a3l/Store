@@ -29,6 +29,16 @@ namespace StoreApi.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> All()
+        {
+            var result = await _mediator.Send(new GetAllCategoriesRequest());
+            if (result.Value == null) return NotFound(result);
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

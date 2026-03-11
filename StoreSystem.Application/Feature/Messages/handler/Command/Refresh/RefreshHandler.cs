@@ -16,11 +16,11 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
 {
     public class RefreshHandler : IRequestHandler<RefreshRequest, Result<TokenModel>>
     {
-        private readonly IGenerateRefreshToken _GenerateRefreshToken;
+        private readonly IGenerateToken _GenerateRefreshToken;
         private readonly IGenerateJwtToken _GenerateJwtToken;
         private readonly UserManager<User> _UManager;
         private readonly IRepository<RefreshToken> _Repo;
-        public RefreshHandler(IRepository<RefreshToken> rep,IGenerateJwtToken GenerateJwtToken,UserManager<User> UManager,IGenerateRefreshToken GenerateRefreshToken)
+        public RefreshHandler(IRepository<RefreshToken> rep,IGenerateJwtToken GenerateJwtToken,UserManager<User> UManager,IGenerateToken GenerateRefreshToken)
         {
             _GenerateRefreshToken = GenerateRefreshToken;
             _UManager = UManager;
@@ -32,34 +32,44 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             User? user = await _UManager.FindByEmailAsync(request.Email);
             if (user == null) return Errors.UserNotFoundError;
 
-            Result<RefreshToken?> refresh = await _Repo.GetByCondition(x => x.UserId == user.Id);
-            if (!refresh.IsSuccess || refresh.Value == null) return new Error("RefreshTokenNotFound", Core.enums.ErrorType.General, "Refresh token not Found");
+            if (request.TokenId == null) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Token Id is Required!");
 
-            RefreshToken refreshToken = refresh.Value;
+            Result<RefreshToken?> result  = await _Repo.GetByCondition(x=>x.TokenId == request.TokenId);
+
+            if (result.Value == null) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Refresh Token Not found!");
+
+            RefreshToken refreshToken = result.Value;
+         
+
+            if(refreshToken == null) 
+                return new Error("RefreshTokenERROR", Core.enums.ErrorType.General, "Invalid refresh token");
+            
             if (refreshToken.RefreshTokenRevokedAt != null)
                 return new Error("RefreshTokenRevokedError", Core.enums.ErrorType.General, "Refresh token is revoked");
             if (refreshToken.RefreshTokenExpiresAt == null || refreshToken.RefreshTokenExpiresAt <= DateTime.UtcNow)
                 return new Error("RefreshTokenExpiredError", Core.enums.ErrorType.General, "Refresh token expired");
-
-            bool refreshValid = BCrypt.Net.BCrypt.Verify(request.RefreshToken, refreshToken.RefreshTokenHash);
-            if (!refreshValid)
+            bool isVerified = BCrypt.Net.BCrypt.Verify(request.RefreshToken, refreshToken.RefreshTokenHash);
+            if(!isVerified)
                 return new Error("RefreshTokenERROR", Core.enums.ErrorType.General, "Invalid refresh token");
-            
+ 
             Claim[] claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(ClaimTypes.Role, user.Role)
             };
+           
             string newAccessToken = _GenerateJwtToken.Generate(claims);
-            string newRefreshToken = _GenerateRefreshToken.Generate();
+            string newRefreshToken = _GenerateRefreshToken.Generate(64);
+            
 
-            await _Repo.Update(refreshToken.Id, rt =>
+            await _Repo.Update(refreshToken.Id, x => 
             {
-                rt.RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken);
-                rt.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
-                rt.RefreshTokenRevokedAt = null;
+                x.UserId = user.Id;
+                x.RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken);
+                x.RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
             });
+
             TokenModel model = new()
             {
                 AccessToken = newAccessToken,

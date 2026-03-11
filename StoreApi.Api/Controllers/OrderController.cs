@@ -28,7 +28,17 @@ namespace StoreApi.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("All")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> All()
+        {
+            var result = await _mediator.Send(new GetAllOrdersRequest());
+            return Ok(result);
+        }
+
         [HttpGet("GetById/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetOrderByIdRequest { Id = id });

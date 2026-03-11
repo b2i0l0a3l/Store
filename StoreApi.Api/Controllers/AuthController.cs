@@ -20,10 +20,10 @@ namespace StoreApi.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Regisetr")]
+        [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Login([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
@@ -49,6 +49,9 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
         {
+            var tokenId = User?.FindFirst("TokenId")?.Value;
+            request.TokenId = tokenId;
+
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);
@@ -60,6 +63,9 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
         {
+            var tokenId = User?.FindFirst("TokenId")?.Value;
+            request.TokenId = tokenId;
+
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);

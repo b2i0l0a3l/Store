@@ -7,7 +7,7 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Core.interfaces
 {
-    public interface IGetProductsFucntion
+    public interface IGetProductPaginationFucntion
     {
         Task<Result<PagedResult<ProductsModel>>> GetProductsAsync(int PageNumber, int PageSize);
     }

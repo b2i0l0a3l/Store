@@ -23,6 +23,7 @@ namespace StoreSystem.Infrastructure.Persistence
         public DbSet<SupplierProduct> SupplierProducts { get; set; }
         public DbSet<Return> Returns { get; set; }
         public DbSet<ReturnItem> ReturnItems { get; set; }
+        public DbSet<AuditLog> AuditLogs { get; set; }
 
    
     }

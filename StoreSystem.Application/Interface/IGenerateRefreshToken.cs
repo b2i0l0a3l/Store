@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Application.Interface
 {
-    public interface IGenerateRefreshToken
+    public interface IGenerateToken
     {
-        string Generate();
+        string Generate(int byteLength);
     }
 }

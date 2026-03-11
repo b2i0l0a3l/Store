@@ -15,10 +15,10 @@ using StoreSystem.Infrastructure.Persistence;
 
 namespace StoreSystem.Infrastructure.presistence.database.functions.ProductFunctions
 {
-    public class GetProducts : IGetProductsFucntion
+    public class GetProductPagination : IGetProductPaginationFucntion
     {
         private readonly AppDbContext _Context;
-        public GetProducts(AppDbContext context) => _Context = context;
+        public GetProductPagination(AppDbContext context) => _Context = context;
         public async Task<Result<PagedResult<ProductsModel>>> GetProductsAsync(int PageNumber, int PageSize)
         {
             var connection = _Context.Database.GetDbConnection();

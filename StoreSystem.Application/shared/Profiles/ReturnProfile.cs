@@ -12,7 +12,9 @@ namespace StoreSystem.Application.shared.Profiles
     {
         public ReturnProfile()
         {
-            CreateMap<Return, ReturnModel>().ReverseMap();
+            CreateMap<Return, ReturnModel>()
+                .ForMember(dest => dest.ClientId, opt => opt.MapFrom(src => src.Order != null ? (src.Order.ClientId ?? 0) : 0))
+                .ReverseMap();
         }
     }
 }

@@ -26,7 +26,6 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.ProductFunct
             try
             {
                 var parameters = new DynamicParameters();
-
                 parameters.Add("p_page_number", PageNumber);
                 parameters.Add("p_page_size", PageSize);
                 parameters.Add("p_category_id", CategoryId ?? null);

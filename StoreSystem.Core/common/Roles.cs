@@ -7,8 +7,8 @@ namespace BookingSystem.Core.common
 {
     public static class Roles
     {
-        public static string Admin = "Admin";
-        public static string Staff = "Staff";
-        public static string Viewer = "Viewer";
+        public const string Admin = "Admin";
+        public const string Staff = "Staff";
+        public const string Viewer = "Viewer";
     }
 }

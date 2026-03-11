@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -18,10 +19,10 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
     {
         private readonly UserManager<User> _UManager;
         private readonly IGenerateJwtToken _JwtToken;
-        private readonly IGenerateRefreshToken _RefreshToken;
+        private readonly IGenerateToken _RefreshToken;
         private readonly IRepository<RefreshToken> _Repo;
 
-        public LoginHandler(IRepository<RefreshToken> repo,UserManager<User> UManager, IGenerateJwtToken JwtToken,IGenerateRefreshToken RefreshToken)
+        public LoginHandler(IRepository<RefreshToken> repo,UserManager<User> UManager, IGenerateJwtToken JwtToken,IGenerateToken RefreshToken)
         {
             _UManager = UManager;
             _JwtToken = JwtToken;
@@ -41,17 +42,21 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                 bool result = await _UManager.CheckPasswordAsync(user, request.Password);
                 if (!result) return Errors.InvalidCredError;
 
+                string TokenId = _RefreshToken.Generate(16);
+
                 Claim[] Claims = new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email!),
-                    new Claim(ClaimTypes.Role, user.Role)
-
+                    new Claim(ClaimTypes.Role, user.Role ?? "Viewer"),
+                    new Claim("TokenId", TokenId)
                 };
-                var newRefreshToken = _RefreshToken.Generate();
+                
+                var newRefreshToken = _RefreshToken.Generate(64);
                 RefreshToken refreshToken = new()
                 {
                     UserId = user.Id,
+                    TokenId = TokenId,
                     RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken),
                     RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(30),
                     RefreshTokenRevokedAt = null
@@ -66,9 +71,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                     RefreshToken = newRefreshToken
                 };
                 return model;
-            }catch
+            }catch(Exception ex)
             {
-                return new Error("LoginError",Core.enums.ErrorType.General, "An unexpected error occurred during login");
+                return new Error("LoginError",Core.enums.ErrorType.General, ex.Message);
             }
             
         }

@@ -22,19 +22,26 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Logout
         }
         public async Task<Result> Handle(LogoutRequest request, CancellationToken cancellationToken)
         {
-            
-            var res = await _user.FindByEmailAsync(request.Email);
-            var t = await _repo.GetByCondition(x=> x.UserId == res!.Id);
-            if (res == null)
+            var user = await _user.FindByEmailAsync(request.Email);
+            if (user == null)
                 return Errors.UserNotFoundError;
-            if (t.Value == null) 
+
+            Result<RefreshToken?> tokensResult = await _repo.GetByCondition(x => x.TokenId == request.TokenId);
+
+            if (tokensResult.Value == null)
                 return new Error("RefreshTokenNotFoundError", Core.enums.ErrorType.General, "Refresh Token Not Found");
 
-            bool refreshValid = BCrypt.Net.BCrypt.Verify(request.RefreshToken, t.Value.RefreshTokenHash);
-            if (!refreshValid)
-                return new Error("RefreshTokenError",Core.enums.ErrorType.General,"Refresh Token invalid");
+            RefreshToken refreshToken = tokensResult.Value;
 
-            t.Value.RefreshTokenRevokedAt = DateTime.UtcNow;
+
+            if (refreshToken == null)
+                return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Refresh Token invalid");
+
+            if (refreshToken.RefreshTokenRevokedAt != null)
+                return new Error("RefreshTokenRevokedError", Core.enums.ErrorType.General, "Refresh token is already revoked");
+
+            await _repo.Update(refreshToken.Id, x => x.RefreshTokenRevokedAt = DateTime.UtcNow);
+
             return Result.Success();
         }
     }
