@@ -8,7 +8,7 @@ namespace StoreSystem.Core.Models
     public class ReturnWithItemModel
     {
         public int OrderId { get; set; }
-        public required List<ReturnWithItemModel> Items { get; set; }
+        public required List<ReturnItemList> Items { get; set; }
     }
     public class ReturnItemList
     {

@@ -42,7 +42,7 @@ namespace StoreSystem.Infrastructure.presistence.database.procedures
             catch (Exception ex)
             {
                 await _Context.Database.RollbackTransactionAsync();
-                return new Error("DeleteOrderWithHisItemERROR", ErrorType.General, ex.Message);
+                return new Error("AddPaymentError", ErrorType.General, ex.Message);
             }
         }
     }
