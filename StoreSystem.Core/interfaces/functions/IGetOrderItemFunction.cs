@@ -7,7 +7,7 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Core.interfaces
 {
-    public interface IGetOrderItemFunction
+    public interface IGetOrderItemPaginationFunction
     {
         Task<Result<PagedResult<OrderItemFunctionModel>>> GetOrderItemByOrderIdAsync(int PageNumber, int PageSize,int OrderId);
         

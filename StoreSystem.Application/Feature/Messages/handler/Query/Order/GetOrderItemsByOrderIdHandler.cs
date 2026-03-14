@@ -8,20 +8,22 @@ using StoreSystem.Application.Feature.Messages.Request.Query.Order;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
+using StoreSystem.Core.interfaces.functions.OrderFunctions;
 using StoreSystem.Core.Models;
+using StoreSystem.Core.Models.OrderItemModels;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Query.Order
 {
-    public class GetOrderItemsByOrderIdHandler : IRequestHandler<GetOrderItemsByOrderIdRequest, Result<PagedResult<OrderItemFunctionModel>>>
+    public class GetOrderItemsByOrderIdHandler : IRequestHandler<GetOrderItemsByOrderIdRequest, Result<IEnumerable<GetOrderItemByOrderIdModel>>>
     {
-        private readonly IGetOrderItemFunction _repo;
-        public GetOrderItemsByOrderIdHandler(IGetOrderItemFunction repo)
+        private readonly IGetOrderItemsByOrderIdFunc _repo;
+        public GetOrderItemsByOrderIdHandler(IGetOrderItemsByOrderIdFunc repo)
         {
             _repo = repo;
         }
-        public async Task<Result<PagedResult<OrderItemFunctionModel>>> Handle(GetOrderItemsByOrderIdRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetOrderItemByOrderIdModel>>> Handle(GetOrderItemsByOrderIdRequest request, CancellationToken cancellationToken)
         {
-            return await _repo.GetOrderItemByOrderIdAsync(request.PageNumber,request.PageSize,request.OrderId);
+            return await _repo.GetResultAsync(request.OrderId);
         }
     }
 }

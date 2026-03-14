@@ -13,7 +13,7 @@ using StoreSystem.Infrastructure.Persistence;
 
 namespace StoreSystem.Infrastructure.presistence.database.functions.OrderItemFunctions
 {
-    public class GetOrderItemByOrderIdFunction : IGetOrderItemFunction
+    public class GetOrderItemByOrderIdFunction : IGetOrderItemPaginationFunction
     {
         private readonly AppDbContext _Context;
         public GetOrderItemByOrderIdFunction(AppDbContext context) => _Context = context;
