@@ -178,8 +178,8 @@
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/store-management-system.git
-cd store-management-system
+git clone https://github.com/b2i0l0a3l/Store.git
+cd Store
 ```
 
 ### 2️⃣ Backend Setup
