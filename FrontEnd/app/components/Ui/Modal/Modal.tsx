@@ -9,11 +9,15 @@ function CustomModal({
   children,
   title,
   icon,
+  className,
+  maxWidth = "max-w-lg",
   onClose,
 }: {
   children: React.ReactNode;
   title: string;
   icon: React.ComponentType<{ className?: string }>;
+  className?: string;
+  maxWidth?: string;
   onClose: () => void;
 }) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -23,7 +27,6 @@ function CustomModal({
     setMounted(true);
   }, []);
 
-  /* ---- Scroll Lock + Escape Key ---- */
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -39,7 +42,6 @@ function CustomModal({
     };
   }, [onClose]);
 
-  /* ---- Focus Trap ---- */
   useEffect(() => {
     const modal = modalRef.current;
     if (!modal) return;
@@ -83,8 +85,8 @@ function CustomModal({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4
-        animate-[fadeIn_200ms_ease-out_forwards]"
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4
+        animate-[fadeIn_200ms_ease-out_forwards] ${className}`}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -92,8 +94,8 @@ function CustomModal({
       <div
         ref={modalRef}
         onClick={stopPropagation}
-        className="w-full max-w-lg relative
-          animate-[scaleIn_250ms_cubic-bezier(0.16,1,0.3,1)_forwards]"
+        className={`w-full ${maxWidth} relative
+          animate-[scaleIn_250ms_cubic-bezier(0.16,1,0.3,1)_forwards]`}
       >
         <button
           onClick={onClose}

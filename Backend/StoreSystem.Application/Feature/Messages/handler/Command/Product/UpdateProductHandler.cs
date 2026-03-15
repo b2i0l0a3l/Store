@@ -26,6 +26,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 p.Name = request.Name;
                 p.Price = request.Price;
                 p.Cost = request.Cost;
+                p.Quantity = request.Quantity;
                 p.CategoryId = request.CategoryId;
             });
 

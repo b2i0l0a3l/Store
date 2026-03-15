@@ -1,13 +1,14 @@
 import { getAccessToken } from "../../(auth)/util/session";
 import { MyResponse } from "../types";
 import { handleRefreshToken } from "./tokenManager";
+import { isTokenExpired } from "./tokenValidation";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /* -------------------- Headers -------------------- */
 
-async function buildHeaders(options: RequestInit) {
-  const token = await getAccessToken();
+async function buildHeaders(options: RequestInit, explicitToken?: string) {
+  const token = explicitToken || (await getAccessToken());
   const headers = new Headers(options.headers || {});
 
   if (!headers.has("Content-Type")) {
@@ -43,8 +44,7 @@ async function retryRequest(
   if (!newToken) return null;
 
   try {
-    const headers = await buildHeaders(options);
-    headers.set("Authorization", `Bearer ${newToken}`);
+    const headers = await buildHeaders(options, newToken);
     return await makeRequest(endpoint, options, headers);
   } catch (error) {
     console.error("Fetch API Retry Error:", error);
@@ -98,7 +98,17 @@ export async function fetchApi<T>(
   let res: Response;
 
   try {
-    const headers = await buildHeaders(options);
+    let token = await getAccessToken();
+
+    // Proactively refresh token if expired using jose logic
+    if (token && isTokenExpired(token)) {
+      const newToken = await handleRefreshToken();
+      if (newToken) {
+        token = newToken;
+      }
+    }
+
+    const headers = await buildHeaders(options, token);
     res = await makeRequest(endpoint, options, headers);
   } catch (error) {
     console.error("Fetch API Network Error:", error);

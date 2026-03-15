@@ -1,4 +1,4 @@
-import { getRefreshToken } from "@/app/(auth)/util/session";
+import { getAccessToken, getRefreshToken } from "@/app/(auth)/util/session";
 import { API_URL, fetchApi } from "@/app/util/Api/Api";
 import { MyResponse } from "@/app/util/types";
 
@@ -72,13 +72,13 @@ export async function refresh(
   body: RefreshTokenRequest,
 ): Promise<AuthResponse> {
   try {
-    const token = await getRefreshToken();
+    const accessToken = await getAccessToken();
 
     const response = await fetch(`${API_URL}/Auth/Refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -105,7 +105,7 @@ export async function Logout(body: LogoutRequest): Promise<AuthResponse> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${await getRefreshToken()}`,
+        Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: JSON.stringify(body),
     });

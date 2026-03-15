@@ -32,11 +32,9 @@ export default function ShowCardButton({ id }: { id: number }) {
       />
       {showCard && (
         <OrderModal
-          disabled={true}
           title=""
-          data={order ?? undefined}
+          OrderId={id}
           onClose={closeModal}
-          onClick={openModal}
           icon={ShoppingBagIcon}
         />
       )}
