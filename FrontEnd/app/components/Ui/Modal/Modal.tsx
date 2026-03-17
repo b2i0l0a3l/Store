@@ -10,14 +10,12 @@ function CustomModal({
   title,
   icon,
   className,
-  maxWidth = "max-w-lg",
   onClose,
 }: {
   children: React.ReactNode;
   title: string;
   icon: React.ComponentType<{ className?: string }>;
   className?: string;
-  maxWidth?: string;
   onClose: () => void;
 }) {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -94,8 +92,8 @@ function CustomModal({
       <div
         ref={modalRef}
         onClick={stopPropagation}
-        className={`w-full ${maxWidth} relative
-          animate-[scaleIn_250ms_cubic-bezier(0.16,1,0.3,1)_forwards]`}
+        className="w-full max-w-lg relative
+          animate-[scaleIn_250ms_cubic-bezier(0.16,1,0.3,1)_forwards]"
       >
         <button
           onClick={onClose}

@@ -5,10 +5,9 @@ export function isTokenExpired(token: string): boolean {
     const decoded = decodeJwt(token);
     if (!decoded.exp) return false;
 
-    // Add a 10 second buffer
     const currentTime = Math.floor(Date.now() / 1000);
     return decoded.exp < currentTime + 10;
   } catch (error) {
-    return true; // If we can't decode it, consider it expired to force a refresh/login
+    return true;
   }
 }

@@ -29,7 +29,6 @@ export default function OrderModal({
     <CustomModal
       title={title}
       icon={icon}
-      maxWidth="max-w-4xl"
       onClose={onClose}
     >
       <div className="flex flex-col gap-6 w-full mt-2">
