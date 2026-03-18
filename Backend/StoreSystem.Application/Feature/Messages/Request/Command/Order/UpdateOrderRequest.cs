@@ -11,6 +11,9 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command
 {
     public class UpdateOrderRequest : IRequest<Result>
     {
-        public required UpdateOrderModel Model { get; set; }
+         public int OrderId { get; set; }
+        public int? ClientId { get; set; }
+        public enOrderType OrderType { get; set; }
+        public enOrderStatus OrderStatus { get; set; }
     }
 }

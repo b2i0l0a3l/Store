@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Models
 {
-    public class OrderItemWithDetials
+    public class OrderItemWithTotalCount
     {
         public int Id { get; set; }
         public int OrderId { get; set; }

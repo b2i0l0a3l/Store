@@ -9,7 +9,7 @@ namespace StoreSystem.Core.interfaces
 {
     public interface IGetOrderItemPaginationFunction
     {
-        Task<Result<PagedResult<OrderItemFunctionModel>>> GetOrderItemByOrderIdAsync(int PageNumber, int PageSize,int OrderId);
+        Task<Result<PagedResult<OrderItemWithTotalCount>>> GetOrderItemByOrderIdAsync(int PageNumber, int PageSize,int OrderId);
         
     }
 }

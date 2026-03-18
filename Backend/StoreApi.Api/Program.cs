@@ -91,12 +91,12 @@ builder.Services.AddSwaggerGen(c =>
         {
             Title = "Store API - V1",
             Version = "v1",
-            Description = "A sample Student Management API ",
+            Description = "Store Management API ",
             TermsOfService = new Uri("http://tempuri.org/terms"),
             Contact = new OpenApiContact
             {
                 Name = "Bilal",
-                Email = "belamraoui92@gmail.com"
+                Email = "belamraoui21@gmail.com"
             },
             License = new OpenApiLicense
             {

@@ -18,9 +18,9 @@ namespace StoreApi.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllDebtsPagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll([FromQuery] GetDebtsRequest req)
+        public async Task<IActionResult> GetAllDebtsPagination([FromQuery] GetDebtsRequest req)
         {
             var result = await _mediator.Send(req);
             return Ok(result);

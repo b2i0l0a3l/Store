@@ -8,7 +8,8 @@ namespace StoreSystem.Core.Models
     public class OrderCardModel
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string ClientName { get; set; } = string.Empty;
+        public int? ClientId { get; set; } 
         public decimal Total { get; set; }
         public decimal Remaining { get; set; }
         public string OrderType { get; set; } = string.Empty;

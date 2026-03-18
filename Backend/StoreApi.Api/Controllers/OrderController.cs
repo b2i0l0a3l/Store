@@ -47,15 +47,6 @@ namespace StoreApi.Api.Controllers
             return Ok(result.Value);
         }
 
-        [HttpPost("Add")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Add([FromBody] AddOrderRequest request)
-        {
-            var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
-        }
 
         [HttpPut("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]

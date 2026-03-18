@@ -12,14 +12,14 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
-    public class GetOrderItemHandler : IRequestHandler<GetOrderItemsRequest, Result<PagedResult<OrderItemWithDetials>>>
+    public class GetOrderItemHandler : IRequestHandler<GetOrderItemsRequest, Result<PagedResult<OrderItemWithTotalCount>>>
     {
         private readonly IGetOrderItemPagination _itemFunction;
         public GetOrderItemHandler(IGetOrderItemPagination itemFunction)
         {
             _itemFunction = itemFunction;
         }
-        public async Task<Result<PagedResult<OrderItemWithDetials>>> Handle(GetOrderItemsRequest request, CancellationToken cancellationToken)
+        public async Task<Result<PagedResult<OrderItemWithTotalCount>>> Handle(GetOrderItemsRequest request, CancellationToken cancellationToken)
         {
             return await _itemFunction.handle(request.PageNumber, request.PageSize);
         }

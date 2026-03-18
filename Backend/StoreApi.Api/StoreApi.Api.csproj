@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="**/*.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\StoreSystem.Application\StoreSystem.Application.csproj" />
     <ProjectReference Include="..\StoreSystem.Infrastructure\StoreSystem.Infrastructure.csproj" />
   </ItemGroup>

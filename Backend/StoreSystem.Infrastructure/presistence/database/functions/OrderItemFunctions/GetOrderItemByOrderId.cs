@@ -18,7 +18,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
         private readonly AppDbContext _Context;
         public GetOrderItemByOrderId(AppDbContext context) => _Context = context;
 
-        public async Task<Result<IEnumerable<GetOrderItemByOrderIdModel>>> GetResultAsync(int OrderId)
+        public async Task<Result<IEnumerable<GetOrderItemFunctionModel>>> GetResultAsync(int OrderId)
         {
              var connection = _Context.Database.GetDbConnection();
 
@@ -30,7 +30,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
 
                 parameters.Add("p_order_id", OrderId);
 
-                var result = await connection.QueryAsync<GetOrderItemByOrderIdModel>("select * from fn_get_all_order_item_by_order_id(@p_order_id)",
+                var result = await connection.QueryAsync<GetOrderItemFunctionModel>("select * from fn_get_all_order_item_by_order_id(@p_order_id)",
                     parameters
                 );
                 var list = result.ToList();

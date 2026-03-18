@@ -18,15 +18,15 @@ namespace StoreApi.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllClientsPagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAll([FromQuery]GetClientsRequest req)
+        public async Task<IActionResult> GetAllClientsPagination([FromQuery]GetClientsRequest req)
         {
             var result = await _mediator.Send(req);
             return Ok(result);
         }
 
-        [HttpGet("All")]
+        [HttpGet("GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> All()
         {

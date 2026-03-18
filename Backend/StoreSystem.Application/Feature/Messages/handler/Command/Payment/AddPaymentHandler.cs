@@ -26,7 +26,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result> Handle(AddPaymentRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.Handle(request.Model);
+            var result = await _Repo.Handle(new AddPaymentModel{Amount = request.Amount, DebtId= request.DebtId});
             return result;
         }
     }

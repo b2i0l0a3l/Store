@@ -7,6 +7,7 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
+using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
@@ -21,7 +22,15 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result> Handle(UpdateOrderItemRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.handle(request.request);   
+            UpdateOrderItemModel req = new()
+            {
+                OrderId = request.OrderId,
+                OrderItemId = request.OrderItemId,
+                Price = request.Price,
+                ProductId = request.ProductId,
+                Quantity = request.Quantity
+            };
+            var result = await _Repo.handle(req);   
             return result;
         }
     }

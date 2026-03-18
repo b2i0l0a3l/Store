@@ -9,6 +9,7 @@ using StoreSystem.Core.common;
 using StoreSystem.Core.enums;
 using StoreSystem.Core.interfaces;
 using StoreSystem.Core.Models;
+using StoreSystem.Core.Models.OrderItemModels;
 using StoreSystem.Infrastructure.Persistence;
 
 namespace StoreSystem.Infrastructure.presistence.database.functions.OrderItemFunctions
@@ -17,7 +18,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderItemFun
     {
         private readonly AppDbContext _Context;
         public GetOrderItemPagination(AppDbContext context) => _Context = context;
-        public async Task<Result<PagedResult<OrderItemWithDetials>>> handle(int PageNumber, int PageSize)
+        public async Task<Result<PagedResult<OrderItemWithTotalCount>>> handle(int PageNumber, int PageSize)
         {
              var connection = _Context.Database.GetDbConnection();
 
@@ -30,12 +31,12 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderItemFun
                 parameters.Add("p_page_number", PageNumber);
                 parameters.Add("p_page_size", PageSize);
 
-                var result = await connection.QueryAsync<OrderItemWithDetials>("select * from fn_get_order_item_paginated(@p_page_size,@p_page_number)",
+                var result = await connection.QueryAsync<OrderItemWithTotalCount>("select * from fn_get_order_item_paginated(@p_page_size,@p_page_number)",
                     parameters
                 );
                 var list = result.ToList();
                 if (list.Count == 0) return Errors.DataNotFoundError;
-                PagedResult<OrderItemWithDetials> pagedResult = new ()
+                PagedResult<OrderItemWithTotalCount> pagedResult = new ()
                 {
                     Items = list,
                     TotalItems = list.Count,

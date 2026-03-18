@@ -14,14 +14,14 @@ using StoreSystem.Core.Models.OrderItemModels;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Query.Order
 {
-    public class GetOrderItemsByOrderIdHandler : IRequestHandler<GetOrderItemsByOrderIdRequest, Result<IEnumerable<GetOrderItemByOrderIdModel>>>
+    public class GetOrderItemsByOrderIdHandler : IRequestHandler<GetOrderItemsByOrderIdRequest, Result<IEnumerable<GetOrderItemFunctionModel>>>
     {
         private readonly IGetOrderItemsByOrderIdFunc _repo;
         public GetOrderItemsByOrderIdHandler(IGetOrderItemsByOrderIdFunc repo)
         {
             _repo = repo;
         }
-        public async Task<Result<IEnumerable<GetOrderItemByOrderIdModel>>> Handle(GetOrderItemsByOrderIdRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetOrderItemFunctionModel>>> Handle(GetOrderItemsByOrderIdRequest request, CancellationToken cancellationToken)
         {
             return await _repo.GetResultAsync(request.OrderId);
         }

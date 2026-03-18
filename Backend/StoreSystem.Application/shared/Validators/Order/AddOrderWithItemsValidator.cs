@@ -11,9 +11,9 @@ namespace StoreSystem.Application.shared.Validators.Order
     {
         public AddOrderWithItemsValidator()
         {
-            RuleFor(x => x.Request.Client_Id).NotNull().WithMessage("Client Id Is Required.");
-            RuleFor(x => x.Request.Items).NotEmpty().WithMessage("You must add at least one item.");
-            RuleFor(x => x.Request.Items).NotNull().WithMessage("items is required.");
+            RuleFor(x => x.ClientId).NotNull().WithMessage("Client Id Is Required.");
+            RuleFor(x => x.Items).NotEmpty().WithMessage("You must add at least one item.");
+            RuleFor(x => x.Items).NotNull().WithMessage("items is required.");
         }
     }
 }

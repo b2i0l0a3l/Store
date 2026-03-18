@@ -10,6 +10,7 @@ namespace StoreApi.Api.Controllers
 {
     [Route("api/Category")]
     [ApiController]
+    [Authorize]
     public class CategoryController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -19,30 +20,30 @@ namespace StoreApi.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAllCategoriesPagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAll([FromQuery]GetCategoriesRequest req)
+        public async Task<IActionResult> GetAllCategoriesPagination([FromQuery]GetCategoriesRequest req)
         {
             var result = await _mediator.Send(req);
             if (result.Value == null) return NotFound(result);
             return Ok(result);
         }
 
-        [HttpGet("All")]
+        [HttpGet("GetAllCategories")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> GetAllCategories()
         {
             var result = await _mediator.Send(new GetAllCategoriesRequest());
             if (result.Value == null) return NotFound(result);
             return Ok(result);
         }
 
-        [HttpGet("GetById/{id}")]
+        [HttpGet("{id}",Name="GetCategoryById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetCategoryById(int id)
         {
             var result = await _mediator.Send(new GetCategoryByIdRequest { Id = id });
             if (result.Value ==null)

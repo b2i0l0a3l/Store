@@ -18,7 +18,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderItemFun
         private readonly AppDbContext _Context;
         public GetOrderItemByOrderIdFunction(AppDbContext context) => _Context = context;
 
-        public async Task<Result<PagedResult<OrderItemFunctionModel>>> GetOrderItemByOrderIdAsync(int PageNumber, int PageSize, int OrderId)
+        public async Task<Result<PagedResult<OrderItemWithTotalCount>>> GetOrderItemByOrderIdAsync(int PageNumber, int PageSize, int OrderId)
         {
              var connection = _Context.Database.GetDbConnection();
 
@@ -32,12 +32,12 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderItemFun
                 parameters.Add("p_page_size", PageSize);
                 parameters.Add("p_order_id", OrderId);
 
-                var result = await connection.QueryAsync<OrderItemFunctionModel>("select * from fn_get_all_order_items_paged(@p_page_number,@p_page_size,@p_order_id)",
+                var result = await connection.QueryAsync<OrderItemWithTotalCount>("select * from fn_get_all_order_items_paged(@p_page_number,@p_page_size,@p_order_id)",
                     parameters
                 );
                 var list = result.ToList();
                 if (list.Count == 0) return Errors.DataNotFoundError;
-                PagedResult<OrderItemFunctionModel> pagedResult = new ()
+                PagedResult<OrderItemWithTotalCount> pagedResult = new ()
                 {
                     Items = list,
                     TotalItems = list.Count,

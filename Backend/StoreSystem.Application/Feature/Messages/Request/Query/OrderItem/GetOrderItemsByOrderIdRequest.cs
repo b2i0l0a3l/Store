@@ -9,7 +9,7 @@ using StoreSystem.Core.Models.OrderItemModels;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Query.Order
 {
-    public class GetOrderItemsByOrderIdRequest : IRequest<Result<IEnumerable<GetOrderItemByOrderIdModel>>>
+    public class GetOrderItemsByOrderIdRequest : IRequest<Result<IEnumerable<GetOrderItemFunctionModel>>>
     {
         public int OrderId { get; set; }
     }
