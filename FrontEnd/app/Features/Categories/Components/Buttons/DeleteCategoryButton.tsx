@@ -4,6 +4,7 @@ import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback } from "react";
 import { useCategoryStore } from "@/app/Features/Categories/store/category";
+import { toast } from "@/app/store/useToastStore";
 
 const DeleteCategoryButton = memo(function DeleteCategoryButton({
   dataId,
@@ -11,8 +12,13 @@ const DeleteCategoryButton = memo(function DeleteCategoryButton({
   dataId: number;
 }) {
   const handleDelete = useCallback(async () => {
-    await deleteCategory({ id: dataId });
-    useCategoryStore.getState().recordDelete(dataId);
+    const success = await deleteCategory({ id: dataId });
+    if (success) {
+      useCategoryStore.getState().recordDelete(dataId);
+      toast.success("تم حذف التصنيف بنجاح");
+    } else {
+      toast.error("حدث خطأ أثناء حذف التصنيف");
+    }
   }, [dataId]);
 
   return (

@@ -5,6 +5,7 @@ import { memo, useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { updateClient } from "@/app/Features/clients/api/clientApi";
 import { useClientStore } from "@/app/Features/clients/store/client";
+import { toast } from "@/app/store/useToastStore";
 
 const UpdateClientButton = memo(function UpdateClientButton({
   data,
@@ -18,11 +19,16 @@ const UpdateClientButton = memo(function UpdateClientButton({
 
   const handleSubmit = useCallback(
     async (name: string, phoneNumber: string) => {
-      await updateClient({ id: data.id, name, phoneNumber });
-      useClientStore
-        .getState()
-        .recordUpdate({ id: data.id, name, phoneNumber });
-      setOpen(false);
+      const success = await updateClient({ id: data.id, name, phoneNumber });
+      if (success) {
+        useClientStore
+          .getState()
+          .recordUpdate({ id: data.id, name, phoneNumber });
+        toast.success("تم تعديل بيانات العميل بنجاح");
+        setOpen(false);
+      } else {
+        toast.error("حدث خطأ أثناء التعديل");
+      }
     },
     [data.id],
   );

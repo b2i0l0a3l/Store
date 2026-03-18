@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { addClient } from "@/app/Features/clients/api/clientApi";
+import { toast } from "@/app/store/useToastStore";
 
 export default function AddClientButton() {
   const [openModal, setOpenModal] = useState(false);
@@ -13,8 +14,13 @@ export default function AddClientButton() {
 
   const handleSubmit = useCallback(
     async (name: string, phoneNumber: string) => {
-      await addClient({ name, phoneNumber });
-      setOpenModal(false);
+      const success = await addClient({ name, phoneNumber });
+      if (success) {
+        toast.success("تمت إضافة العميل بنجاح");
+        setOpenModal(false);
+      } else {
+        toast.error("حدث خطأ أثناء إضافة العميل");
+      }
     },
     [],
   );

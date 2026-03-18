@@ -5,6 +5,7 @@ import { memo, useState, useCallback } from "react";
 import CategoryModal from "../Modal/CategoryModal";
 import { updateCategory } from "@/app/Features/Categories/api/categoryApi";
 import { useCategoryStore } from "@/app/Features/Categories/store/category";
+import { toast } from "@/app/store/useToastStore";
 
 const UpdateCategoryButton = memo(function UpdateCategoryButton({
   data,
@@ -18,11 +19,16 @@ const UpdateCategoryButton = memo(function UpdateCategoryButton({
 
   const handleSubmit = useCallback(
     async (name: string) => {
-      await updateCategory({ id: data.id, name });
-      useCategoryStore
-        .getState()
-        .recordUpdate({ id: data.id, name, totalCount: data.totalCount });
-      setOpen(false);
+      const success = await updateCategory({ id: data.id, name });
+      if (success) {
+        useCategoryStore
+          .getState()
+          .recordUpdate({ id: data.id, name, totalCount: data.totalCount });
+        toast.success("تم تعديل التصنيف بنجاح");
+        setOpen(false);
+      } else {
+        toast.error("حدث خطأ أثناء تعديل التصنيف");
+      }
     },
     [data.id, data.totalCount],
   );

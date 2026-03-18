@@ -4,6 +4,7 @@ import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback } from "react";
 import { useClientStore } from "@/app/Features/clients/store/client";
+import { toast } from "@/app/store/useToastStore";
 
 const DeleteClientButton = memo(function DeleteClientButton({
   dataId,
@@ -11,8 +12,13 @@ const DeleteClientButton = memo(function DeleteClientButton({
   dataId: number;
 }) {
   const handleDelete = useCallback(async () => {
-    await deleteClient({ id: dataId });
-    useClientStore.getState().recordDelete(dataId);
+    const success = await deleteClient({ id: dataId });
+    if (success) {
+      useClientStore.getState().recordDelete(dataId);
+      toast.success("تم حذف العميل بنجاح");
+    } else {
+      toast.error("حدث خطأ أثناء الحذف");
+    }
   }, [dataId]);
 
   return (

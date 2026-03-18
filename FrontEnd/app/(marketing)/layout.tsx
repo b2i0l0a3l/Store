@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   description: "  description: Verwalten sie dein Geschaft.",
 };
 
+import ToastContainer from "../components/Ui/Toast/ToastContainer";
+
 export default function MarketingLayout({
   children,
 }: Readonly<{
@@ -29,6 +31,7 @@ export default function MarketingLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SidebarProvider>{children}</SidebarProvider>
+        <ToastContainer />
       </body>
     </html>
   );

@@ -7,6 +7,7 @@ import { addProduct } from "@/app/Features/Products/api/productApi";
 import { category } from "@/app/Features/Categories/types";
 import { product } from "@/app/Features/Products/types";
 import { useProductStore } from "@/app/Features/Products/store/product";
+import { toast } from "@/app/store/useToastStore";
 
 export default function AddProductButton({
   categories,
@@ -21,11 +22,14 @@ export default function AddProductButton({
 
   const handleSubmit = useCallback(
     async (payload: any, formData: any) => {
-      const newProduct = await addProduct(payload);
-      if (newProduct) {
+      const success = await addProduct(payload);
+      if (success) {
         recordAdd(formData);
+        toast.success("تمت إضافة المنتج بنجاح");
+        setOpenModal(false);
+      } else {
+        toast.error("حدث خطأ أثناء إضافة المنتج");
       }
-      setOpenModal(false);
     },
     [recordAdd],
   );

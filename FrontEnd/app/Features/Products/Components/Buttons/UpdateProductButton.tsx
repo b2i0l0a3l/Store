@@ -7,6 +7,7 @@ import { updateProduct } from "@/app/Features/Products/api/productApi";
 import { useProductStore } from "@/app/Features/Products/store/product";
 import { category } from "@/app/Features/Categories/types";
 import { product } from "@/app/Features/Products/types";
+import { toast } from "@/app/store/useToastStore";
 
 const UpdateProductButton = memo(function UpdateProductButton({
   data,
@@ -23,11 +24,14 @@ const UpdateProductButton = memo(function UpdateProductButton({
   const handleSubmit = useCallback(
     async (payload: any, formData: any) => {
       const updatedData = { ...payload, id: data.id };
-      const r = await updateProduct(updatedData);
-      if (r) {
+      const success = await updateProduct(updatedData);
+      if (success) {
         useProductStore.getState().recordUpdate({ ...data, ...formData });
+        toast.success("تم تعديل المنتج بنجاح");
+        setOpen(false);
+      } else {
+        toast.error("حدث خطأ أثناء تعديل المنتج");
       }
-      setOpen(false);
     },
     [data],
   );

@@ -5,6 +5,7 @@ import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import PaymentModal from "../Modal/PaymentModal";
 import { pay } from "@/app/Features/Debts/api/paymentApi";
 import { useDebtStore } from "@/app/Features/Debts/store/debt";
+import { toast } from "@/app/store/useToastStore";
 
 function PaymentButton({
   debtId,
@@ -23,9 +24,12 @@ function PaymentButton({
       debtId: data.OrderId,
       amount: data.Amount,
     };
-    const r = await pay(model);
-    if (r) {
+    const success = await pay(model);
+    if (success) {
       debtStore.recordUpdate({ ...data, id: debtId });
+      toast.success("تم تسجيل الدفعة بنجاح");
+    } else {
+      toast.error("حدث خطأ أثناء تسجيل الدفعة");
     }
     setOpen(false);
   };

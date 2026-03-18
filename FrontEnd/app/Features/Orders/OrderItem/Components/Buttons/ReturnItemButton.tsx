@@ -1,18 +1,29 @@
+"use client";
 import { ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
+import { useState } from "react";
+import { OrderItem } from "../../types";
+import ReturnItemModal from "../Modal/ReturnItemModal";
 
-export default function ReturnItemButton({ itemId }: { itemId: number }) {
+export default function ReturnItemButton({
+  orderItem,
+}: {
+  orderItem: OrderItem;
+}) {
+  const [open, setOpen] = useState(false);
   return (
-    <CustomButton
-      onClick={() => {
-        // TODO: Handle item return
-        console.log("Return item", itemId);
-      }}
-      text=""
-      hoverColor=""
-      hoverTextColor="text-white"
-      className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-amber-500/80 transition-all duration-200"
-      icon={ArrowUturnLeftIcon}
-    />
+    <>
+      <CustomButton
+        onClick={() => {
+          setOpen(true);
+        }}
+        text=""
+        hoverColor=""
+        hoverTextColor="text-white"
+        className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-amber-500/80 transition-all duration-200"
+        icon={ArrowUturnLeftIcon}
+      />
+      {open && <ReturnItemModal setOpen={setOpen} orderItem={orderItem} />}
+    </>
   );
 }

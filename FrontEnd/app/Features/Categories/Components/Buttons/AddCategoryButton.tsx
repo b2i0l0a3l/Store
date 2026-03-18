@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { useState, useCallback } from "react";
 import CategoryModal from "../Modal/CategoryModal";
 import { addCategory } from "@/app/Features/Categories/api/categoryApi";
+import { toast } from "@/app/store/useToastStore";
 
 export default function AddCategoryButton() {
   const [openModal, setOpenModal] = useState(false);
@@ -12,8 +13,13 @@ export default function AddCategoryButton() {
   const handleClose = useCallback(() => setOpenModal(false), []);
 
   const handleSubmit = useCallback(async (name: string) => {
-    await addCategory({ name });
-    setOpenModal(false);
+    const success = await addCategory({ name });
+    if (success) {
+      toast.success("تمت إضافة التصنيف بنجاح");
+      setOpenModal(false);
+    } else {
+      toast.error("حدث خطأ أثناء إضافة التصنيف");
+    }
   }, []);
 
   return (

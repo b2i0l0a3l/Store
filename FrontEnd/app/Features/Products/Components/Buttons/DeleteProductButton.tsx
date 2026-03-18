@@ -4,6 +4,7 @@ import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback } from "react";
 import { useProductStore } from "@/app/Features/Products/store/product";
+import { toast } from "@/app/store/useToastStore";
 
 const DeleteProductButton = memo(function DeleteProductButton({
   dataId,
@@ -11,9 +12,12 @@ const DeleteProductButton = memo(function DeleteProductButton({
   dataId: number;
 }) {
   const handleDelete = useCallback(async () => {
-    const r = await deleteProduct({ id: dataId });
-    if (r) {
+    const success = await deleteProduct({ id: dataId });
+    if (success) {
       useProductStore.getState().recordDelete(dataId);
+      toast.success("تم حذف المنتج بنجاح");
+    } else {
+      toast.error("حدث خطأ أثناء حذف المنتج");
     }
   }, [dataId]);
 
