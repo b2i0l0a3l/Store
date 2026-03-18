@@ -26,8 +26,10 @@ export default function ShowCardButton({ id }: { id: number }) {
     <>
       <CustomButton
         onClick={openModal}
-        className=" text-white px-4 py-2 bg-transparent rounded-md"
         text=""
+        hoverColor=""
+        hoverTextColor="text-white"
+        className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-emerald-500/80 transition-all duration-200"
         icon={EyeIcon}
       />
       {showCard && (

@@ -32,7 +32,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             User? user = await _UManager.FindByEmailAsync(request.Email);
             if (user == null) return Errors.UserNotFoundError;
 
-            if (request.TokenId == null) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Token Id is Required!");
+            if (string.IsNullOrEmpty(request.TokenId)) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Token Id is Required!");
 
             Result<RefreshToken?> result  = await _Repo.GetByCondition(x=>x.TokenId == request.TokenId);
 
@@ -56,7 +56,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role ?? "Viewer"),
+                new Claim("TokenId", refreshToken.TokenId)
             };
            
             string newAccessToken = _GenerateJwtToken.Generate(claims);

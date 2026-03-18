@@ -5,7 +5,6 @@ import { isTokenExpired } from "./tokenValidation";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-/* -------------------- Headers -------------------- */
 
 async function buildHeaders(options: RequestInit, explicitToken?: string) {
   const token = explicitToken || (await getAccessToken());
@@ -22,7 +21,6 @@ async function buildHeaders(options: RequestInit, explicitToken?: string) {
   return headers;
 }
 
-/* -------------------- Fetch Request -------------------- */
 
 async function makeRequest(
   endpoint: string,
@@ -99,8 +97,6 @@ export async function fetchApi<T>(
 
   try {
     let token = await getAccessToken();
-
-    // Proactively refresh token if expired using jose logic
     if (token && isTokenExpired(token)) {
       const newToken = await handleRefreshToken();
       if (newToken) {

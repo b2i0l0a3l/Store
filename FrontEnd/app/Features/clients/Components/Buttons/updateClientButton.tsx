@@ -1,6 +1,6 @@
 "use client";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
-import { PencilIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { memo, useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { updateClient } from "@/app/Features/clients/api/clientApi";
@@ -30,17 +30,17 @@ const UpdateClientButton = memo(function UpdateClientButton({
   return (
     <>
       <CustomButton
-        className="px-4 py-2"
-        color=""
-        hoverColor="hover:opacity-80"
-        text=""
-        icon={PencilIcon}
         onClick={handleOpen}
+        text=""
+        hoverColor=""
+        hoverTextColor="text-white"
+        className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-blue-500/80 transition-all duration-200"
+        icon={PencilSquareIcon}
       />
       {open && (
         <ClientModal
           title="Update Client"
-          icon={PencilIcon}
+          icon={PencilSquareIcon}
           onClose={handleClose}
           data={data}
           onClick={handleSubmit}

@@ -7,7 +7,6 @@ import {
 } from "../../(auth)/util/session";
 import { AuthResponse, Logout, refresh } from "@/app/(auth)/api/authApi";
 import { CurrentUser } from "../currentUser";
-import { redirect } from "next/navigation";
 
 async function handleLogout(email: string, refreshToken: string) {
   await clearTokens();
@@ -22,27 +21,22 @@ async function updateTokens(ref: AuthResponse) {
 export async function handleRefreshToken(): Promise<string | null> {
   try {
     const r = await CurrentUser();
-    if (r === null) redirect("/login");
+    if (r === null) return null;
     const rt = await getRefreshToken();
-    if (rt === null) redirect("/login");
-
+    if (rt === undefined || rt === null) return null;
     const ref: AuthResponse = await refresh({
       email: r.email,
-      refreshToken: rt!,
+      refreshToken: rt,
     });
-
     if (ref.isSuccess) {
       await updateTokens(ref);
       return ref.accessToken!;
     } else {
-      await handleLogout(r.email, rt!);
-      redirect("/login");
+      await handleLogout(r.email, rt);
+      return null;
     }
   } catch (error) {
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      throw error;
-    }
     console.error("Refresh token error:", error);
-    redirect("/login");
+    return null;
   }
 }

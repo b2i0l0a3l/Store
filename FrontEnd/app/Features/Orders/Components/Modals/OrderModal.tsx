@@ -30,6 +30,7 @@ export default function OrderModal({
       title={title}
       icon={icon}
       onClose={onClose}
+      className="max-w-4xl!"
     >
       <div className="flex flex-col gap-6 w-full mt-2">
         <div className="w-full overflow-x-auto rounded-xl border border-slate-700/50 bg-slate-800/20">

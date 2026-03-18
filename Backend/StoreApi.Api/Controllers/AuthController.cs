@@ -50,8 +50,8 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Refresh([FromBody] RefreshRequest request)
         {
             var tokenId = User?.FindFirst("TokenId")?.Value;
+            Console.WriteLine("TokenId: " + tokenId);
             request.TokenId = tokenId;
-
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);

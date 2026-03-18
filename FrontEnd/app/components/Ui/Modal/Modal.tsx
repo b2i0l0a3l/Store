@@ -84,7 +84,7 @@ function CustomModal({
   return createPortal(
     <div
       className={`fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4
-        animate-[fadeIn_200ms_ease-out_forwards] ${className}`}
+        animate-[fadeIn_200ms_ease-out_forwards] `}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -92,8 +92,8 @@ function CustomModal({
       <div
         ref={modalRef}
         onClick={stopPropagation}
-        className="w-full max-w-lg relative
-          animate-[scaleIn_250ms_cubic-bezier(0.16,1,0.3,1)_forwards]"
+        className={`w-full max-w-lg relative
+          animate-[scaleIn_250ms_cubic-bezier(0.16,1,0.3,1)_forwards] ${className}`}
       >
         <button
           onClick={onClose}

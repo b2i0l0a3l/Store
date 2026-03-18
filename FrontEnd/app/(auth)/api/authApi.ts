@@ -73,16 +73,15 @@ export async function refresh(
 ): Promise<AuthResponse> {
   try {
     const accessToken = await getAccessToken();
-
     const response = await fetch(`${API_URL}/Auth/Refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
+        "Authorization": `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     });
-
+    console.log(response);
     if (!response.ok) {
       return { isSuccess: false, message: "Refresh failed" };
     }

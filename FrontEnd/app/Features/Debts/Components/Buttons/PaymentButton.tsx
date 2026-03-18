@@ -1,7 +1,7 @@
 "use client";
 import { memo, useState } from "react";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
-import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
+import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import PaymentModal from "../Modal/PaymentModal";
 import { pay } from "@/app/Features/Debts/api/paymentApi";
 import { useDebtStore } from "@/app/Features/Debts/store/debt";
@@ -34,10 +34,10 @@ function PaymentButton({
       <CustomButton
         disabled={disabled}
         onClick={handleOpen}
-        className="px-4 py-2"
-        color=""
-        hoverColor="hover:opacity-80"
         text=""
+        hoverColor=""
+        hoverTextColor="text-white"
+        className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-emerald-500/80 transition-all duration-200 disabled:opacity-50"
         icon={CurrencyDollarIcon}
       />
       {open && (

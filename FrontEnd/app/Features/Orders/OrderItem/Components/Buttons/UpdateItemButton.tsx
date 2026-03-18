@@ -1,10 +1,13 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 
-export default function UpdateOrderButton() {
+export default function UpdateItemButton({ itemId }: { itemId: number }) {
   return (
     <CustomButton
-      onClick={() => {}}
+      onClick={() => {
+        // TODO: Handle item update
+        console.log("Update item", itemId);
+      }}
       text=""
       hoverColor=""
       hoverTextColor="text-white"

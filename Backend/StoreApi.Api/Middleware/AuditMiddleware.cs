@@ -26,7 +26,7 @@ namespace StoreApi.Api.Middleware
             TimeSpan Duration = EndAt - StartAt;
 
             
-            if (context.Request.Method != "GET" || !context.Request.Path.StartsWithSegments("/swagger"))
+            if (context.Request.Method != "GET")
             {
                 var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -51,11 +51,17 @@ namespace StoreApi.Api.Middleware
                 await _Repo.Add(log);  
             }
             
-            _logger.LogInformation(
-                "Request {method} {path} responded {status}  time: {Duration}",
+            if(context.Response.StatusCode == 401 || context.Response.StatusCode == 400)
+                _logger.LogWarning("Request {method} {path} responded {status}  time: {Duration} seconds",
                 context.Request.Method,
                 context.Request.Path,
-                context.Response.StatusCode, Duration.TotalMilliseconds);
+                context.Response.StatusCode, Duration.Seconds);
+            else
+                _logger.LogInformation(
+                    "Request {method} {path} responded {status}  time: {Duration} seconds",
+                    context.Request.Method,
+                    context.Request.Path,
+                    context.Response.StatusCode, Duration.Seconds);
         }
 
     }

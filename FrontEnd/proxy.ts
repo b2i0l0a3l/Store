@@ -1,0 +1,20 @@
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { decodeJwt } from "jose";
+
+export function proxy(request: NextRequest) {
+  const token = request.cookies.get("accessToken")?.value;
+   
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+ 
+
+  return NextResponse.next();
+}
+
+export const config = {
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|login|register).*)",
+  ],
+};
