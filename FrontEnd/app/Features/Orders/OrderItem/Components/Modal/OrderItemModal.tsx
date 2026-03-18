@@ -4,6 +4,7 @@ import { OrderItem } from "../../types";
 import { updateOrderItem } from "../../Api/OrderItemApi";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { toast } from "@/app/store/useToastStore";
+import { useOrderItemStore } from "../../store/orderItem";
 
 export default function OrderItemModal({
   setOpen,
@@ -39,9 +40,12 @@ export default function OrderItemModal({
     const success = await updateOrderItem(payload);
 
     if (success) {
-      toast.success(
-        "Item updated successfully (please refresh the page to view changes if necessary)",
-      );
+      toast.success("Item updated successfully!");
+      useOrderItemStore.getState().recordUpdate({
+        ...orderItem,
+        price: formData.price,
+        quantity: formData.quantity,
+      });
       setOpen(false);
     } else {
       toast.error("an error occurred while updating the item");

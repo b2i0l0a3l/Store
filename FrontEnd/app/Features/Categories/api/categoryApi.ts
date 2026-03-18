@@ -3,7 +3,7 @@ import { category } from "../types";
 
 export async function getCategories(): Promise<category[]> {
   try {
-    const result = await fetchApi<{ value: category[] }>(`/Category/All`, {
+    const result = await fetchApi<{ value: category[] }>(`/Category/GetAllCategories`, {
       cache: "no-store",
     });
 

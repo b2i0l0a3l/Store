@@ -22,15 +22,13 @@ function CreditModal({cart ,onClose}: { cart: CartItem[]; onClose: () => void}) 
 
   const request = useMemo(
         () => ({
-          request: {
             orderType: 1,
-            client_id: selectedClient?.value,
+            clientId: selectedClient?.value,
             items: cart.map((item: any) => ({
               productId: item.productId,
               quantity: item.quantity,
               price: item.price,
             })),
-          },
         }),
         [cart,selectedClient],
       );

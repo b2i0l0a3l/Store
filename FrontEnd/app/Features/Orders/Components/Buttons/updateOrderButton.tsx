@@ -1,10 +1,15 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
+import { order } from "../../types";
+import { useOrderStore } from "../../store/order";
 
-export default function UpdateOrderButton() {
+export default function UpdateOrderButton({ order }: { order: order }) {
   return (
     <CustomButton
-      onClick={() => {}}
+      onClick={() => {
+        // TODO: Open update modal or handle API
+        // useOrderStore.getState().recordUpdate(updatedOrder);
+      }}
       text=""
       hoverColor=""
       hoverTextColor="text-white"

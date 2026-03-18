@@ -1,10 +1,13 @@
 import { TrashIcon } from "@heroicons/react/24/outline";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
+import { useOrderStore } from "../../store/order";
 
-export default function DeleteOrderButton() {
+export default function DeleteOrderButton({ id }: { id: number }) {
   return (
     <CustomButton
-      onClick={() => {}}
+      onClick={() => {
+        // useOrderStore.getState().recordDelete(id);
+      }}
       text=""
       hoverColor=""
       hoverTextColor="text-white"

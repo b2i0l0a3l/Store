@@ -6,19 +6,28 @@ import CustomSearch from "@/app/components/Ui/Search/CustomSearch";
 import { useCallback, useMemo, useState } from "react";
 import { order } from "@/app/Features/Orders/types";
 import OrderTable from "./Table/OrderTable";
+import { useOrderStore } from "@/app/Features/Orders/store/order";
 
 function OrderSection({ data }: { data: order[] }) {
   const [search, setSearch] = useState("");
+  const updatedOrders = useOrderStore((state) => state.updatedOrders);
+  const deletedOrderIds = useOrderStore((state) => state.deletedOrderIds);
 
   const handleSearch = useCallback((value: string) => {
     setSearch(value);
   }, []);
 
+  const displayData = useMemo(() => {
+    return data
+      .filter((item) => !deletedOrderIds.has(item.id))
+      .map((item) => updatedOrders[item.id] || item);
+  }, [data, updatedOrders, deletedOrderIds]);
+
   const filteredData = useMemo(() => {
-    return data.filter((order) =>
-      order.name.toLowerCase().includes(search.toLowerCase()),
+    return displayData.filter((order) =>
+      order.clientName.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [data, search]);
+  }, [displayData, search]);
 
   return (
     <>

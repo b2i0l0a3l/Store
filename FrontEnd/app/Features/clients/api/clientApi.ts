@@ -3,7 +3,7 @@ import { client } from "../types";
 
 export async function getClients(): Promise<client[]> {
   try {
-    const result = await fetchApi<{ value: client[] }>(`/Client/All`, {
+    const result = await fetchApi<{ value: client[] }>(`/Client/GetAll`, {
       cache: "no-store",
     });
 

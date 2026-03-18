@@ -16,14 +16,12 @@ export default function BuyButton() {
 
   const request = useMemo(
     () => ({
-      request: {
-        order_type: 0,
-        items: cart.map((item: any) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-      },
+      orderType: 0,
+      items: cart.map((item: any) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      })),
     }),
     [cart],
   );

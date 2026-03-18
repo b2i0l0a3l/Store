@@ -4,6 +4,8 @@ import { OrderItem } from "../../types";
 import ReturnItemButton from "../Buttons/ReturnItemButton";
 import DeleteItemButton from "../Buttons/DeleteItemButton";
 import UpdateItemButton from "../Buttons/UpdateItemButton";
+import { useOrderItemStore } from "../../store/orderItem";
+import { useMemo } from "react";
 
 const columns: Column<OrderItem>[] = [
   { key: "productName", label: "Product Name" },
@@ -28,9 +30,26 @@ const columns: Column<OrderItem>[] = [
 ];
 
 export default function OrderItemTable({ data }: { data: OrderItem[] }) {
+  const updatedOrderItems = useOrderItemStore(
+    (state) => state.updatedOrderItems,
+  );
+  const deletedOrderItemIds = useOrderItemStore(
+    (state) => state.deletedOrderItemIds,
+  );
+
+  const displayData = useMemo(() => {
+    return data
+      .filter((item) => !deletedOrderItemIds.has(item.id))
+      .map((item) => updatedOrderItems[item.id] || item);
+  }, [data, updatedOrderItems, deletedOrderItemIds]);
+
   return (
     <>
-      <MyTable columns={columns} data={data} totalCount={data.length} />
+      <MyTable
+        columns={columns}
+        data={displayData}
+        totalCount={displayData.length}
+      />
     </>
   );
 }

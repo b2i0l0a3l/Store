@@ -1,6 +1,7 @@
 export type order = {
   id: number;
-  name: string;
+  clientName: string;
+  clientId: number;
   total: number;
   remaining: number;
   orderType: string;
