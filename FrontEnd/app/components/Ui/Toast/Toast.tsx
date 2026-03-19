@@ -12,7 +12,6 @@ export default function Toast({ toast }: { toast: ToastMessage }) {
   const removeToast = useToastStore((state) => state.removeToast);
   const [isLeaving, setIsLeaving] = useState(false);
 
-  // Determine colors and icons based on type
   let Icon = InformationCircleIcon;
   let colors = "bg-slate-800 text-slate-200 border-slate-700";
   let iconColor = "text-blue-400";

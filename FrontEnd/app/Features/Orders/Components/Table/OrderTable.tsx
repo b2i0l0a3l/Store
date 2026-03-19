@@ -2,7 +2,6 @@ import { formatDate } from "@/app/util/dateFormat";
 import MyTable, { Column } from "@/app/components/Ui/customtable/MyTable";
 import { order } from "@/app/Features/Orders/types";
 import ShowCardButton from "../Buttons/ShowCardButton";
-import UpdateOrderButton from "../Buttons/updateOrderButton";
 import DeleteOrderButton from "../Buttons/DeleteOrderButton";
 
 const columns: Column<order>[] = [
@@ -21,7 +20,6 @@ const columns: Column<order>[] = [
     render: (item) => (
       <div className="flex gap-2">
         <ShowCardButton id={item.id} />
-        <UpdateOrderButton order={item} />
         <DeleteOrderButton id={item.id} />
       </div>
     ),
