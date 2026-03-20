@@ -6,11 +6,13 @@ using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using StoreSystem.Application.Feature.Messages.Request.Query.Order;
 using StoreSystem.Application.Feature.Messages.Request.Command.Order;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreApi.Api.Controllers
 {
     [Route("api/Order")]
     [ApiController]
+    [Authorize]
     public class OrderController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -38,9 +40,18 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("GetById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id,[FromServices] IAuthorizationService authorizationService)
         {
+            var authResult = await authorizationService.AuthorizeAsync(
+            User,
+            id,
+            "ViewerOrderOrAdmin");
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
             var result = await _mediator.Send(new GetOrderByIdRequest { Id = id });
             if (!result.IsSuccess)
                 return BadRequest(result.Error);

@@ -21,12 +21,10 @@ namespace StoreSystem.Application.shared
                 issuer: _Configuration["JWT_VALID_ISSUER"]!,
                 audience: _Configuration["JWT_VALID_AUDIENCE"]!,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddMinutes(45),
                 signingCredentials: creds
             );
             return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-       
-        
+        } 
     }
 }

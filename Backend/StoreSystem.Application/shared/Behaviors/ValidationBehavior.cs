@@ -23,7 +23,6 @@ namespace StoreSystem.Application.Common.Behaviors
             {
                 return await next();
             }
-
             var context = new ValidationContext<TRequest>(request);
 
             var validationResults = await Task.WhenAll(

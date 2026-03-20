@@ -9,6 +9,8 @@ export default function LoginForm() {
   const [state, setState] = useState<LoginState>({});
   const [pending, setPending] = useState(false);
 
+
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setPending(true);
@@ -43,7 +45,6 @@ export default function LoginForm() {
       if (data.refreshToken) {
         await setRefreshToken(data.refreshToken);
       }
-
       window.location.href = "/";
     } catch (err) {
       setState({

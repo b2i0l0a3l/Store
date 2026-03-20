@@ -43,7 +43,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
 
             if(refreshToken == null) 
                 return new Error("RefreshTokenERROR", Core.enums.ErrorType.General, "Invalid refresh token");
-            
             if (refreshToken.RefreshTokenRevokedAt != null)
                 return new Error("RefreshTokenRevokedError", Core.enums.ErrorType.General, "Refresh token is revoked");
             if (refreshToken.RefreshTokenExpiresAt == null || refreshToken.RefreshTokenExpiresAt <= DateTime.UtcNow)
@@ -62,7 +61,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
            
             string newAccessToken = _GenerateJwtToken.Generate(claims);
             string newRefreshToken = _GenerateRefreshToken.Generate(64);
-            
 
             await _Repo.Update(refreshToken.Id, x => 
             {

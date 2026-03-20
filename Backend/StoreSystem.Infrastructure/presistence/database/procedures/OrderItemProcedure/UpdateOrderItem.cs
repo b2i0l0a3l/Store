@@ -31,11 +31,9 @@ namespace StoreSystem.Infrastructure.presistence.database.procedures
 
                 parameters.Add("p_order_item_id", req.OrderItemId);
                 parameters.Add("p_quantity", req.Quantity);
-                parameters.Add("p_order_id", req.OrderId);
                 parameters.Add("p_price", req.Price);
-                parameters.Add("p_product_id", req.ProductId);
 
-                var result = await connection.ExecuteAsync("CALL sp_update_order_item(@p_order_item_id, @p_quantity, @p_order_id,@p_price,@p_product_id)",
+                var result = await connection.ExecuteAsync("CALL sp_update_order_item(@p_order_item_id, @p_quantity,@p_price)",
                     parameters,
                     transaction: transaction.GetDbTransaction()
                 );

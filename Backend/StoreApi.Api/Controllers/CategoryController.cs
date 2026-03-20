@@ -32,6 +32,7 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("GetAllCategories")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllCategories()
         {

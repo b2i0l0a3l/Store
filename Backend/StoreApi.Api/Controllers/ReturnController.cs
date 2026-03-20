@@ -5,11 +5,13 @@ using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using StoreSystem.Application.Feature.Messages.Request.Command.Return;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreApi.Api.Controllers
 {
     [Route("api/Return")]
     [ApiController]
+    [Authorize]
     public class ReturnController : ControllerBase
     {
         private readonly IMediator _mediator;

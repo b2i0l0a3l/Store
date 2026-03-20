@@ -12,7 +12,7 @@ export async function setAccessToken(accessToken: string): Promise<void> {
       maxAge: 60 * 60 * 24 * 7,
     });
   } catch (error) {
-    // Ignore error if we are in a server component
+    console.error("Set access token error:", error);
   }
 }
 
@@ -27,7 +27,7 @@ export async function setRefreshToken(refreshToken: string): Promise<void> {
       maxAge: 60 * 60 * 24 * 7,
     });
   } catch (error) {
-    // Ignore error if we are in a server component
+    console.error("Set refresh token error:", error);
   }
 }
 
@@ -46,6 +46,6 @@ export async function clearTokens(): Promise<void> {
     cookieStore.delete("accessToken");
     cookieStore.delete("refreshToken");
   } catch (error) {
-    // Ignore error if we are in a server component
+    console.error("Clear tokens error:", error);
   }
 }

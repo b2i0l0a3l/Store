@@ -11,6 +11,7 @@ namespace StoreApi.Api.Controllers
 {
     [Route("api/Product")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -29,6 +30,7 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("All")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> All()
         {

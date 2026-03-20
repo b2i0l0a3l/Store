@@ -1,5 +1,4 @@
 import {
-  getAccessToken,
   getRefreshToken,
   setAccessToken,
   setRefreshToken,
@@ -14,6 +13,8 @@ async function handleLogout(email: string, refreshToken: string) {
 }
 
 async function updateTokens(ref: AuthResponse) {
+  console.log("inside update ref",ref);
+  await clearTokens();
   await setAccessToken(ref.accessToken!);
   await setRefreshToken(ref.refreshToken!);
 }
@@ -28,13 +29,12 @@ export async function handleRefreshToken(): Promise<string | null> {
       email: r.email,
       refreshToken: rt,
     });
+    console.log("ref",ref);
     if (ref.isSuccess) {
       await updateTokens(ref);
       return ref.accessToken!;
-    } else {
-      await handleLogout(r.email, rt);
-      return null;
-    }
+    } 
+    return null;
   } catch (error) {
     console.error("Refresh token error:", error);
     return null;

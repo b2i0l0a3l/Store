@@ -8,6 +8,8 @@ using StoreApi.Api.Middleware;
 using StoreSystem.Infrastructure.shared;
 
 using Microsoft.OpenApi.Models;
+using StoreApi.Api.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var currentDir = Directory.GetCurrentDirectory();
 while (currentDir != null && !File.Exists(Path.Combine(currentDir, ".env")))
@@ -72,6 +74,13 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddScoped<IAuthorizationHandler, RoleHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ViewerOrderOrAdmin", policy =>
+        policy.Requirements.Add(new RoleRequirement()));
+});
+
 
 builder.Services.AddCors(options =>
 {
@@ -128,14 +137,17 @@ var app = builder.Build();
 
 
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseHttpsRedirection();
-app.UseRateLimiter();
 
+
+app.UseRouting();
+app.UseRateLimiter();
 app.Use(async (context, next) =>
 {
     await next();
@@ -145,13 +157,10 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsync("Too many login attempts. Please try again later.");
     }
 });
-
-app.UseRouting();
 app.UseCors("Allow"); 
 
 app.UseAuthentication(); 
-app.UseAuthorization();
-app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<AuditMiddleware>();
+app.UseAuthorization();
 app.MapControllers();
 app.Run();

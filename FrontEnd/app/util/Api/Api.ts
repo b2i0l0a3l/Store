@@ -1,13 +1,10 @@
 import { getAccessToken } from "../../(auth)/util/session";
 import { MyResponse } from "../types";
-import { handleRefreshToken } from "./tokenManager";
-import { isTokenExpired } from "./tokenValidation";
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-
-async function buildHeaders(options: RequestInit, explicitToken?: string) {
-  const token = explicitToken || (await getAccessToken());
+async function buildHeaders(options: RequestInit) {
+  const token = await getAccessToken();
   const headers = new Headers(options.headers || {});
 
   if (!headers.has("Content-Type")) {
@@ -21,7 +18,6 @@ async function buildHeaders(options: RequestInit, explicitToken?: string) {
   return headers;
 }
 
-
 async function makeRequest(
   endpoint: string,
   options: RequestInit,
@@ -31,23 +27,6 @@ async function makeRequest(
     ...options,
     headers,
   });
-}
-
-async function retryRequest(
-  endpoint: string,
-  options: RequestInit,
-): Promise<Response | null> {
-  const newToken = await handleRefreshToken();
-
-  if (!newToken) return null;
-
-  try {
-    const headers = await buildHeaders(options, newToken);
-    return await makeRequest(endpoint, options, headers);
-  } catch (error) {
-    console.error("Fetch API Retry Error:", error);
-    return null;
-  }
 }
 
 async function parseResponse<T>(res: Response): Promise<MyResponse<T>> {
@@ -96,15 +75,7 @@ export async function fetchApi<T>(
   let res: Response;
 
   try {
-    let token = await getAccessToken();
-    if (token && isTokenExpired(token)) {
-      const newToken = await handleRefreshToken();
-      if (newToken) {
-        token = newToken;
-      }
-    }
-
-    const headers = await buildHeaders(options, token);
+    const headers = await buildHeaders(options);
     res = await makeRequest(endpoint, options, headers);
   } catch (error) {
     console.error("Fetch API Network Error:", error);
@@ -117,18 +88,12 @@ export async function fetchApi<T>(
   }
 
   if (res.status === 401) {
-    const retry = await retryRequest(endpoint, options);
-
-    if (!retry) {
-      return {
-        message: "Unauthorized",
-        succeeded: false,
-        statusCode: 401,
-        value: null,
-      } as MyResponse<T>;
-    }
-
-    res = retry;
+    return {
+      message: "Unauthorized",
+      succeeded: false,
+      statusCode: 401,
+      value: null,
+    } as MyResponse<T>;
   }
 
   return parseResponse<T>(res);

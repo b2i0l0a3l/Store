@@ -81,12 +81,13 @@ export async function refresh(
       },
       body: JSON.stringify(body),
     });
-    console.log(response);
     if (!response.ok) {
       return { isSuccess: false, message: "Refresh failed" };
     }
 
     const data = await response.json();
+    console.log("new RefreshToken",data.refreshToken);
+    console.log("new AccessToken",data.accessToken);
     return {
       isSuccess: true,
       message: "Refresh successful",

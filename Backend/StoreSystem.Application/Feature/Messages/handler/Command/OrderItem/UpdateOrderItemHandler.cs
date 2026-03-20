@@ -24,10 +24,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
         {
             UpdateOrderItemModel req = new()
             {
-                OrderId = request.OrderId,
                 OrderItemId = request.OrderItemId,
                 Price = request.Price,
-                ProductId = request.ProductId,
                 Quantity = request.Quantity
             };
             var result = await _Repo.handle(req);   
