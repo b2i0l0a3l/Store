@@ -11,16 +11,16 @@ using Microsoft.OpenApi.Models;
 using StoreApi.Api.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
-var currentDir = Directory.GetCurrentDirectory();
-while (currentDir != null && !File.Exists(Path.Combine(currentDir, ".env")))
-{
-    currentDir = Directory.GetParent(currentDir)?.FullName;
-}
+// var currentDir = Directory.GetCurrentDirectory();
+// while (currentDir != null && !File.Exists(Path.Combine(currentDir, ".env")))
+// {
+//     currentDir = Directory.GetParent(currentDir)?.FullName;
+// }
 
-if (currentDir != null)
-{
-    DotNetEnv.Env.Load(Path.Combine(currentDir, ".env"));
-}
+// if (currentDir != null)
+// {
+//     DotNetEnv.Env.Load(Path.Combine(currentDir, ".env"));
+// }
 
 var builder = WebApplication.CreateBuilder(args);
 
