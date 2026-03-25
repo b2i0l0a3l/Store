@@ -11,16 +11,6 @@ using Microsoft.OpenApi.Models;
 using StoreApi.Api.Authorization;
 using Microsoft.AspNetCore.Authorization;
 
-// var currentDir = Directory.GetCurrentDirectory();
-// while (currentDir != null && !File.Exists(Path.Combine(currentDir, ".env")))
-// {
-//     currentDir = Directory.GetParent(currentDir)?.FullName;
-// }
-
-// if (currentDir != null)
-// {
-//     DotNetEnv.Env.Load(Path.Combine(currentDir, ".env"));
-// }
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -86,7 +76,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("Allow", policy =>
     {
-        policy.WithOrigins("http://localhost:5107","http://localhost:3000","http://127.0.0.1:5500", "http://localhost:5500")
+        policy.WithOrigins("https://store-three-self.vercel.app","http://localhost:5107","http://localhost:3000","http://127.0.0.1:5500", "http://localhost:5500")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
