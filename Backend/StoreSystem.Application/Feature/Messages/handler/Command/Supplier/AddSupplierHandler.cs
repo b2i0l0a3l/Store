@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
@@ -15,12 +10,10 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
     public class AddSupplierHandler : IRequestHandler<AddSupplierRequest, Result<SupplierModel>>
     {
         private readonly IRepository<Supplier> _Repo;
-        private readonly IMapper _Mapper;
 
-        public AddSupplierHandler(IRepository<Supplier> Repo, IMapper Mapper)
+        public AddSupplierHandler(IRepository<Supplier> Repo)
         {
             _Repo = Repo;
-            _Mapper = Mapper;
         }
 
         public async Task<Result<SupplierModel>> Handle(AddSupplierRequest request, CancellationToken cancellationToken)
@@ -34,7 +27,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             var result = await _Repo.Add(supplier);
             if (!result.IsSuccess) return result.Error!;
 
-            return _Mapper.Map<SupplierModel>(result.Value);
+            return SupplierModel.FromEntity(result.Value!);
         }
     }
 }

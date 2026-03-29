@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,12 +10,10 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdRequest, Result<CategoryModel>>
     {
         private readonly IRepository<Category> _Repo;
-        private readonly IMapper _Mapper;
 
-        public GetCategoryByIdHandler(IRepository<Category> repo, IMapper mapper)
+        public GetCategoryByIdHandler(IRepository<Category> repo)
         {
             _Repo = repo;
-            _Mapper = mapper;
         }
 
         public async Task<Result<CategoryModel>> Handle(GetCategoryByIdRequest request, CancellationToken cancellationToken)
@@ -25,7 +22,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             if (!result.IsSuccess || result.Value == null)
                 return new Error("NotFound", Core.enums.ErrorType.General, $"Category with Id {request.Id} not found");
 
-            return _Mapper.Map<CategoryModel>(result.Value);
+            return CategoryModel.FromEntity(result.Value);
         }
     }
 }

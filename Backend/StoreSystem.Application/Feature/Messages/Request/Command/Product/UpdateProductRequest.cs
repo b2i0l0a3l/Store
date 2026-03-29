@@ -10,6 +10,8 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command
     public class UpdateProductRequest : IRequest<Result<bool>>
     {
         public int Id { get; set; }
+        public string? CodeBar { get; set; }
+        public string? ImagePath { get; set; }
         public string Name { get; set; } = string.Empty;
         public decimal Price { get; set; }
         public decimal Cost { get; set; }

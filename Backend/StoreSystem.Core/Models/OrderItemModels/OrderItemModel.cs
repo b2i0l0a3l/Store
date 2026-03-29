@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using StoreSystem.Core.Entities;
 
 namespace StoreSystem.Core.Models
 {
@@ -11,5 +8,13 @@ namespace StoreSystem.Core.Models
         public int ProductId { get; set; }
         public decimal Price { get; set; }
         public int Quantity { get; set; }
+
+        public static OrderItemModel FromEntity(OrderItem entity) => new()
+        {
+            Id = entity.Id,
+            ProductId = entity.ProductId,
+            Price = entity.Price,
+            Quantity = entity.Quantity
+        };
     }
 }

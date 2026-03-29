@@ -24,8 +24,9 @@ namespace StoreSystem.Core.Entities
         [Required]
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
-        public Category? Category { get; set; }
-      
+        public Category? Category { get; set;}
+        public string? ImagePath {get;set;} 
+        public string? BarCode {get;set;}
         public ICollection<OrderItem>? OrderItems { get; set; }
         public ICollection<Debt>? Debts { get; set; }
         public ICollection<SupplierProduct>? SupplierProducts { get; set; }

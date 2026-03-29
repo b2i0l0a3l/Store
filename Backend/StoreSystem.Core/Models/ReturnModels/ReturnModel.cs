@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using StoreSystem.Core.Entities;
 
 namespace StoreSystem.Core.Models
 {
@@ -12,5 +9,13 @@ namespace StoreSystem.Core.Models
         public int ClientId { get; set; }
         public decimal TotalRefund { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public static ReturnModel FromEntity(Return entity) => new()
+        {
+            Id = entity.Id,
+            OrderId = entity.OrderId,
+            TotalRefund = entity.TotalRefund,
+            CreatedAt = entity.CreatedAt
+        };
     }
 }

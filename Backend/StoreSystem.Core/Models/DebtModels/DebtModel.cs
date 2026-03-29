@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using StoreSystem.Core.Entities;
 
 namespace StoreSystem.Core.Models
 {
@@ -13,5 +10,15 @@ namespace StoreSystem.Core.Models
         public decimal Remaining { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+
+        public static DebtModel FromEntity(Debt entity) => new()
+        {
+            Id = entity.Id,
+            OrderId = entity.OrderId,
+            ClientId = entity.ClientId,
+            Remaining = entity.Remaining,
+            CreatedAt = entity.CreatedAt,
+            UpdatedAt = entity.UpdatedAt
+        };
     }
 }

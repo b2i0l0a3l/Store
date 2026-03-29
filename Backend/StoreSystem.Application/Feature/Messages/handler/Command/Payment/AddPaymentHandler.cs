@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Common;
 using StoreSystem.Application.Feature.Messages.Request.Command;
@@ -11,7 +6,6 @@ using StoreSystem.Core.Entities;
 using StoreSystem.Core.enums;
 using StoreSystem.Core.interfaces;
 using StoreSystem.Core.Models;
-using PaymentEntity = StoreSystem.Core.Entities.Payment;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {

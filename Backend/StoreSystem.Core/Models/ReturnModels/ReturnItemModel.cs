@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using StoreSystem.Core.Entities;
 
 namespace StoreSystem.Core.Models
 {
@@ -13,5 +10,15 @@ namespace StoreSystem.Core.Models
         public int Quantity { get; set; }
         public decimal Price { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public static ReturnItemModel FromEntity(ReturnItem entity) => new()
+        {
+            Id = entity.Id,
+            ReturnId = entity.ReturnId,
+            ProductId = entity.ProductId,
+            Quantity = entity.Quantity,
+            Price = entity.Price,
+            CreatedAt = entity.CreatedAt
+        };
     }
 }

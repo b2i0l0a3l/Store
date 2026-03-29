@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using StoreSystem.Core.Entities;
 using StoreSystem.Core.enums;
 
 namespace StoreSystem.Core.Models
@@ -15,5 +12,16 @@ namespace StoreSystem.Core.Models
         public enOrderType OrderType { get; set; }
         public DateTime CreatedAt { get; set; } 
         public DateTime UpdatedAt { get; set; } 
+
+        public static OrderModel FromEntity(Order entity) => new()
+        {
+            Id = entity.Id,
+            ClientId = entity.ClientId ?? 0,
+            Total = entity.Total,
+            OrderStatus = entity.OrderStatus,
+            OrderType = entity.OrderType,
+            CreatedAt = entity.CreatedAt,
+            UpdatedAt = entity.UpdatedAt
+        };
     }
 }

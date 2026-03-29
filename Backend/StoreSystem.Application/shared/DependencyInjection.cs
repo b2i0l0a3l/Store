@@ -15,7 +15,6 @@ namespace StoreSystem.Application
             var assembly = Assembly.GetExecutingAssembly();
             services.AddScoped<IGenerateJwtToken,GenerateJwtToken>();
             services.AddScoped<IGenerateToken, GenerateRefreshToken>();
-            services.AddAutoMapper(cfg => { }, assembly);
             services.AddValidatorsFromAssembly(assembly);
             services.AddMediatR(assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

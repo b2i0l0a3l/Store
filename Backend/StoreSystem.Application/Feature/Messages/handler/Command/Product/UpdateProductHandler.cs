@@ -28,6 +28,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 p.Cost = request.Cost;
                 p.Quantity = request.Quantity;
                 p.CategoryId = request.CategoryId;
+                p.BarCode = request.CodeBar;
+                p.ImagePath = request.ImagePath;
             });
 
             return result;
