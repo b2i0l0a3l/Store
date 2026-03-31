@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -16,20 +15,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetAllSupplierProductsHandler : IRequestHandler<GetAllSupplierProductsRequest, Result<IEnumerable<SupplierProductModel>>>
     {
         private readonly IRepository<SupplierProduct> _repo;
-        private readonly IMapper _mapper;
-
-        public GetAllSupplierProductsHandler(IRepository<SupplierProduct> repo, IMapper mapper)
+        public GetAllSupplierProductsHandler(IRepository<SupplierProduct> repo)
         {
-            _repo = repo;
-            _mapper = mapper;
-        }
+            _repo = repo;        }
 
         public async Task<Result<IEnumerable<SupplierProductModel>>> Handle(GetAllSupplierProductsRequest request, CancellationToken cancellationToken)
         {
             var result = await _repo.All();
             if (!result.IsSuccess) return result.Error!;
 
-            var records = result.Value!.Select(x => _mapper.Map<SupplierProductModel>(x));
+            var records = result.Value!.Select(x => SupplierProductModel.FromEntity(x));
             return Result<IEnumerable<SupplierProductModel>>.Success(records);
         }
     }

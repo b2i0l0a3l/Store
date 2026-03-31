@@ -1,0 +1,12 @@
+using System;
+
+namespace StoreSystem.Core.Models.DashboardModels
+{
+    public class RecentOrderModel
+    {
+        public int OrderId { get; set; }
+        public string ClientName { get; set; }
+        public decimal TotalPrice { get; set; }
+        public DateTime InsertDate { get; set; }
+    }
+}

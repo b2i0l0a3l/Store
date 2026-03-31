@@ -14,5 +14,7 @@ namespace StoreSystem.Core.Models.ProductModels
         public decimal Price { get; set; } 
         public decimal Cost { get; set; }
         public DateTime CreatedAt { get; set; } 
+        public string CodeBar {get;set;}  = string.Empty;
+        public string ImagePath {get;set;}  = string.Empty;
     }
 }

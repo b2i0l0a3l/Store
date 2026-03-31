@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -16,20 +15,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetAllPaymentsHandler : IRequestHandler<GetAllPaymentsRequest, Result<IEnumerable<PaymentModel>>>
     {
         private readonly IRepository<Payment> _repo;
-        private readonly IMapper _mapper;
-
-        public GetAllPaymentsHandler(IRepository<Payment> repo, IMapper mapper)
+        public GetAllPaymentsHandler(IRepository<Payment> repo)
         {
-            _repo = repo;
-            _mapper = mapper;
-        }
+            _repo = repo;        }
 
         public async Task<Result<IEnumerable<PaymentModel>>> Handle(GetAllPaymentsRequest request, CancellationToken cancellationToken)
         {
             var result = await _repo.All();
             if (!result.IsSuccess) return result.Error!;
 
-            var records = result.Value!.Select(x => _mapper.Map<PaymentModel>(x));
+            var records = result.Value!.Select(x => PaymentModel.FromEntity(x));
             return Result<IEnumerable<PaymentModel>>.Success(records);
         }
     }

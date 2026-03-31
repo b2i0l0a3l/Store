@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,13 +10,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetSupplierProductByIdHandler : IRequestHandler<GetSupplierProductByIdRequest, Result<SupplierProductModel>>
     {
         private readonly IRepository<SupplierProduct> _Repo;
-        private readonly IMapper _Mapper;
-
-        public GetSupplierProductByIdHandler(IRepository<SupplierProduct> repo, IMapper mapper)
+        public GetSupplierProductByIdHandler(IRepository<SupplierProduct> repo)
         {
-            _Repo = repo;
-            _Mapper = mapper;
-        }
+            _Repo = repo;        }
 
         public async Task<Result<SupplierProductModel>> Handle(GetSupplierProductByIdRequest request, CancellationToken cancellationToken)
         {
@@ -25,7 +20,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             if (!result.IsSuccess || result.Value == null)
                 return new Error("NotFound", Core.enums.ErrorType.General, $"SupplierProduct with Id {request.Id} not found");
 
-            return _Mapper.Map<SupplierProductModel>(result.Value);
+            return SupplierProductModel.FromEntity(result.Value);
         }
     }
 }

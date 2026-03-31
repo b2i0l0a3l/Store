@@ -18,6 +18,12 @@ using StoreSystem.Infrastructure.presistence.database.functions.ProductFunctions
 using StoreSystem.Core.interfaces.functions.OrderFunctions;
 using StoreSystem.Core.interfaces.functions;
 using StoreSystem.Infrastructure.presistence.database.functions.DebtFunctions;
+using StoreSystem.Core.interfaces.functions.ProductFunctions;
+using StoreSystem.Core.interfaces.functions.DebtFunctions;
+using StoreSystem.Core.interfaces.functions.ClientFunctions;
+using StoreSystem.Infrastructure.presistence.database.functions.ClientFunctions;
+using StoreSystem.Core.interfaces.functions.PaymentFunctions;
+using StoreSystem.Infrastructure.presistence.database.functions.PaymentFunctions;
 
 namespace StoreSystem.Infrastructure.shared
 {
@@ -27,7 +33,7 @@ namespace StoreSystem.Infrastructure.shared
         public static void AddInfrastructurServiceRegistration(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration["CONNECTION_STRING"]));
+            options.UseNpgsql(configuration.GetConnectionString("MyConn")));
 
             services.AddIdentity<User, Microsoft.AspNetCore.Identity.IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()
@@ -49,6 +55,19 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IGetAllOrdersFunction, GetAllOrders>();
             services.AddScoped<IGetOrderItemsByOrderIdFunc, GetOrderItemByOrderId>();
             services.AddScoped<IGetDebts, GetDebts>();
+            services.AddScoped<IFnClientRankingFunction, FnClientRankingFunction>();
+            services.AddScoped<IGetOrdersCountFunction, GetOrdersCountFunction>();
+            services.AddScoped<IGetProductCountFunction, GetProductCountFunction>();
+            services.AddScoped<IGetTotalOrdersFunction, GetTotalOrdersFunction>();
+            services.AddScoped<IGetTotalRemainingFunction, GetTotalRemainingFunction>();
+
+            // Advanced Dashboard Functions
+            services.AddScoped<IFnLowStockAlertsFunction, FnLowStockAlertsFunction>();
+            services.AddScoped<IFnTopSellingProductsFunction, FnTopSellingProductsFunction>();
+            services.AddScoped<IFnSalesOverTimeFunction, FnSalesOverTimeFunction>();
+            services.AddScoped<IFnRecentOrdersFunction, FnRecentOrdersFunction>();
+            services.AddScoped<IFnRecentPaymentsFunction, FnRecentPaymentsFunction>();
+            services.AddScoped<IFnCashVsDebtRatioFunction, FnCashVsDebtRatioFunction>();
         }
     }
 }

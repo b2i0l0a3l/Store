@@ -59,17 +59,17 @@
   <table>
     <tr>
       <td align="center">
-        <img src="https://placehold.co/600x400/1e1e1e/white?text=Dashboard" width="400" alt="Dashboard"/>
+        <img src="docs/assets/dashboard_ui_1774799108342.png" width="400" alt="Dashboard"/>
         <br/><strong>Dashboard / Analytics</strong>
       </td>
       <td align="center">
-        <img src="https://placehold.co/600x400/1e1e1e/white?text=Products+Management" width="400" alt="Products Management"/>
+        <img src="docs/assets/products_ui_1774799162001.png" width="400" alt="Products Management"/>
         <br/><strong>Products Management</strong>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <img src="https://placehold.co/600x400/1e1e1e/white?text=Point+of+Sale+(POS)" width="400" alt="Point of Sale"/>
+        <img src="docs/assets/pos_ui_1774799251219.png" width="400" alt="Point of Sale"/>
         <br/><strong>Point of Sale (POS)</strong>
       </td>
       <td align="center">

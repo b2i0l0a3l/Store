@@ -25,7 +25,8 @@ export default  function SideBarNavBar() {
   const CurrentPath = usePathname();
 
   const links: NavLink[] = [  
-    { name: "Dashboard", Path: "/", icon: HomeIcon ,allowedRoles:["Admin"]},
+    { name: "Selling", Path: "/", icon: HomeIcon ,allowedRoles:["Admin"]},
+    { name: "Dashboard", Path: "/Dashboard", icon: HomeIcon ,allowedRoles:["Admin"]},
     { name: "Products", Path: "/Products", icon: ShoppingBagIcon ,allowedRoles:["Admin","Staff","Viewer"]},
     { name: "Clients", Path: "/Clients", icon: UsersIcon ,allowedRoles:["Admin","Staff"]},
     { name: "Categories", Path: "/Categories", icon: TagIcon ,allowedRoles:["Admin","Staff","Viewer"]},

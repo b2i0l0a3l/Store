@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,13 +10,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetDebtByIdHandler : IRequestHandler<GetDebtByIdRequest, Result<DebtModel>>
     {
         private readonly IRepository<Debt> _Repo;
-        private readonly IMapper _Mapper;
-
-        public GetDebtByIdHandler(IRepository<Debt> repo, IMapper mapper)
+        public GetDebtByIdHandler(IRepository<Debt> repo)
         {
-            _Repo = repo;
-            _Mapper = mapper;
-        }
+            _Repo = repo;        }
 
         public async Task<Result<DebtModel>> Handle(GetDebtByIdRequest request, CancellationToken cancellationToken)
         {
@@ -25,7 +20,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             if (!result.IsSuccess || result.Value == null)
                 return new Error("NotFound", Core.enums.ErrorType.General, $"Debt with Id {request.Id} not found");
 
-            return _Mapper.Map<DebtModel>(result.Value);
+            return DebtModel.FromEntity(result.Value);
         }
     }
 }

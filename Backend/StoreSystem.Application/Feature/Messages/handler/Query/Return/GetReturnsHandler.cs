@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -16,13 +15,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetReturnsHandler : IRequestHandler<GetReturnsRequest, Result<PagedResult<ReturnModel>>>
     {
         private readonly IRepository<ReturnEntity> _Repo;
-        private readonly IMapper _Mapper;
-
-        public GetReturnsHandler(IRepository<ReturnEntity> repo, IMapper mapper)
+        public GetReturnsHandler(IRepository<ReturnEntity> repo)
         {
-            _Repo = repo;
-            _Mapper = mapper;
-        }
+            _Repo = repo;        }
 
         public async Task<Result<PagedResult<ReturnModel>>> Handle(GetReturnsRequest request, CancellationToken cancellationToken)
         {
@@ -33,7 +28,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             {
                 PageNumber = request.PageNumber,
                 PageSize = request.PageSize,
-                Items = result.Value!.Items.Select(x => _Mapper.Map<ReturnModel>(x)),
+                Items = result.Value!.Items.Select(x => ReturnModel.FromEntity(x)),
                 TotalItems = result.Value.TotalItems,
             };
 

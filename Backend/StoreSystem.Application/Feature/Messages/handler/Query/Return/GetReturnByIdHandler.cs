@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,13 +10,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetReturnByIdHandler : IRequestHandler<GetReturnByIdRequest, Result<ReturnModel>>
     {
         private readonly IRepository<ReturnEntity> _Repo;
-        private readonly IMapper _Mapper;
-
-        public GetReturnByIdHandler(IRepository<ReturnEntity> repo, IMapper mapper)
+        public GetReturnByIdHandler(IRepository<ReturnEntity> repo)
         {
-            _Repo = repo;
-            _Mapper = mapper;
-        }
+            _Repo = repo;        }
 
         public async Task<Result<ReturnModel>> Handle(GetReturnByIdRequest request, CancellationToken cancellationToken)
         {
@@ -25,7 +20,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             if (!result.IsSuccess || result.Value == null)
                 return new Error("NotFound", Core.enums.ErrorType.General, $"Return with Id {request.Id} not found");
 
-            return _Mapper.Map<ReturnModel>(result.Value);
+            return ReturnModel.FromEntity(result.Value);
         }
     }
 }

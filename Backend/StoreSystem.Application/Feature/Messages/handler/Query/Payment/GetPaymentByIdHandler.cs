@@ -1,4 +1,3 @@
-using AutoMapper;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,13 +10,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetPaymentByIdHandler : IRequestHandler<GetPaymentByIdRequest, Result<PaymentModel>>
     {
         private readonly IRepository<Payment> _Repo;
-        private readonly IMapper _Mapper;
-
-        public GetPaymentByIdHandler(IRepository<Payment> repo, IMapper mapper)
+        public GetPaymentByIdHandler(IRepository<Payment> repo)
         {
-            _Repo = repo;
-            _Mapper = mapper;
-        }
+            _Repo = repo;        }
 
         public async Task<Result<PaymentModel>> Handle(GetPaymentByIdRequest request, CancellationToken cancellationToken)
         {
@@ -25,7 +20,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
             if (!result.IsSuccess || result.Value == null)
                 return new Error("NotFound", Core.enums.ErrorType.General, $"Payment with Id {request.Id} not found");
 
-            return _Mapper.Map<PaymentModel>(result.Value);
+            return PaymentModel.FromEntity(result.Value);
         }
     }
 }
