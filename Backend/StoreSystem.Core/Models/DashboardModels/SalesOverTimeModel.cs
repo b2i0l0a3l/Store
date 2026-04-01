@@ -4,7 +4,7 @@ namespace StoreSystem.Core.Models.DashboardModels
 {
     public class SalesOverTimeModel
     {
-        public DateTime Date { get; set; }
+        public DateTime SaleDate { get; set; }
         public decimal TotalSales { get; set; }
     }
 }

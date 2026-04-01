@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   ShoppingBagIcon,
   HomeIcon,
+  Squares2X2Icon,
   UsersIcon,
   CurrencyDollarIcon,
   ShoppingCartIcon,
@@ -21,12 +22,12 @@ interface NavLink {
 }
 
 
-export default  function SideBarNavBar() {
+export default function SideBarNavBar({ onClose }: { onClose?: () => void }) {
   const CurrentPath = usePathname();
 
   const links: NavLink[] = [  
     { name: "Selling", Path: "/", icon: HomeIcon ,allowedRoles:["Admin"]},
-    { name: "Dashboard", Path: "/Dashboard", icon: HomeIcon ,allowedRoles:["Admin"]},
+    { name: "Dashboard", Path: "/Dashboard", icon: Squares2X2Icon ,allowedRoles:["Admin"]},
     { name: "Products", Path: "/Products", icon: ShoppingBagIcon ,allowedRoles:["Admin","Staff","Viewer"]},
     { name: "Clients", Path: "/Clients", icon: UsersIcon ,allowedRoles:["Admin","Staff"]},
     { name: "Categories", Path: "/Categories", icon: TagIcon ,allowedRoles:["Admin","Staff","Viewer"]},
@@ -36,14 +37,14 @@ export default  function SideBarNavBar() {
   ];
 
   return (
-    <nav className="flex-1 px-4 py-8">
+    <nav className="flex-1 px-4 py-8 overflow-y-auto custom-scrollbar">
       <ul className="flex flex-col gap-3 w-full">
         {links.map((link) => {
           const isActive = CurrentPath === link.Path;
           const IconComponent = link.icon || HomeIcon;   
           return (
             <li key={link.name}>
-              <Link href={link.Path}>
+              <Link href={link.Path} onClick={onClose}>
                 <div
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out
                     ${
