@@ -1,5 +1,6 @@
 "use client";
 
+import { Logout } from "@/app/(auth)/api/authApi";
 import CustomButton from "../Ui/buttons/CustomButton";
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -7,7 +8,7 @@ export default function LogoutBtn() {
   const router = useRouter();
   return (
     <CustomButton
-      onClick={() => router.replace("/login")}
+      onClick={() => Logout().then(() => router.replace("/login"))}
       icon={ArrowLeftEndOnRectangleIcon}
       text="Logout"
       className="w-full px-4 py-3 bg-linear-to-r

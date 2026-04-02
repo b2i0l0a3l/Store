@@ -15,8 +15,8 @@ export default function ProductTable({
   categories: category[];
 }) {
   const columns: Column<product>[] = useMemo(
-    () => [
-      {key: "imagePath", label: "Image", render: (item) => <img src={GetImageFromBackEnd(item.imagePath || "")} alt={item.name} width={50} height={50} />},
+    () => [ 
+      {key: "imagePath", label: "Image", render: (item) => <img className="rounded-2xl" src={GetImageFromBackEnd(item.imagePath || "")} alt={item.name} width={45} height={45} />},
       { key: "name", label: "Name" },
       { key: "categoryName", label: "Category" },
       { key: "price", label: "Price" , render: (item) => item.price.toFixed(2) },

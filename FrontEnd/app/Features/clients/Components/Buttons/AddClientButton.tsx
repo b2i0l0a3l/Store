@@ -5,6 +5,7 @@ import { useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { addClient } from "@/app/Features/clients/api/clientApi";
 import { toast } from "@/app/store/useToastStore";
+import { client } from "../../types";
 
 export default function AddClientButton() {
   const [openModal, setOpenModal] = useState(false);
@@ -13,14 +14,16 @@ export default function AddClientButton() {
   const handleClose = useCallback(() => setOpenModal(false), []);
 
   const handleSubmit = useCallback(
-    async (name: string, phoneNumber: string) => {
+    async (name: string, phoneNumber: string) : Promise<client | null> => {
       const success = await addClient({ name, phoneNumber });
+      console.log(success);
       if (success) {
         toast.success("تمت إضافة العميل بنجاح");
         setOpenModal(false);
       } else {
         toast.error("حدث خطأ أثناء إضافة العميل");
       }
+      return success;
     },
     [],
   );

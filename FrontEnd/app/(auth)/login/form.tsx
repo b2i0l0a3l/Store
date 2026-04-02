@@ -38,6 +38,7 @@ export default function LoginForm() {
         setPending(false);
         return;
       }
+      console.log(data);
 
       if (data.accessToken) {
         await setAccessToken(data.accessToken);

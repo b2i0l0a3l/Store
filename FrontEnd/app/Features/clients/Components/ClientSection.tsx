@@ -17,13 +17,13 @@ export default function ClientSection({ data }: { data: client[] }) {
 
   const updatedClients = useClientStore((state) => state.updatedClients);
   const deletedClientIds = useClientStore((state) => state.deletedClientIds);
+  const client = useClientStore((state) => state.clients);
 
   const filteredData = useMemo(() => {
-    let currentData = data;
+    let currentData = [...data, ...Object.values(client)];
     if (deletedClientIds.size > 0) {
       currentData = currentData.filter((c) => !deletedClientIds.has(c.id));
     }
-
     const searchLower = search.toLowerCase();
     return currentData
       .filter((c) => {
@@ -31,7 +31,7 @@ export default function ClientSection({ data }: { data: client[] }) {
         return actualClient.name.toLowerCase().includes(searchLower);
       })
       .map((c) => updatedClients[c.id] || c);
-  }, [data, search, updatedClients, deletedClientIds]);
+  }, [data, search, updatedClients, deletedClientIds,client]);
 
   return (
     <>

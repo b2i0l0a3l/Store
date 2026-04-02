@@ -6,7 +6,7 @@ import DeleteOrderButton from "../Buttons/DeleteOrderButton";
 
 const columns: Column<order>[] = [
   { key: "clientName", label: "Client Name" },
-  { key: "total", label: "Total" },
+  { key: "total", label: "Total", render: (item) => item.total.toFixed(2) },
   { key: "orderType", label: "Order Type" },
   { key: "orderStatus", label: "Order Status" },
   {

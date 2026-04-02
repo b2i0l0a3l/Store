@@ -16,9 +16,10 @@ interface clientState {
 
 export const useClientStore = create<clientState>((set) => ({
   clients: {},
-  loading: false,
-  addClient: (client: client) =>
-    set((state) => ({ ...state.clients, [client.id]: client })),
+  loading: false, 
+  addClient: (client: client) =>{
+    set((state) => ({ ...state.clients, [client.id]: client }))
+  },
 
   fetchClients: async () => {
     set({ loading: true });

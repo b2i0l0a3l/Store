@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { decodeJwt } from "jose";
+import { CurrentTokenId } from "./app/util/currentUser";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -30,9 +31,9 @@ function getEmailFromToken(token: string): string | null {
 
 export async function proxy(request: NextRequest) {
   const accessToken = request.cookies.get("accessToken")?.value;
+  const TokenID = await CurrentTokenId();
   const refreshToken = request.cookies.get("refreshToken")?.value;
-
-  if (!accessToken || !refreshToken) {
+  if (!accessToken || !refreshToken ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
@@ -52,7 +53,7 @@ export async function proxy(request: NextRequest) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ email, refreshToken }),
+      body: JSON.stringify({ email, refreshToken, TokenID}),
     });
 
     if (!refreshResponse.ok) {

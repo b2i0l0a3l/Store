@@ -24,21 +24,19 @@ export async function addClient({
 }: {
   name: string;
   phoneNumber: string;
-}): Promise<boolean> {
+}): Promise<client | null> {
   try {
-    const result = await fetchApi<{ value: client[] }>(`/Client/Add`, {
+    const result = await fetchApi< client >(`/Client/Add`, {
       method: "POST",
       body: JSON.stringify({ name, phoneNumber }),
     });
-
-    if (!result.succeeded || !result.value) {
-      return false;
+    if (!result.succeeded || !result) {
+      return null;
     }
-
-    return true;
+    return result.value;
   } catch (error) {
-    console.error(error);
-    return false;
+    console.error(error); 
+    return null;
   }
 }
 

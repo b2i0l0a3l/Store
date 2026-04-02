@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import CustomModal from "@/app/components/Ui/Modal/Modal";
 import { client } from "@/app/Features/clients/types";
+import { useClientStore } from "../../store/client";
 
 export default function ClientModal({
   title,
@@ -13,11 +14,12 @@ export default function ClientModal({
   icon: React.ComponentType<{ className?: string }>;
   data?: client;
   onClose: () => void;
-  onClick: (name: string, phone: string) => void;
+  onClick: (name: string, phone: string) => Promise<client | null>;
 }) {
   const [name, setName] = useState(data?.name || "");
   const [phone, setPhone] = useState(data?.phoneNumber || "");
-
+  const [loading, setLoading] = useState(false);
+  const addClient = useClientStore((state) => state.addClient);
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setName(e.target.value);
@@ -32,8 +34,17 @@ export default function ClientModal({
     [],
   );
 
-  const handleSubmit = useCallback(() => {
-    onClick(name, phone);
+  const handleSubmit = useCallback(async() => {
+    try{
+      setLoading(true);
+      const res : client | null = await onClick(name, phone);
+      if(res){
+        addClient(res);
+      }
+    }
+    finally{
+      setLoading(false);
+    }
   }, [onClick, name, phone]);
 
   return (
@@ -54,11 +65,12 @@ export default function ClientModal({
       />
       <div className="flex justify-end mt-2">
         <button
+        disabled ={loading}
           onClick={handleSubmit}
           type="button"
           className="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-500 transition-colors"
         >
-          Save
+           {loading ? "Saving..." : "Save"}
         </button>
       </div>
     </CustomModal>

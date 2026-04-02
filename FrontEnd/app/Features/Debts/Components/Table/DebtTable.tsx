@@ -5,7 +5,7 @@ import { Debt } from "../../types";
 
 const columns: Column<Debt>[] = [
   { key: "clientName", label: "Name" },
-  { key: "remaining", label: "Remaining" },
+  { key: "remaining", label: "Remaining", render: (item) => item.remaining?.toFixed(2)  },
   {
     key: "updatedAt",
     label: "Last Update",
@@ -21,7 +21,7 @@ const columns: Column<Debt>[] = [
     label: "Action",
     render: (item) => (
       <div className="flex gap-2">
-        <PaymentButton debtId={item.id} disabled={item.remainingAmount === 0} />
+        <PaymentButton debtId={item.id} disabled={item.remaining === 0} />
       </div>
     ),
   },

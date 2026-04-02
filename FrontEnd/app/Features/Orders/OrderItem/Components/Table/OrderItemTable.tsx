@@ -10,7 +10,7 @@ import { useMemo } from "react";
 const columns: Column<OrderItem>[] = [
   { key: "productName", label: "Product Name" },
   { key: "quantity", label: "Quantity" },
-  { key: "price", label: "Price" },
+  { key: "price", label: "Price", render: (item) => item.price.toFixed(2) },
   {
     key: "createdAt",
     label: "Created At",

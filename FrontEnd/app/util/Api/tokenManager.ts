@@ -7,10 +7,7 @@ import {
 import { AuthResponse, Logout, refresh } from "@/app/(auth)/api/authApi";
 import { CurrentUser } from "../currentUser";
 
-async function handleLogout(email: string, refreshToken: string) {
-  await clearTokens();
-  await Logout({ email: email, refreshToken: refreshToken });
-}
+
 
 async function updateTokens(ref: AuthResponse) {
   console.log("inside update ref",ref);

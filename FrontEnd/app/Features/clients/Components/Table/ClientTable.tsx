@@ -19,6 +19,7 @@ const columns: Column<client>[] = [
 ];
 
 export default function ClientTable({ data }: { data: client[] }) {
+ 
   return (
     <>
       <MyTable columns={columns} data={data} totalCount={data.length} />

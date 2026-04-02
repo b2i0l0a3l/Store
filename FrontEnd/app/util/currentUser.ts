@@ -7,6 +7,7 @@ type JwtPayload = {
   "http://schemas.microsoft.com/ws/2008/06/identity/claims/role": string;
   FullName: string;
   ImagePath?: string;
+  TokenId?: string;
 };
 
 export async function CurrentUser(): Promise<user | null> {
@@ -26,4 +27,11 @@ export async function CurrentUser(): Promise<user | null> {
   const imagePath = decoded["ImagePath"];
 
   return { email, role, fullName, imagePath };
+}
+export async function CurrentTokenId(): Promise<string | undefined> {
+  const token = await getAccessToken();
+  if (token === null || token === undefined) return undefined;
+  const decoded = decodeJwt<JwtPayload>(token);
+  const tokenId = decoded["TokenId"];
+  return tokenId;
 }

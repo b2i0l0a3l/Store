@@ -1,5 +1,6 @@
 import { getAccessToken, getRefreshToken } from "@/app/(auth)/util/session";
 import { API_URL, fetchApi } from "@/app/util/Api/Api";
+import { CurrentTokenId, CurrentUser } from "@/app/util/currentUser";
 import { MyResponse } from "@/app/util/types";
 
 export interface LoginRequest {
@@ -99,17 +100,20 @@ export async function refresh(
   }
 }
 
-export async function Logout(body: LogoutRequest): Promise<AuthResponse> {
+export async function Logout(): Promise<AuthResponse> {
   try {
+    const user = await CurrentUser();
+    const refreshToken = await getRefreshToken();
+    const TokenId = await CurrentTokenId();
     const response = await fetch(`${API_URL}/Auth/Logout`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${await getAccessToken()}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({email:user?.email,tokenId :TokenId,refreshToken: refreshToken}),
     });
-    const data = await response.json();
+    await response.json();
     return { isSuccess: true, message: "Logout successful" };
   } catch (error) {
     console.error("Refresh error:", error);

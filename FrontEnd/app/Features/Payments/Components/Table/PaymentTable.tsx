@@ -5,7 +5,6 @@ import DeletePaymentButton from "../Buttons/DeletePaymentButton";
 import { Payment } from "../../types";
 
 const columns: Column<Payment>[] = [
-  { key: "id", label: "ID" },
   { key: "debtID", label: "Debt ID" },
   {
     key: "amount",
