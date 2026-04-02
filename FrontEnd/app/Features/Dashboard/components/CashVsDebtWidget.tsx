@@ -27,8 +27,8 @@ export default function CashVsDebtWidget({ data }: { data: CashVsDebtRatio | nul
         <h3 className="text-lg font-semibold text-white">Cash vs Debt</h3>
       </div>
       
-      <div className="flex-1 w-full min-h-[200px] flex items-center justify-center relative">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="w-full h-[200px] flex items-center justify-center relative mt-4">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
           <PieChart>
             <Pie
               data={chartData}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SidebarProvider from "../components/side-bar/SidebarProvider";
+import TopBar from "../components/top-bar/TopBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,7 +31,7 @@ export default function MarketingLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider>{children}</SidebarProvider>
+        <SidebarProvider topBar={<TopBar />}>{children}</SidebarProvider>
         <ToastContainer />
       </body>
     </html>

@@ -16,10 +16,10 @@ namespace StoreApi.Api.Controllers
     [Authorize]
     public class ProductController : ControllerBase
     {
-        private IUploadProductImage _UploadImage;
+        private IUploadImage _UploadImage;
         private readonly IMediator _mediator;
 
-        public ProductController(IMediator mediator,IUploadProductImage UploadImage)
+        public ProductController(IMediator mediator,IUploadImage UploadImage)
         {
             _mediator = mediator;
             _UploadImage = UploadImage;
@@ -72,7 +72,7 @@ namespace StoreApi.Api.Controllers
             if (req.ProductImage != null && req.ProductImage.Length != 0)
             {
                 using var stream = req.ProductImage.OpenReadStream();
-                request.ImagePath = await _UploadImage.Upload(stream, req.ProductImage.FileName);
+                request.ImagePath = await _UploadImage.Upload(stream, req.ProductImage.FileName,"ProductImages");
             }
             
             var result = await _mediator.Send(request);
@@ -82,10 +82,28 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpPut("Update")]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromBody] UpdateProductRequest request)
+        public async Task<IActionResult> Update([FromForm] UpdateProduct req)
         {
+            UpdateProductRequest request = new()
+            {
+                Id = req.Id,
+                CategoryId = req.CategoryId,
+                CodeBar = req.CodeBar ?? null,
+                Cost = req.Cost,
+                Price = req.Price,
+                Name = req.Name,
+                Quantity = req.Quantity,
+            };
+
+            if (req.ProductImage != null && req.ProductImage.Length != 0)
+            {
+                using var stream = req.ProductImage.OpenReadStream();
+                request.ImagePath = await _UploadImage.Upload(stream, req.ProductImage.FileName, "ProductImages");
+            }
+
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
                 return BadRequest(result.Error);

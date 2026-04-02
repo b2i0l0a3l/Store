@@ -6,8 +6,10 @@ import MobileHeader from "./MobileHeader";
 
 export default function SidebarProvider({
   children,
+  topBar,
 }: {
   children: React.ReactNode;
+  topBar?: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,6 +21,7 @@ export default function SidebarProvider({
       <MobileHeader onToggle={handleToggle} />
       <Sidebar isOpen={isOpen} onClose={handleClose} />
       <main className="pt-14 md:pt-0 md:ml-64 transition-[margin] duration-300">
+        {topBar}
         {children}
       </main>
     </>

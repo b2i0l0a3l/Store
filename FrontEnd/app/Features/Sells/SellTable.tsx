@@ -10,9 +10,10 @@ export default function SellTable({ data }: { data: product[] }) {
     () => [
       { key: "name", label: "Name" },
       { key: "categoryName", label: "Category" },
-      { key: "price", label: "Price" },
+      { key: "price", label: "Price" , render: (item) => item.price.toFixed(2) },
       { key: "quantity", label: "Quantity" , render: (item) => item.quantity > 0 ? item.quantity : <span className="text-red-500">Out of Stock</span>},
-      { key: "cost", label: "Cost" },
+      { key: "cost", label: "Cost" , render: (item) => item.cost.toFixed(2) },
+      { key: "barCode", label: "BarCode" },
       {
         key: "action",
         label: "Action",

@@ -13,7 +13,7 @@ namespace StoreSystem.Application.shared
 {
     public class GenerateJwtToken(IConfiguration _Configuration) : IGenerateJwtToken
     {
-        public  string Generate(Claim[] claims)
+        public  string Generate(IEnumerable<Claim> claims)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_Configuration["JWT_SECRET"]!));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

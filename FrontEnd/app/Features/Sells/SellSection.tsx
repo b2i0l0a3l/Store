@@ -33,7 +33,7 @@ export default function SellSection({
 
     if (search) {
       filtered = filtered.filter((x) =>
-        x.name.toLowerCase().includes(searchLower),
+        x.name.toLowerCase().includes(searchLower) || x.barCode.toLowerCase().includes(searchLower),
       );
     }
 

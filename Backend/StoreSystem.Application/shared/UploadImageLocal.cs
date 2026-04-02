@@ -6,11 +6,11 @@ using StoreSystem.Application.Interface;
 
 namespace StoreSystem.Application.shared
 {
-    public class UploadProductImageLocal : IUploadProductImage
+    public class UploadImageLocal : IUploadImage
     {
-        public async Task<string> Upload(Stream FileStream,string FileName)
+        public async Task<string> Upload(Stream FileStream,string FileName,string FolderName)
         {
-            var uploadDirectory = Directory.GetCurrentDirectory()+"/ProductImages";
+            var uploadDirectory = Directory.GetCurrentDirectory()+$"/Assets/{FolderName}";
 
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(FileName);
             var filePath = Path.Combine(uploadDirectory, fileName);
@@ -24,7 +24,7 @@ namespace StoreSystem.Application.shared
             {
                 await FileStream.CopyToAsync(stream);
             }
-            return filePath;
+            return $"Assets/{FolderName}/{fileName}";
         }
     }
 }

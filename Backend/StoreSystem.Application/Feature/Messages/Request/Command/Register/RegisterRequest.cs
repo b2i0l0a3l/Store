@@ -13,5 +13,6 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command.Register
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
+        public string? ImagePath { get; set; }
     }
 }

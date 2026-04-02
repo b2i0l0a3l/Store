@@ -29,6 +29,8 @@ export default function ProductModal({
     quantity: data?.quantity || 0,
   });
 
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   const categoryOptions = useMemo(
     () => categories.map((c) => ({ value: c.id, label: c.name })),
     [categories],
@@ -48,6 +50,12 @@ export default function ProductModal({
     }));
   }, []);
 
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFile(e.target.files[0]);
+    }
+  }, []);
+
   const handleCategoryChange = useCallback(
     (option: { value: string | number; label: string }) => {
       setFormData((prev) => ({
@@ -60,53 +68,91 @@ export default function ProductModal({
   );
 
   const handleSubmit = useCallback(() => {
-    const { categoryName, ...payload } = formData;
-    console.log(payload);
-    onClick(payload, formData);
-  }, [onClick, formData]);
+    const submitData = new FormData();
+    submitData.append("Name", formData.name);
+    submitData.append("CategoryId", formData.categoryId.toString());
+    submitData.append("Price", formData.price.toString());
+    submitData.append("Cost", formData.cost.toString());
+    submitData.append("Quantity", formData.quantity.toString());
+    if (formData.id) {
+      submitData.append("Id", formData.id.toString());
+    }
+    if (data?.barCode) {
+      submitData.append("CodeBar", data.barCode);
+    }
+    if (selectedFile) {
+      submitData.append("ProductImage", selectedFile);
+    }
+
+    onClick(submitData, submitData);
+  }, [onClick, formData, selectedFile, data?.barCode]);
 
   return (
     <CustomModal title={title} icon={icon} onClose={onClose}>
       <div className="space-y-4">
-        <input
-          name="name"
-          onChange={handleChange}
-          value={formData.name}
-          type="text"
-          placeholder="Product Name"
-          className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-        />
-        <CustomComboBox
-          options={categoryOptions}
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          placeholder="Select Category"
-          name="categoryName"
-        />
-        <input
-          name="price"
-          onChange={handleChange}
-          value={formData.price || ""}
-          type="number"
-          placeholder="Price"
-          className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-        />
-        <input
-          name="cost"
-          onChange={handleChange}
-          value={formData.cost || ""}
-          type="number"
-          placeholder="Cost"
-          className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-        />
-        <input
-          name="quantity"
-          onChange={handleChange}
-          value={formData.quantity || ""}
-          type="number"
-          placeholder="Quantity"
-          className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
-        />
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Product Name</label>
+          <input
+            name="name"
+            onChange={handleChange}
+            value={formData.name}
+            type="text"
+            placeholder="Product Name"
+            className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Category</label>
+          <CustomComboBox
+            options={categoryOptions}
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            placeholder="Select Category"
+            name="categoryName"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Price</label>
+          <input
+            name="price"
+            onChange={handleChange}
+            value={formData.price || ""}
+            type="number"
+            placeholder="Price"
+            className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Cost</label>
+          <input
+            name="cost"
+            onChange={handleChange}
+            value={formData.cost || ""}
+            type="number"
+            placeholder="Cost"
+            className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Quantity</label>
+          <input
+            name="quantity"
+            onChange={handleChange}
+            value={formData.quantity || ""}
+            type="number"
+            placeholder="Quantity"
+            className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-1">Product Image</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="w-full px-4 py-2 bg-slate-900/50 border border-slate-700 rounded-lg text-slate-200 focus:outline-hidden focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600"
+          />
+        </div>
       </div>
       <div className="flex justify-end mt-4">
         <button

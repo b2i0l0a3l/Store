@@ -5,6 +5,7 @@ import LowStockAlertsTable from "../../Features/Dashboard/components/LowStockAle
 import TopSellingProductsList from "../../Features/Dashboard/components/TopSellingProductsList";
 import RecentActivitiesFeed from "../../Features/Dashboard/components/RecentActivitiesFeed";
 import CashVsDebtWidget from "../../Features/Dashboard/components/CashVsDebtWidget";
+import TopClientList from "../../Features/Dashboard/components/TopClientList";
 import Loading from "../../components/Ui/Loading/Loading";
 
 import {
@@ -14,6 +15,7 @@ import {
   fetchTopSellingProducts,
   fetchRecentActivities,
   fetchCashVsDebtRatio,
+  fetchClientRanking
 } from "../../Features/Dashboard/api/dashboardActions";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +28,8 @@ export default async function DashboardPage() {
     lowStock,
     topSelling,
     recent,
-    cashVsDebt
+    cashVsDebt,
+    clientRanking
   ] = await Promise.all([
     fetchDashboardSummary(),
     fetchSalesOverTime(30),
@@ -34,6 +37,7 @@ export default async function DashboardPage() {
     fetchTopSellingProducts(),
     fetchRecentActivities(),
     fetchCashVsDebtRatio(),
+    fetchClientRanking(),
   ]);
 
   return (
@@ -60,12 +64,15 @@ export default async function DashboardPage() {
         </div>
 
         {/* Row 3: Lists & Tables */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-12">
           <div className="lg:col-span-1 h-[400px]">
             <LowStockAlertsTable data={lowStock} />
           </div>
           <div className="lg:col-span-1 h-[400px]">
             <TopSellingProductsList data={topSelling} />
+          </div>
+          <div className="lg:col-span-1 h-[400px]">
+            <TopClientList data={clientRanking} />
           </div>
           <div className="lg:col-span-1 h-[400px]">
             <RecentActivitiesFeed data={recent} />

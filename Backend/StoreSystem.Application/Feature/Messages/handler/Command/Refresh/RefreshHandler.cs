@@ -51,13 +51,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             if(!isVerified)
                 return new Error("RefreshTokenERROR", Core.enums.ErrorType.General, "Invalid refresh token");
  
-            Claim[] claims = new[]
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(ClaimTypes.Role, user.Role ?? "Viewer"),
-                new Claim("TokenId", refreshToken.TokenId)
+                new Claim("TokenId", refreshToken.TokenId),
+                new Claim("FullName", user.FullName),
             };
+            if (user.ImagePath != null)
+                claims.Add(new Claim("ImagePath", user.ImagePath));
            
             string newAccessToken = _GenerateJwtToken.Generate(claims);
             string newRefreshToken = _GenerateRefreshToken.Generate(64);

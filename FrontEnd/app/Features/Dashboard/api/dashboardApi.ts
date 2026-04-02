@@ -11,25 +11,21 @@ import {
 
 export async function getDashboardSummary(): Promise<DashboardSummary | null> {
   const res = await fetchApi<DashboardSummary>(`/Dashboard/Summary`, { cache: "no-store" });
-  console.log(res);
   return res.succeeded && res.value ? res.value : null;
 }
 
 export async function getClientRanking(): Promise<ClientRanking[]> {
   const res = await fetchApi<ClientRanking[]>(`/Dashboard/ClientRanking`, { cache: "no-store" });
-  console.log(res);
   return res.succeeded && res.value ? res.value || [] : [];
 }
 
 export async function getLowStockAlerts(): Promise<LowStockAlert[]> {
   const res = await fetchApi<LowStockAlert[]>(`/Dashboard/LowStockAlerts`, { cache: "no-store" });
-  console.log(res);
   return res.succeeded && res.value ? res.value || [] : [];
 }
 
 export async function getTopSellingProducts(): Promise<TopSellingProduct[]> {
   const res = await fetchApi<TopSellingProduct[]>(`/Dashboard/TopSellingProducts`, { cache: "no-store" });
-  console.log(res);
   return res.succeeded && res.value ? res.value || [] : [];
 }
 

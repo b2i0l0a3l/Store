@@ -9,6 +9,6 @@ namespace StoreSystem.Application.Interface
 {
     public interface IGenerateJwtToken
     {
-        string Generate(Claim[] claims);
+        string Generate(IEnumerable<Claim> claims);
     }
 }

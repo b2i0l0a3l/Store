@@ -13,6 +13,7 @@ namespace StoreSystem.Core.Entities
         [MaxLength(30)]
         public string FullName { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
+        public string? ImagePath { get; set; }
 
     }
 }

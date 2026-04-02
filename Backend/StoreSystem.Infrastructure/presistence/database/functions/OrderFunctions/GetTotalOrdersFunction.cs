@@ -25,7 +25,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
 
             try
             {
-                var total = await connection.QueryFirstOrDefaultAsync<decimal>("select COALESCE(count(o.\"Id\"), 0) from \"Orders\" o");
+                var total = await connection.QueryFirstOrDefaultAsync<decimal>("select COALESCE(sum(o.\"Total\"), 0) from \"Orders\" o");
                 return total;
             }
             catch (Exception ex)

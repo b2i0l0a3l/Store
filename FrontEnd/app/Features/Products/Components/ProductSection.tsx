@@ -31,14 +31,14 @@ export default function ProductSection({
     if (deletedProductIds.size > 0) {
       currentData = currentData.filter((c) => !deletedProductIds.has(c.id));
     }
-
     const searchLower = search.toLowerCase();
     return currentData
       .filter((c) => {
         const actualProduct = updatedProducts[c.id] || c;
         return (
-          actualProduct.name.toLowerCase().includes(searchLower) ||
-          actualProduct.categoryName.toLowerCase().includes(searchLower)
+          actualProduct.name?.toLowerCase().includes(searchLower) ||
+          actualProduct.barCode?.toLowerCase().includes(searchLower) ||
+          actualProduct.categoryName?.toLowerCase().includes(searchLower)
         );
       })
       .map((c) => updatedProducts[c.id] || c);
@@ -51,7 +51,6 @@ export default function ProductSection({
           <CustomSearch onSearch={handleSearch} />
           <AddProductButton categories={categories} />
         </div>
-
         <ProductTable data={filteredData} categories={categories} />
       </CardSection>
     </>

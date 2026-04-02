@@ -4,6 +4,8 @@ import { product } from "@/app/Features/Products/types";
 import UpdateProductButton from "../Buttons/UpdateProductButton";
 import DeleteProductButton from "../Buttons/DeleteProductButton";
 import { useMemo } from "react";
+import Image from "next/image";
+import GetImageFromBackEnd from "@/app/util/GetImageFromBackEnd";
 
 export default function ProductTable({
   data,
@@ -14,11 +16,13 @@ export default function ProductTable({
 }) {
   const columns: Column<product>[] = useMemo(
     () => [
+      {key: "imagePath", label: "Image", render: (item) => <img src={GetImageFromBackEnd(item.imagePath || "")} alt={item.name} width={50} height={50} />},
       { key: "name", label: "Name" },
       { key: "categoryName", label: "Category" },
-      { key: "price", label: "Price" },
-      { key: "cost", label: "Cost" },
+      { key: "price", label: "Price" , render: (item) => item.price.toFixed(2) },
+      { key: "cost", label: "Cost" , render: (item) => item.cost.toFixed(2) },
       { key: "quantity", label: "Quantity" },
+      { key: "barCode", label: "BarCode" },
       {
         key: "action",
         label: "Action",

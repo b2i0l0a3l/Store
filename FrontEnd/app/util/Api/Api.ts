@@ -7,7 +7,7 @@ async function buildHeaders(options: RequestInit) {
   const token = await getAccessToken();
   const headers = new Headers(options.headers || {});
 
-  if (!headers.has("Content-Type")) {
+  if (!headers.has("Content-Type") && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
   }
 

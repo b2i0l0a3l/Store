@@ -8,4 +8,6 @@ export interface MyResponse<T> {
 export type user = {
   email: string;
   role: string;
+  fullName: string;
+  imagePath?: string;
 };

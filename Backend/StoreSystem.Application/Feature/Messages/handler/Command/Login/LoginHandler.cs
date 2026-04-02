@@ -44,13 +44,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
 
                 string TokenId = _RefreshToken.Generate(16);
 
-                Claim[] Claims = new[]
+                List<Claim> Claims = new()
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email!),
                     new Claim(ClaimTypes.Role, user.Role ?? "Viewer"),
-                    new Claim("TokenId", TokenId)
+                    new Claim("TokenId", TokenId),
+                    new Claim("FullName", user.FullName),
                 };
+                if (user.ImagePath != null)
+                    Claims.Add(new Claim("ImagePath", user.ImagePath));
                 
                 var newRefreshToken = _RefreshToken.Generate(64);
                 RefreshToken refreshToken = new()

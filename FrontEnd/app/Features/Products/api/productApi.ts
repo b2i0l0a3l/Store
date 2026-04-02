@@ -18,17 +18,11 @@ export async function getProducts(): Promise<product[]> {
   }
 }
 
-export async function addProduct(productData: {
-  name: string;
-  categoryId: number;
-  price: number;
-  cost: number;
-  quantity: number;
-}): Promise<boolean> {
+export async function addProduct(productData: FormData): Promise<boolean> {
   try {
     const result = await fetchApi<{ value: product[] }>(`/Product/Add`, {
       method: "POST",
-      body: JSON.stringify(productData),
+      body: productData,
     });
 
     if (!result.succeeded || !result.value) {
@@ -42,18 +36,11 @@ export async function addProduct(productData: {
   }
 }
 
-export async function updateProduct(productData: {
-  name: string;
-  categoryId: number;
-  price: number;
-  cost: number;
-  quantity: number;
-  id: number;
-}): Promise<boolean> {
+export async function updateProduct(productData: FormData): Promise<boolean> {
   try {
     const result = await fetchApi<{ value: product[] }>(`/Product/Update`, {
       method: "PUT",
-      body: JSON.stringify(productData),
+      body: productData,
     });
 
     if (!result.succeeded || !result.value) {

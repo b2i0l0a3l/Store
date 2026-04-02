@@ -6,4 +6,6 @@ export type product = {
   cost: number;
   quantity: number;
   createdAt: Date;
+  barCode: string;
+  imagePath: string;
 };

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Application.Interface
 {
-    public interface IUploadProductImage
+    public interface IUploadImage
     {
-        Task<string> Upload(Stream FileStream, string FileName);
+        Task<string> Upload(Stream FileStream, string FileName,string FolderName);
     }
 }
