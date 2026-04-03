@@ -5,11 +5,13 @@ using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/Category")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/Category")]
+    [ApiVersion("1")]
     [Authorize]
     public class CategoryController : ControllerBase
     {

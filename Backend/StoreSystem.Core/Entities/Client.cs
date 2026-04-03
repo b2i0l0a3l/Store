@@ -17,5 +17,6 @@ namespace StoreSystem.Core.Entities
 
         public ICollection<Order>? Orders { get; set; }
         public ICollection<Debt>? Debts { get; set; }
+        public ICollection<Invoice>? Invoices { get; set; }
     }
 }

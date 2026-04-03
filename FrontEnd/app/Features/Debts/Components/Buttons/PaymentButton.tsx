@@ -20,11 +20,9 @@ function PaymentButton({
   const debtStore = useDebtStore();
 
   const handleSubmit = async (data: any) => {
-    const model = {
-      debtId: data.OrderId,
-      amount: data.Amount,
-    };
-    const success = await pay(model);
+    console.log(data);
+    
+    const success = await pay(data);
     if (success) {
       debtStore.recordUpdate({ ...data, id: debtId });
       toast.success("تم تسجيل الدفعة بنجاح");
@@ -47,7 +45,7 @@ function PaymentButton({
       {open && (
         <PaymentModal
           handleClose={handleClose}
-          OrderId={debtId}
+          debtId={debtId}
           handleSubmit={handleSubmit}
         />
       )}

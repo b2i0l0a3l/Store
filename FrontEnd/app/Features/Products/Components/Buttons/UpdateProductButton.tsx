@@ -23,8 +23,7 @@ const UpdateProductButton = memo(function UpdateProductButton({
 
   const handleSubmit = useCallback(
     async (payload: any, formData: any) => {
-      const updatedData = { ...payload, id: data.id };
-      const success = await updateProduct(updatedData);
+      const success = await updateProduct(payload);
       if (success) {
         useProductStore.getState().recordUpdate({ ...data, ...formData });
         toast.success("تم تعديل المنتج بنجاح");

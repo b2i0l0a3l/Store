@@ -5,11 +5,15 @@ using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/OrderItem")]
     [ApiController]
+            [Route("api/v{version:apiVersion}/OrderItem")]
+    [ApiVersion("1")]
+
+
     [Authorize]
     public class OrderItemController : ControllerBase
     {

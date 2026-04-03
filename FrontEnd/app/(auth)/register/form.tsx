@@ -126,7 +126,17 @@ export default function Form() {
     }
 
     try {
-      const data = await register({ userName, email, password });
+      const submitData = new FormData();
+      if (userName) submitData.append("FullName", userName);
+      if (email) submitData.append("Email", email);
+      if (password) submitData.append("Password", password);
+
+      const imageFile = formData.get("image") as File;
+      if (imageFile && imageFile.size > 0) {
+        submitData.append("Image", imageFile);
+      }
+
+      const data = await register(submitData);
       if (!data.isSuccess) {
         setState({
           errors: {
@@ -225,6 +235,24 @@ export default function Form() {
             )}
           </div>
         ))}
+        
+        <div>
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-slate-300 mb-1.5"
+          >
+            Profile Picture (Optional)
+          </label>
+          <div className="relative">
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+              className="w-full px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-xl text-slate-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/40 focus:border-cyan-500/50 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20 cursor-pointer"
+            />
+          </div>
+        </div>
 
         <button
           type="submit"

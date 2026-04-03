@@ -22,10 +22,11 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
         public async Task<Result<RegisterModel>> Handle(RegisterRequest request, CancellationToken cancellationToken)
         {
             try
-            {     
+            {
                 if (await _UserManager.FindByEmailAsync(request.Email) != null)
                     return Errors.EmailAlreadyExistsError;
 
+                
                 User user = new()
                 {
                     FullName = request.FullName,

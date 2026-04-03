@@ -67,7 +67,7 @@ export default function ProductModal({
     [],
   );
 
-  const handleSubmit = useCallback(() => {
+  const handleSubmit = useCallback(async() => {
     const submitData = new FormData();
     submitData.append("Name", formData.name);
     submitData.append("CategoryId", formData.categoryId.toString());
@@ -83,8 +83,8 @@ export default function ProductModal({
     if (selectedFile) {
       submitData.append("ProductImage", selectedFile);
     }
-
-    onClick(submitData, submitData);
+    console.log(submitData);
+   await onClick(submitData, submitData);
   }, [onClick, formData, selectedFile, data?.barCode]);
 
   return (

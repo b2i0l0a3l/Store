@@ -7,8 +7,10 @@ import ReturnItemModal from "../Modal/ReturnItemModal";
 
 export default function ReturnItemButton({
   orderItem,
+  orderId,
 }: {
   orderItem: OrderItem;
+  orderId: number;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -23,7 +25,7 @@ export default function ReturnItemButton({
         className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-amber-500/80 transition-all duration-200"
         icon={ArrowUturnLeftIcon}
       />
-      {open && <ReturnItemModal setOpen={setOpen} orderItem={orderItem} />}
+      {open && <ReturnItemModal setOpen={setOpen} orderItem={orderItem} orderId={orderId} />}
     </>
   );
 }

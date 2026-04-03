@@ -39,7 +39,7 @@ export default function OrderModal({
               جاري تحميل العناصر...
             </div>
           ) : (
-            <OrderItemTable data={orderItems} />
+            <OrderItemTable data={orderItems} orderId={OrderId} />
           )}
         </div>
       </div>

@@ -10,6 +10,9 @@ using StoreSystem.Infrastructure.shared;
 using Microsoft.OpenApi.Models;
 using StoreApi.Api.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using StoreSystem.Core.Entities;
+using StoreSystem.Infrastructure.HELPER;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,6 +86,16 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddApiVersioning(options =>
+{
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
+    options.ReportApiVersions = true;
+}).AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1",
@@ -165,4 +178,14 @@ app.UseAuthentication();
 app.UseMiddleware<AuditMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var userManager = services.GetRequiredService<UserManager<User>>();
+    var config = services.GetRequiredService<IConfiguration>();
+
+    await DbSeeder.SeedAdminAsync(userManager, config);
+}
 app.Run();

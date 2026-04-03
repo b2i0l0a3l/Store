@@ -3,11 +3,16 @@ using MediatR;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using StoreSystem.Application.Feature.Messages.Request.Query.Dashboard;
+using BookingSystem.Core.common;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/Dashboard")]
+
     [ApiController]
+    [Route("api/v{version:apiVersion}/Dashboard")]
+    [ApiVersion("1")]
+    [Authorize(Roles =Roles.Admin)]
     public class DashboardController : ControllerBase
     {
         private readonly IMediator _mediator;

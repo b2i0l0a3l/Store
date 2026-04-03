@@ -6,11 +6,13 @@ using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using StoreSystem.Application.Feature.Messages.Request.Command.Return;
 using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/Return")]
     [ApiController]
+       [Route("api/v{version:apiVersion}/Return")]
+    [ApiVersion("1")]
     [Authorize]
     public class ReturnController : ControllerBase
     {

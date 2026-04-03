@@ -9,11 +9,13 @@ using StoreSystem.Application.Feature.Messages.Request.Command.Register;
 using Microsoft.AspNetCore.RateLimiting;
 using StoreSystem.Application.Interface;
 using StoreApi.Api.Contract;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/Auth")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/Auth")]
+    [ApiVersion("1")]
     public class AuthController : ControllerBase
     {
         private readonly IUploadImage _Upload;

@@ -46,6 +46,18 @@ export async function getOrderById(id: number): Promise<order | null> {
   }
 }
 
+export async function deleteOrder(id: number) : Promise<boolean> {
+  try {
+    const result = await fetchApi(`/Order/Delete/${id}`, {
+      method: "DELETE",
+    });
+    return result.succeeded;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
+
 export async function getOrderItems(id: number): Promise<OrderItem[] | null> {
   try {
     const result = await fetchApi<{ value: OrderItem[] }>(`/Order/GetOrderItemsByOrderId?OrderId=${id}`, {

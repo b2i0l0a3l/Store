@@ -19,7 +19,7 @@ export default function ClientModal({
   const [name, setName] = useState(data?.name || "");
   const [phone, setPhone] = useState(data?.phoneNumber || "");
   const [loading, setLoading] = useState(false);
-  const addClient = useClientStore((state) => state.addClient);
+  const addClient = useClientStore((state) => state.recordAdd);
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setName(e.target.value);

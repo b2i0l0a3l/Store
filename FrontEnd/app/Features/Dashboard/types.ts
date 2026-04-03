@@ -22,6 +22,7 @@ export interface TopSellingProduct {
 export interface SalesOverTime {
   saleDate: string;
   totalSales: number;
+  totalDebt: number;
 }
 
 export interface RecentOrder {

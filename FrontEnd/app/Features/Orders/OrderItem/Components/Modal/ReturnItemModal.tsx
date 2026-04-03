@@ -8,9 +8,11 @@ import { toast } from "@/app/store/useToastStore";
 export default function ReturnItemModal({
   setOpen,
   orderItem,
+  orderId,
 }: {
   setOpen: (open: boolean) => void;
   orderItem: OrderItem;
+  orderId: number;
 }) {
   const [quantity, setQuantity] = useState(1);
 
@@ -23,15 +25,15 @@ export default function ReturnItemModal({
     }
 
     const payload = {
-      orderId: (orderItem as any).orderId || 0,
-      items: [
-        {
-          productId: (orderItem as any).productId || 0,
-          quantity: quantity,
-          price: orderItem.price,
-          orderItemId: orderItem.id,
-        },
-      ],
+        orderId: orderId || 0,
+        items: [
+          {
+            productId: orderItem.productId || 0,
+            quantity: quantity,
+            price: orderItem.price,
+            orderItemId: orderItem.id,
+          },
+        ],
     };
 
     const success = await returnOrderItems(payload);

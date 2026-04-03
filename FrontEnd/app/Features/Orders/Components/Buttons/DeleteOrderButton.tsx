@@ -3,6 +3,8 @@ import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { useOrderStore } from "../../store/order";
 import { useState } from "react";
 import ConfirmDeleteModal from "@/app/components/Ui/Modal/ConfirmDeleteModal";
+import { deleteOrder } from "../../api/orderApi";
+import { toast } from "@/app/store/useToastStore";
 
 export default function DeleteOrderButton({ id }: { id: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,10 +16,17 @@ export default function DeleteOrderButton({ id }: { id: number }) {
 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
-    // TODO: implement actual delete logic
-    useOrderStore.getState().recordDelete(id);
-    setIsDeleting(false);
-    setIsModalOpen(false);
+    try{ 
+      useOrderStore.getState().recordDelete(id);
+      await deleteOrder(id);
+      toast.success("تم حذف الطلب بنجاح");
+    }catch(error){
+      toast.error("حدث خطأ أثناء حذف الطلب");
+      useOrderStore.getState().deletedOrderIds.delete(id);
+    }finally{
+      setIsDeleting(false);
+      setIsModalOpen(false);
+    }
   };
 
   return (

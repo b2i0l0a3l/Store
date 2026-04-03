@@ -8,6 +8,8 @@ import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { CartItem, useStore } from "../../store/store";
 import { buy } from "@/app/Features/Orders/api/orderApi";
 import { useProductStore } from "@/app/Features/Products/store/product";
+import { getClients } from "@/app/Features/clients/api/clientApi";
+import { client } from "@/app/Features/clients/types";
 
 function CreditModal({cart ,onClose}: { cart: CartItem[]; onClose: () => void}) {
   
@@ -56,11 +58,15 @@ function CreditModal({cart ,onClose}: { cart: CartItem[]; onClose: () => void}) 
         }, [request, clearCart, recordSale]);
 
   
-  const clients = useClientStore((state) => state.clients);
-  const fetchClients = useClientStore((state) => state.fetchClients);
+  const [clients,setClients] = useState<client[]>([]);
+  
    useEffect(() => {
-     fetchClients();
-  }, [fetchClients]);
+    const fetch = async () => {
+      const clients = await getClients();
+      setClients(clients);
+    }
+    fetch();
+  }, []);
 
   
    

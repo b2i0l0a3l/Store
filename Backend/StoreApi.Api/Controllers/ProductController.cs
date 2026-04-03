@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Authorization;
 using BookingSystem.Core.common;
 using StoreSystem.Application.Interface;
 using StoreApi.Api.Contract.Product;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/Product")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/Product")]
+    [ApiVersion("1")]
     [Authorize]
     public class ProductController : ControllerBase
     {

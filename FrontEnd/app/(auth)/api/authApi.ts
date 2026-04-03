@@ -52,14 +52,11 @@ export async function login(body: LoginRequest): Promise<AuthResponse> {
   }
 }
 
-export async function register(body: RegisterRequest): Promise<AuthResponse> {
+export async function register(formData: FormData): Promise<AuthResponse> {
   try {
     const response = await fetch(`${API_URL}/Auth/Register`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
+      body: formData,
     });
     const data = await response.json();
     return { isSuccess: true, message: "Register successful" };

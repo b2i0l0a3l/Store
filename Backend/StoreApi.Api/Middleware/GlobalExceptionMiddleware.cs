@@ -45,8 +45,6 @@ namespace StoreApi.Api.Middleware
                 var problemDetails = new ValidationProblemDetails(errors)
                 {
                     Status = (int)HttpStatusCode.BadRequest,
-                    Title = "Validation Failure",
-                    Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
                     Detail = "One or more validation errors occurred."
                 };
 
@@ -59,8 +57,6 @@ namespace StoreApi.Api.Middleware
                 var problemDetails = new ProblemDetails
                 {
                     Status = (int)HttpStatusCode.InternalServerError,
-                    Title = "An error occurred while processing your request.",
-                    Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
                     Detail = exception.Message 
                 };
 

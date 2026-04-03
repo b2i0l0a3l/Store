@@ -4,9 +4,9 @@ import CustomModal from "@/app/components/Ui/Modal/Modal";
 import CustomInput from "@/app/components/Ui/inputs/CustomInput";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 
-function PaymentModal({handleClose,OrderId,handleSubmit}:{
+function PaymentModal({handleClose,debtId,handleSubmit}:{
     handleClose: () => void;
-    OrderId: number;
+    debtId: number;
     handleSubmit: (data: any) => void;}) {
 
         const [Amount , setAmount] = useState(0);
@@ -23,7 +23,7 @@ function PaymentModal({handleClose,OrderId,handleSubmit}:{
                     <label htmlFor="debtId">Debt Id</label>
                     <CustomInput 
                     disabled={true}
-                    value={OrderId}
+                    value={debtId}
                     placeholder="Debt Id"
                     type="text"
                     name="debtId"
@@ -45,7 +45,7 @@ function PaymentModal({handleClose,OrderId,handleSubmit}:{
                     text="Pay"
                     className="px-6 py-4 "
                     hoverColor="hover:opacity-80"
-                    onClick={() => handleSubmit({OrderId,Amount})} icon={CurrencyDollarIcon}                />
+                    onClick={() => handleSubmit({debtId:debtId,amount:Amount})} icon={CurrencyDollarIcon}                />
             </div>
             
         </CustomModal>

@@ -6,26 +6,28 @@ import ClientModal from "../Modal/clientModal";
 import { addClient } from "@/app/Features/clients/api/clientApi";
 import { toast } from "@/app/store/useToastStore";
 import { client } from "../../types";
+import { useClientStore } from "@/app/Features/clients/store/client";
 
 export default function AddClientButton() {
   const [openModal, setOpenModal] = useState(false);
+  const recordAdd = useClientStore((state) => state.recordAdd);
 
   const handleOpen = useCallback(() => setOpenModal(true), []);
   const handleClose = useCallback(() => setOpenModal(false), []);
 
   const handleSubmit = useCallback(
-    async (name: string, phoneNumber: string) : Promise<client | null> => {
-      const success = await addClient({ name, phoneNumber });
-      console.log(success);
-      if (success) {
+    async (name: string, phoneNumber: string): Promise<client | null> => {
+      const addedClient = await addClient({ name, phoneNumber });
+      if (addedClient) {
         toast.success("تمت إضافة العميل بنجاح");
         setOpenModal(false);
+        recordAdd(addedClient);
       } else {
         toast.error("حدث خطأ أثناء إضافة العميل");
       }
-      return success;
+      return addedClient;
     },
-    [],
+    [recordAdd],
   );
 
   return (

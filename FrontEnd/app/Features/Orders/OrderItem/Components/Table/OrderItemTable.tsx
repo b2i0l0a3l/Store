@@ -7,29 +7,29 @@ import UpdateItemButton from "../Buttons/UpdateItemButton";
 import { useOrderItemStore } from "../../store/orderItem";
 import { useMemo } from "react";
 
-const columns: Column<OrderItem>[] = [
-  { key: "productName", label: "Product Name" },
-  { key: "quantity", label: "Quantity" },
-  { key: "price", label: "Price", render: (item) => item.price.toFixed(2) },
-  {
-    key: "createdAt",
-    label: "Created At",
-    render: (item) => formatDate(item.createdAt),
-  },
-  {
-    key: "action",
-    label: "Action",
-    render: (item) => (
-      <div className="flex gap-2">
-        <DeleteItemButton itemId={item.id} />
-        <UpdateItemButton orderItem={item} />
-        <ReturnItemButton orderItem={item} />
-      </div>
-    ),
-  },
-];
 
-export default function OrderItemTable({ data }: { data: OrderItem[] }) {
+export default function OrderItemTable({ data , orderId}: { data: OrderItem[] , orderId: number}) {
+  const columns: Column<OrderItem>[] = [
+    { key: "productName", label: "Product Name" },
+    { key: "quantity", label: "Quantity" },
+    { key: "price", label: "Price", render: (item) => item.price.toFixed(2) },
+    {
+      key: "createdAt",
+      label: "Created At",
+      render: (item) => formatDate(item.createdAt),
+    },
+    {
+      key: "action",
+      label: "Action",
+      render: (item) => (
+        <div className="flex gap-2">
+          <DeleteItemButton itemId={item.id} />
+          <UpdateItemButton orderItem={item} />
+          <ReturnItemButton orderItem={item} orderId={orderId} />
+        </div>
+      ),
+    },
+  ];
   const updatedOrderItems = useOrderItemStore(
     (state) => state.updatedOrderItems,
   );

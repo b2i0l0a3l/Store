@@ -1,7 +1,7 @@
 "use client";
 
 import { SalesOverTime } from "../types";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 export default function SalesChart({ data }: { data: SalesOverTime[] }) {
   if (!data || data.length === 0) {
@@ -32,6 +32,10 @@ export default function SalesChart({ data }: { data: SalesOverTime[] }) {
                 <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
                 <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
               </linearGradient>
+              <linearGradient id="colorDebt" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+              </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" vertical={false} />
             <XAxis 
@@ -49,15 +53,26 @@ export default function SalesChart({ data }: { data: SalesOverTime[] }) {
             />
             <Tooltip
               contentStyle={{ backgroundColor: "#0f172a", borderColor: "#ffffff20", borderRadius: "12px", color: "#fff" }}
-              itemStyle={{ color: "#3b82f6" }}
             />
+            <Legend verticalAlign="top" height={36} wrapperStyle={{ fontSize: '13px', paddingTop: '10px' }} />
             <Area 
               type="monotone" 
-              dataKey="totalSales" 
+              dataKey="totalSales"
+              name="Sales" 
               stroke="#3b82f6" 
               strokeWidth={3}
               fillOpacity={1} 
               fill="url(#colorSales)" 
+              animationDuration={1500}
+            />
+            <Area 
+              type="monotone" 
+              dataKey="totalDebt" 
+              name="Debts"
+              stroke="#ef4444" 
+              strokeWidth={3}
+              fillOpacity={1} 
+              fill="url(#colorDebt)" 
               animationDuration={1500}
             />
           </AreaChart>

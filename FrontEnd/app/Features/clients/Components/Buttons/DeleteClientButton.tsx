@@ -19,6 +19,8 @@ const DeleteClientButton = memo(function DeleteClientButton({
     setIsModalOpen(true);
   }, []);
 
+  const recordDelete = useClientStore((state) => state.recordDelete);
+
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
     const success = await deleteClient({ id: dataId });
@@ -26,12 +28,12 @@ const DeleteClientButton = memo(function DeleteClientButton({
     setIsModalOpen(false);
 
     if (success) {
-      useClientStore.getState().recordDelete(dataId);
+      recordDelete(dataId);
       toast.success("تم حذف العميل بنجاح");
     } else {
       toast.error("حدث خطأ أثناء الحذف");
     }
-  }, [dataId]);
+  }, [dataId, recordDelete]);
 
   return (
     <>

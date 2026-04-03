@@ -7,11 +7,14 @@ using StoreSystem.Core.common;
 using StoreSystem.Application.Feature.Messages.Request.Query.Order;
 using StoreSystem.Application.Feature.Messages.Request.Command.Order;
 using Microsoft.AspNetCore.Authorization;
+using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers
 {
-    [Route("api/Order")]
     [ApiController]
+    [Route("api/v{version:apiVersion}/Order")]
+    [ApiVersion("1")]
+
     [Authorize]
     public class OrderController : ControllerBase
     {

@@ -1,14 +1,6 @@
 export default function GetImageFromBackEnd(imagePath: string) {
-  if (!imagePath) return `${process.env.NEXT_PUBLIC_API_URL?.replace("/api", "")}/assets/images.png`;
+  if (!imagePath) return ``;
   let normalizedImagePath = imagePath;
-  if (normalizedImagePath && normalizedImagePath.includes("Assets/")) {
-    normalizedImagePath = normalizedImagePath.substring(
-      normalizedImagePath.indexOf("Assets/"),
-    );
-  }
-
-  return normalizedImagePath
-    ? `${process.env.NEXT_PUBLIC_API_URL?.replace("/api", "")}/${normalizedImagePath}`
-    : `${process.env.NEXT_PUBLIC_API_URL?.replace("/api", "")}/assets/ProductImages/images.png`;
-
+  const backend = `${process.env.NEXT_PUBLIC_API_URL?.replace("/api", "").replace("/v1","")}/${normalizedImagePath}`;
+  return backend;
 }
