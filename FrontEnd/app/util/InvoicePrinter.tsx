@@ -2,21 +2,20 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useReactToPrint } from "react-to-print";
 import { order } from "../Features/Orders/types";
-import { OrderItem } from "../Features/Orders/OrderItem/types";
 import { fetchApi } from "./Api/Api";
-
+import { useStore } from "../Features/Sells/store/store";
 interface Props {
-  order: order;
-  items: OrderItem[];
+  clientId?: number;
   showButton?: boolean;
 }
 
-const InvoicePrinter = ({ order, items, showButton = true }: Props) => {
+const InvoicePrinter = ({ clientId, showButton = true }: Props) => {
   const componentRef = useRef<HTMLDivElement>(null);
   const [html, setHtml] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const cart = useStore((state)=> state.cart)
   useEffect(() => {
     const fetchInvoice = async () => {
       setLoading(true);
@@ -25,9 +24,9 @@ const InvoicePrinter = ({ order, items, showButton = true }: Props) => {
         const response = await fetchApi<any>("/Ivoice/html-invoice", {
           method: "POST",
           body: JSON.stringify({
-            clientId: order.clientId,
-            items: items.map((i) => ({
-              productName: i.productName,
+            clientId: clientId ?? null,
+            items: cart.map((i) => ({
+              productName: i.name,
               quantity: i.quantity,
               price: i.price,
             })),
@@ -47,18 +46,24 @@ const InvoicePrinter = ({ order, items, showButton = true }: Props) => {
       }
     };
 
-    if (order && items.length > 0) {
+    if (clientId && cart.length > 0) {
       fetchInvoice();
     }
-  }, [order, items]);
+  }, [clientId, cart]);
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
-    documentTitle: `Invoice_${order.id}`,
+    documentTitle: `Invoice_${new Date().toLocaleString("ar-MA", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+})}`,
   });
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full h-full">
       {showButton && (
         <button
           onClick={() => handlePrint()}

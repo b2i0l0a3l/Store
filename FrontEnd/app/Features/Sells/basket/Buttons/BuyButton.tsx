@@ -1,11 +1,12 @@
 "use client";
 
-import { useStore } from "@/app/Features/Sells/store/store";
+import { CartItem, useStore } from "@/app/Features/Sells/store/store";
 import { useProductStore } from "@/app/Features/Products/store/product";
 import { useState, useMemo, useCallback } from "react";
 import { buy } from "@/app/Features/Orders/api/orderApi";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
+import { toast } from "@/app/store/useToastStore";
 
 export default function BuyButton() {
   const [loading, setLoading] = useState(false);
@@ -27,9 +28,11 @@ export default function BuyButton() {
   );
 
   const handleBuy = useCallback(async () => {
+    const copy : CartItem[] = cart;
     try {
-      if (!cart) return;
-      setLoading(true);
+      if (!cart || !request) return;
+      setLoading(true); 
+      clearCart();
       await buy(request);
       recordSale(
         cart.map((item) => ({
@@ -37,9 +40,10 @@ export default function BuyButton() {
           quantity: item.quantity,
         })),
       );
-      clearCart();
-    } catch (error) {
-      console.log(error);
+      toast.success("تم الشراء بنجاح");
+    } catch {
+      useStore.getState().copy(copy);
+      toast.error("فشل في الشراء");
     } finally {
       setLoading(false);
     }

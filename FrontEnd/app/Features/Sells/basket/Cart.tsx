@@ -4,6 +4,7 @@ import BasketCard from "./parent/BasketCard";
 import ClearButton from "./Buttons/ClearButton";
 import BuyButton from "./Buttons/BuyButton";
 import CreditButton from "./Buttons/CreditButton";
+import InvoicePrinter from "@/app/util/InvoicePrinter";
 
 export default function Cart() {
   return (
@@ -14,6 +15,7 @@ export default function Cart() {
           <ClearButton />
           <BuyButton />
           <CreditButton />
+          <InvoicePrinter />
         </div>
       </div>
     </CardSection>

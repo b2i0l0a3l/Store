@@ -10,6 +10,7 @@ export type CartItem = {
 
 interface CartState {
   cart: CartItem[];
+  copy : (item: CartItem[]) => void;
   addToCart: (item: CartItem) => void;
   updateQuantity: (productId: number, quantity: number) => void;
   removeFromCart: (productId: number) => void;
@@ -27,6 +28,7 @@ function checkQuantity(quantity: number , StockQuantity : number) {
 
 export const useStore = create<CartState>((set) => ({
   cart: [],
+  copy : (item: CartItem[]) => set({ cart: item }),
   addToCart: (item) =>
     set((state) => {
       const existingItem = state.cart.find(
