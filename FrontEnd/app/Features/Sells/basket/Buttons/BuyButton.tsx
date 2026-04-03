@@ -51,13 +51,13 @@ export default function BuyButton() {
 
   return (
     <CustomButton
-      className={`py-2.5 px-4  active:scale-[0.98] ${
+      className={`py-1.5 px-3 text-xs active:scale-[0.98] ${
         loading || cart.length === 0
-          ? "bg-slate-700 text-slate-400 cursor-not-allowed shadow-none"
-          : "bg-blue-600 hover:bg-blue-500 hover:shadow-blue-500/25 text-white"
+          ? "bg-slate-800 text-slate-500 cursor-not-allowed shadow-none"
+          : "bg-emerald-600 hover:bg-emerald-500 hover:shadow-emerald-500/25 text-white"
       } cursor-pointer`}
-      hoverColor="hover:bg-blue-500"
-      text={loading ? "Processing..." : "Complete Purchase"}
+      hoverColor="hover:bg-emerald-500"
+      text={loading ? "Processing..." : "Buy"}
       icon={ShoppingBagIcon}
       onClick={() => handleBuy()}
       disabled={loading || cart.length === 0}

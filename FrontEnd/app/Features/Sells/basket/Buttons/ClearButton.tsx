@@ -7,11 +7,11 @@ export default function ClearButton() {
   const clearCart = useStore((state: any) => state.clearCart);
   return (
     <CustomButton
-      className="w-full h-full cursor-pointer"
-      hoverColor="hover:bg-red-500"
+      className="w-full py-1.5 px-3 text-xs"
+      hoverColor="hover:bg-red-500/90"
       hoverTextColor="hover:text-white"
-      color="bg-slate-700/80"
-      text="Clear Cart"
+      color="bg-slate-800/80"
+      text="Clear"
       icon={TrashIcon}
       onClick={() => clearCart()}
       disabled={false}

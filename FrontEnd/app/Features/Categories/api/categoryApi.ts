@@ -22,21 +22,21 @@ export async function addCategory({
   name,
 }: {
   name: string;
-}): Promise<boolean> {
+}): Promise<category | null> {
   try {
-    const result = await fetchApi<{ value: category[] }>(`/Category/Add`, {
+    const result = await fetchApi<category>(`/Category/Add`, {
       method: "POST",
       body: JSON.stringify({ name }),
     });
 
     if (!result.succeeded || !result.value) {
-      return false;
+      return null;
     }
 
-    return true;
+    return result.value;
   } catch (error) {
     console.error(error);
-    return false;
+    return null;
   }
 }
 

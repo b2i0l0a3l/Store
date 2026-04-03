@@ -20,7 +20,7 @@ function CreditButton() {
             <CustomButton
             disabled={cart.length === 0}
                 text="Credit"
-                className="bg-linear-to-r from-red-500 to-pink-500"
+                className="py-1.5 px-3 text-xs bg-linear-to-r from-amber-600 to-orange-500"
                 icon={CurrencyDollarIcon}
                 onClick={() => {setOpen(true)}}
             />

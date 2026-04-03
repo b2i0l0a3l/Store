@@ -1,0 +1,27 @@
+      table_name       
+-----------------------
+ Categories
+ AspNetUserClaims
+ AspNetUserLogins
+ AspNetUserRoles
+ AspNetUserTokens
+ Clients
+ Orders
+ AuditLogs
+ Payments
+ Debts
+ OrderItems
+ AspNetRoles
+ AspNetUsers
+ Returns
+ __EFMigrationsHistory
+ ReturnItems
+ SupplierProducts
+ AspNetRoleClaims
+ RefreshToken
+ Suppliers
+ Products
+ InvoiceItems
+ Invoices
+(23 rows)
+

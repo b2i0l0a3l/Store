@@ -15,6 +15,9 @@ export default function CategorySection({ data }: { data: category[] }) {
     setSearch(value);
   }, []);
 
+  const addedCategories = useCategoryStore(
+    (state) => state.addedCategories,
+  );
   const updatedCategories = useCategoryStore(
     (state) => state.updatedCategories,
   );
@@ -23,7 +26,7 @@ export default function CategorySection({ data }: { data: category[] }) {
   );
 
   const filteredData = useMemo(() => {
-    let currentData = data;
+    let currentData = [...data, ...addedCategories];
     if (deletedCategoryIds.size > 0) {
       currentData = currentData.filter((c) => !deletedCategoryIds.has(c.id));
     }
@@ -35,7 +38,7 @@ export default function CategorySection({ data }: { data: category[] }) {
         return actualCategory.name.toLowerCase().includes(searchLower);
       })
       .map((c) => updatedCategories[c.id] || c);
-  }, [data, search, updatedCategories, deletedCategoryIds]);
+  }, [data, search, updatedCategories, deletedCategoryIds, addedCategories]);
 
   return (
     <>
