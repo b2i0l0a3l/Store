@@ -8,6 +8,6 @@ namespace StoreSystem.Application.Interface
 {
     public interface IGenerateInvoiceHtml
     {
-        string GenerateInvoiceHtml(InvoiceModel invoice);
+        Task<string> GenerateInvoiceHtml(InvoiceModel invoice);
     }
 }

@@ -24,6 +24,7 @@ using StoreSystem.Core.interfaces.functions.ClientFunctions;
 using StoreSystem.Infrastructure.presistence.database.functions.ClientFunctions;
 using StoreSystem.Core.interfaces.functions.PaymentFunctions;
 using StoreSystem.Infrastructure.presistence.database.functions.PaymentFunctions;
+using StoreSystem.Infrastructure.presistence.database.procedures.invoiceProcedure;
 
 namespace StoreSystem.Infrastructure.shared
 {
@@ -41,6 +42,7 @@ namespace StoreSystem.Infrastructure.shared
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IHandleOrderWithHisItemsProcedure, HandleOrderWithHisItems>();
+            services.AddScoped<IInvoiceProcedure, InvoiceProcedure>();
             services.AddScoped<IHandleReturnProcedure, HandleReturn>();
             services.AddScoped<IUpdateOrderItemProcedure, UpdateOrderItem>();
             services.AddScoped<IDeleteOrderItemProcedure, DeleteOrderItem>();

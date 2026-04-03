@@ -16,6 +16,8 @@ namespace StoreSystem.Application
             services.AddScoped<IGenerateJwtToken,GenerateJwtToken>();
             services.AddScoped<IGenerateToken, GenerateRefreshToken>();
             services.AddScoped<IUploadImage, UploadImageLocal>();
+            services.AddScoped<IGenerateQrCode, QrCodeGenerator>();
+            services.AddScoped<IGenerateInvoiceHtml, GenerateInvoiceHtmlService>();
             services.AddValidatorsFromAssembly(assembly);
             services.AddMediatR(assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

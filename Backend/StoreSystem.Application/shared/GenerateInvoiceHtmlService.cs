@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using StoreSystem.Application.Interface;
+using StoreSystem.Core.interfaces.functions;
 using StoreSystem.Core.Models.Invoice;
 
 namespace StoreSystem.Application.shared
@@ -11,12 +12,24 @@ namespace StoreSystem.Application.shared
     public class GenerateInvoiceHtmlService : IGenerateInvoiceHtml
     {
         private IGenerateQrCode _GenerateQrCode;
-        public GenerateInvoiceHtmlService(IGenerateQrCode GenerateQrCode)
+        private IInvoiceProcedure _Invoice;
+        public GenerateInvoiceHtmlService(IInvoiceProcedure Invoice,IGenerateQrCode GenerateQrCode)
         {
             _GenerateQrCode = GenerateQrCode;
+            _Invoice = Invoice;
         }
-        public string GenerateInvoiceHtml(InvoiceModel invoice)
+        public async Task<string> GenerateInvoiceHtml(InvoiceModel invoice)
         {
+            string newId = Guid.NewGuid().ToString();
+            await _Invoice.handle(new InvoiceModel()
+            {
+                Id = newId,
+                Items = invoice.Items,
+                ClientId = invoice.ClientId ?? null,
+            });
+            decimal Total = invoice.Items.Sum(x => x.quantity * x.price);
+            DateTime Date = DateTime.UtcNow;
+          
             var sb = new StringBuilder();
             foreach (var item in invoice.Items)
             {
@@ -26,8 +39,7 @@ namespace StoreSystem.Application.shared
                     <span>{item.price * item.quantity} MAD</span>
                 </div>");
             }
-
-        var qrText = $"Invoice:{invoice.Id}|Total:{invoice.Total}|Date:{invoice.Date:yyyy-MM-dd}";
+        var qrText = $"Invoice:{newId}|Total:{Total}|Date:{Date:yyyy-MM-dd}";
         var qrBase64 = _GenerateQrCode.GenerateQrCode(qrText);
 
         return $@"
@@ -64,13 +76,13 @@ namespace StoreSystem.Application.shared
 
 <div class='center'>
     <h3>متجري</h3>
-    <p>الهاتف: 0600000000</p>
+    <p>phone: 0600000000</p>
 </div>
 
 <div class='line'></div>
 
-<p>التاريخ: {invoice.Date:yyyy-MM-dd}</p>
-<p>رقم الفاتورة: {invoice.Id}</p>
+<p>Date: {Date:yyyy-MM-dd}</p>
+<p>invoice id: {newId}</p>
 
 <div class='line'></div>
 
@@ -79,8 +91,8 @@ namespace StoreSystem.Application.shared
 <div class='line'></div>
 
 <div class='item total'>
-    <span>المجموع</span>
-    <span>{invoice.Total} MAD</span>
+    <span>Total</span>
+    <span>{Total} MAD</span>
 </div>
 
 <div class='line'></div>
@@ -90,7 +102,7 @@ namespace StoreSystem.Application.shared
 </div>
 
 <div class='center'>
-    <p>شكراً لزيارتكم 🙏</p>
+    <p>Thank You 🙏</p>
 </div>
 
 </body>

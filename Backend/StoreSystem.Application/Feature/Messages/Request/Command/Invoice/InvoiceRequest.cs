@@ -10,9 +10,9 @@ using StoreSystem.Core.Models.Invoice;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command.Invoice
 {
-    public class InvoiceRequest :IRequest<Result>
+    public class InvoiceRequest :IRequest<Result<string>>
     {
-        public int ClientId { get; set; }
+        public int? ClientId { get; set; }
         public required List<InvoiceItem> Items { get; set; }
 
     }
