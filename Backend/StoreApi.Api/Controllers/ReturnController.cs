@@ -14,7 +14,7 @@ namespace StoreApi.Api.Controllers
        [Route("api/v{version:apiVersion}/Return")]
     [ApiVersion("1")]
     [Authorize]
-    public class ReturnController : ControllerBase
+    public class ReturnController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -45,9 +45,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetReturnByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPut("Update")]
@@ -56,9 +54,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateReturnRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -67,9 +63,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteReturnRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
         [HttpPost("ReturnItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -77,9 +71,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> ReturnItems([FromBody] AddReturnWithItemsRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
 
         }
 

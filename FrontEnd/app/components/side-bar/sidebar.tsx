@@ -8,12 +8,12 @@ import SideBarNavBar from "./SideBarNavBar";
 interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  userRole?: string;
 }
 
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar({ isOpen, onClose, userRole }: SidebarProps) {
   return (
     <>
-      {/* Backdrop overlay — mobile only */}
       {isOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
@@ -22,7 +22,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 flex flex-col h-[100dvh] w-64 bg-linear-to-b from-slate-900 to-slate-800 shadow-2xl
+        className={`fixed top-0 left-0 z-50 flex flex-col h-dvh w-64 bg-linear-to-b from-slate-900 to-slate-800 shadow-2xl
           transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0`}
@@ -44,7 +44,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           </button>
         </div>
 
-        <SideBarNavBar onClose={onClose} />
+        <SideBarNavBar onClose={onClose} userRole={userRole} />
 
         <div className="p-4 border-t border-slate-700">
           <LogoutBtn />

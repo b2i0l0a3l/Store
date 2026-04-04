@@ -28,9 +28,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
                 var count = await connection.QueryFirstOrDefaultAsync<int>("select COALESCE(count(o.\"Id\"), 0) from \"Orders\" o");
                 return count;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetOrdersCountERROR", ErrorType.General, ex.Message);
+                return new Error("GetOrdersCountERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

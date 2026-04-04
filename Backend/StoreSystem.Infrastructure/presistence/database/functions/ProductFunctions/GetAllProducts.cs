@@ -26,9 +26,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.ProductFunct
                 if (list.Count == 0) return Errors.DataNotFoundError;
                 return list;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetProductsERROR", ErrorType.General, ex.Message);
+                return new Error("GetProductsERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

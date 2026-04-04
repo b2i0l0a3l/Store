@@ -28,9 +28,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.ProductFunct
                 var count = await connection.QueryFirstOrDefaultAsync<int>("select COALESCE(count(o.\"Id\"), 0) from \"Products\" o");
                 return count;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetProductCountERROR", ErrorType.General, ex.Message);
+                return new Error("GetProductCountERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

@@ -36,9 +36,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
                 if (result == null) return Errors.DataNotFoundError;
                 return (Result<OrderCardModel>)result;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetOrderCardERROR", ErrorType.General, ex.Message);
+                return new Error("GetOrderCardERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

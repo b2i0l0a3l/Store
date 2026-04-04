@@ -47,9 +47,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.ProductFunct
                 };
                 return pagedResult;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetProductsERROR", ErrorType.General, ex.Message);
+                return new Error("GetProductsERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

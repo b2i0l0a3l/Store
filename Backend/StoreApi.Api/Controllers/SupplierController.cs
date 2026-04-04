@@ -8,7 +8,7 @@ namespace StoreApi.Api.Controllers
     [Route("api/Supplier")]
     [ApiController]
     [Authorize]
-    public class SupplierController : ControllerBase
+    public class SupplierController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -22,7 +22,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> All()
         {
             var result = await _mediator.Send(new GetAllSuppliersRequest());
-            return Ok(result);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }
 }

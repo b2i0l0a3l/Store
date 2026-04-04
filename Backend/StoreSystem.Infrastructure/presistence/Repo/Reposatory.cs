@@ -31,9 +31,9 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 await _Context.SaveChangesAsync();
                 return Entity;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("AddFailed",ErrorType.General,ex.Message);
+                return new Error("AddFailed", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
 
@@ -43,14 +43,13 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 var result = await findAsync(Id);
-                if (result == null) return new Error("DeleteFaild",ErrorType.General,"Entity Not Found");;
+                if (result == null) return new Error("DeleteFaild",StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");;
                 _Set.Remove(result);
                 await _Context.SaveChangesAsync();
                 return true;
-            }catch(Exception ex)
+            }catch
             {
-
-                return new Error("DeleteFaild",ErrorType.General,ex.Message);
+                return new Error("DeleteFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
 
@@ -59,7 +58,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 int TotoalItems = await _Set.CountAsync();
-                if (TotoalItems <= 0) return new Error("GetFaild", ErrorType.General, "Entity Not Found");
+                if (TotoalItems <= 0) return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");
                 
                 List<T> items = await _Set.AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize).
@@ -72,9 +71,9 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                     PageNumber = pageNumber,
                     PageSize = pageSize
                 };
-            }catch(Exception ex)
+            }catch
             {
-                return new Error("GetFaild",ErrorType.General,ex.Message);
+                return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
 
@@ -83,11 +82,11 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 var result = await _Set.FirstOrDefaultAsync(exp);
-                if (result == null) return new Error("GetFaild",ErrorType.General,"Entity Not Found");
+                if (result == null) return new Error("GetFaild",StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");
                 return result;
-            }catch(Exception ex)
+            }catch
             {
-                return new Error("GetFaild",ErrorType.General,ex.Message);
+                return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
 
@@ -96,7 +95,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 var result = await findAsync(Id);
-                if (result == null) return new Error("GetByIdFaild",ErrorType.General,"Entity Not Found");;
+                if (result == null) return new Error("GetByIdFaild",StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");;
                 return result;
             }catch(Exception ex)
             {
@@ -109,7 +108,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 var result = await findAsync(Id);
-                if (result == null) return new Error("UpdateFaild", ErrorType.General, "Entity Not Found"); ;
+                if (result == null) return new Error("UpdateFaild", StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found"); ;
                 UpdateAction(result);
                 await _Context.SaveChangesAsync();
                 return true;
@@ -128,7 +127,7 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             try
             {
                 int TotoalItems = await _Set.CountAsync();
-                if (TotoalItems <= 0) return new Error("GetFaild", ErrorType.General, "Entity Not Found");
+                if (TotoalItems <= 0) return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");
 
                 List<T> items = await _Set.AsNoTracking().Where(predicate)
                 .Skip((pageNumber - 1) * pageSize).
@@ -142,9 +141,9 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                     PageSize = pageSize
                 };
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetFaild", ErrorType.General, ex.Message);
+                return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
 
@@ -156,9 +155,9 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
                 if (items.Count <= 0) return Errors.DataNotFoundError;
                 return items;   
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("AllFaild", ErrorType.General, ex.Message);
+                return new Error("AllFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

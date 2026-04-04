@@ -38,9 +38,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
 
                 return list;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetOrderItemByOrderIdERROR", ErrorType.General, ex.Message);
+                return new Error("GetOrderItemByOrderIdERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
       

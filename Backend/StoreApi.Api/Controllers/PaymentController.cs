@@ -13,7 +13,7 @@ namespace StoreApi.Api.Controllers
                 [Route("api/v{version:apiVersion}/Payment")]
     [ApiVersion("1")]
     [Authorize]
-    public class PaymentController : ControllerBase
+    public class PaymentController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -44,9 +44,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetPaymentByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPost("Add")]
@@ -55,9 +53,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Add([FromBody] AddPaymentRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
         }
 
         [HttpPut("Update")]
@@ -66,9 +62,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Update([FromBody] UpdatePaymentRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -77,9 +71,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeletePaymentRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }
 }

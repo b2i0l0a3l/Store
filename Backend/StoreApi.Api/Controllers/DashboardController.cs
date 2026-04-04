@@ -13,7 +13,7 @@ namespace StoreApi.Api.Controllers
     [Route("api/v{version:apiVersion}/Dashboard")]
     [ApiVersion("1")]
     [Authorize(Roles =Roles.Admin)]
-    public class DashboardController : ControllerBase
+    public class DashboardController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -27,10 +27,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetSummary()
         {
             var result = await _mediator.Send(new GetDashboardSummaryQuery());
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("ClientRanking")]
@@ -38,10 +35,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetClientRanking()
         {
             var result = await _mediator.Send(new GetClientRankingQuery());
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("LowStockAlerts")]
@@ -49,10 +43,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetLowStockAlerts()
         {
             var result = await _mediator.Send(new GetLowStockAlertsQuery());
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("TopSellingProducts")]
@@ -60,10 +51,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetTopSellingProducts()
         {
             var result = await _mediator.Send(new GetTopSellingProductsQuery());
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("SalesOverTime")]
@@ -71,10 +59,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetSalesOverTime([FromQuery] int days = 30)
         {
             var result = await _mediator.Send(new GetSalesOverTimeQuery { Days = days });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("RecentActivities")]
@@ -82,10 +67,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetRecentActivities()
         {
             var result = await _mediator.Send(new GetRecentActivitiesQuery());
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("CashVsDebtRatio")]
@@ -93,10 +75,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetCashVsDebtRatio()
         {
             var result = await _mediator.Send(new GetCashVsDebtRatioQuery());
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-                
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }
 }

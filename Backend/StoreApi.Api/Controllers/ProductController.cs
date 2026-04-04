@@ -16,7 +16,7 @@ namespace StoreApi.Api.Controllers
     [Route("api/v{version:apiVersion}/Product")]
     [ApiVersion("1")]
     [Authorize]
-    public class ProductController : ControllerBase
+    public class ProductController : ApiControllerBase
     {
         private IUploadImage _UploadImage;
         private readonly IMediator _mediator;
@@ -50,9 +50,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetProductByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPost("Add")]
@@ -78,9 +76,7 @@ namespace StoreApi.Api.Controllers
             }
             
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPut("Update")]
@@ -107,9 +103,7 @@ namespace StoreApi.Api.Controllers
             }
 
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -119,9 +113,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteProductRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }
 }

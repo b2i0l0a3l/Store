@@ -33,9 +33,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.ClientFuncti
                 if (rankings == null || rankings.Count == 0) return Errors.DataNotFoundError;
                 return rankings;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetClientRankingERROR", ErrorType.General, ex.Message);
+                return new Error("GetClientRankingERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

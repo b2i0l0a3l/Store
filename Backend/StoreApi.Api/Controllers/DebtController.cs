@@ -13,7 +13,7 @@ namespace StoreApi.Api.Controllers
     [Route("api/v{version:apiVersion}/Debt")]
     [ApiVersion("1")]
     [Authorize]
-    public class DebtController : ControllerBase
+    public class DebtController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -44,9 +44,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetDebtByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
 
@@ -56,9 +54,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateDebtRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -67,9 +63,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteDebtRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }
 }

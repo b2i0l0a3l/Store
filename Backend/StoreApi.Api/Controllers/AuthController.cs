@@ -10,43 +10,41 @@ using Microsoft.AspNetCore.RateLimiting;
 using StoreSystem.Application.Interface;
 using StoreApi.Api.Contract;
 using Asp.Versioning;
+using StoreSystem.Core.interfaces;
+using StoreApi.Api.Utils;
 
 namespace StoreApi.Api.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/Auth")]
     [ApiVersion("1")]
-    public class AuthController : ControllerBase
+    public class AuthController : ApiControllerBase
     {
-        private readonly IUploadImage _Upload;
         private readonly IMediator _mediator;
-
-        public AuthController(IMediator mediator,IUploadImage Upload)
+        public AuthController(IMediator mediator)
         {
             _mediator = mediator;
-            _Upload = Upload;
         }
         [HttpPost("Register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromForm] RegisterContract req)
         {
+            IFileData? fileData = null;
+            if (req.Image != null && req.Image.Length != 0)
+            {
+                fileData = new FormFileData(req.Image);
+            }
             RegisterRequest request = new()
             {
                 Email = req.Email,
                 FullName = req.FullName,
-                Password = req.Password
+                Password = req.Password,
+                Image = fileData
             };
-            if (req.Image != null && req.Image.Length != 0)
-            {
-                using var stream = req.Image.OpenReadStream();
-                request.ImagePath = await _Upload.Upload(stream, req.Image.FileName,"UserImages");
-            }
-            
+
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPost("Login")]
@@ -56,9 +54,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPost("Refresh")]
@@ -71,9 +67,7 @@ namespace StoreApi.Api.Controllers
             Console.WriteLine("TokenId: " + tokenId);
             request.TokenId = tokenId;
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPost("Logout")]
@@ -85,9 +79,7 @@ namespace StoreApi.Api.Controllers
             request.TokenId = tokenId;
 
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
         }
     }
 }

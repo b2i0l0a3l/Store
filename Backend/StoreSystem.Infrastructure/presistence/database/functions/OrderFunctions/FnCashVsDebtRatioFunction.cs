@@ -31,9 +31,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
                 if (result == null) return Errors.DataNotFoundError;
                 return result;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetCashVsDebtRatioERROR", ErrorType.General, ex.Message);
+                return new Error("GetCashVsDebtRatioERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

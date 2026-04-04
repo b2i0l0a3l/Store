@@ -28,9 +28,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.DebtFunction
                 var remaining = await connection.QueryFirstOrDefaultAsync<decimal>("select COALESCE(sum(d.\"Remaining\"), 0) from \"Debts\" d");
                 return remaining;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetTotalRemainingERROR", ErrorType.General, ex.Message);
+                return new Error("GetTotalRemainingERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

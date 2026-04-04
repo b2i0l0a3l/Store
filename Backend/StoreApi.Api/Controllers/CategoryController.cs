@@ -13,7 +13,7 @@ namespace StoreApi.Api.Controllers
     [Route("api/v{version:apiVersion}/Category")]
     [ApiVersion("1")]
     [Authorize]
-    public class CategoryController : ControllerBase
+    public class CategoryController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -60,9 +60,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Add([FromBody] AddCategoryRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpPut("Update")]
@@ -71,9 +69,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateCategoryRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]

@@ -13,7 +13,7 @@ namespace StoreApi.Api.Controllers
     [Route("api/v{version:apiVersion}/Ivoice")]
     [ApiVersion("1")]
 
-    public class InvoiceController : ControllerBase
+    public class InvoiceController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -27,7 +27,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> HtmlInvoice([FromBody]InvoiceRequest req)
         {
             var result = await _mediator.Send(req);
-            return Ok(result);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
     }

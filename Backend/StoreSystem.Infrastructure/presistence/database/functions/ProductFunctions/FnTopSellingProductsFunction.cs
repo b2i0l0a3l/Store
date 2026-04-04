@@ -33,9 +33,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.ProductFunct
                 if (list == null || list.Count == 0) return Errors.DataNotFoundError;
                 return list;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetTopSellingProductsERROR", ErrorType.General, ex.Message);
+                return new Error("GetTopSellingProductsERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

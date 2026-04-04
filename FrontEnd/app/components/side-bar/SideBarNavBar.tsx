@@ -22,10 +22,10 @@ interface NavLink {
 }
 
 
-export default function SideBarNavBar({ onClose }: { onClose?: () => void }) {
+export default function SideBarNavBar({ onClose, userRole }: { onClose?: () => void; userRole?: string }) {
   const CurrentPath = usePathname();
 
-  const links: NavLink[] = [  
+  const allLinks: NavLink[] = [  
     { name: "Selling", Path: "/", icon: HomeIcon ,allowedRoles:["Admin"]},
     { name: "Dashboard", Path: "/Dashboard", icon: Squares2X2Icon ,allowedRoles:["Admin"]},
     { name: "Products", Path: "/Products", icon: ShoppingBagIcon ,allowedRoles:["Admin","Staff","Viewer"]},
@@ -35,6 +35,13 @@ export default function SideBarNavBar({ onClose }: { onClose?: () => void }) {
     { name: "Debts", Path: "/Debts", icon: CurrencyDollarIcon ,allowedRoles:["Admin","Staff"]},
     { name: "Payments", Path: "/Payments", icon: BanknotesIcon ,allowedRoles:["Admin","Staff"]},
   ];
+
+  // Filter links based on user role
+  const links = allLinks.filter((link) => {
+    if (!link.allowedRoles || link.allowedRoles.length === 0) return true;
+    if (!userRole) return false;
+    return link.allowedRoles.includes(userRole);
+  });
 
   return (
     <nav className="flex-1 px-4 py-8 overflow-y-auto custom-scrollbar">

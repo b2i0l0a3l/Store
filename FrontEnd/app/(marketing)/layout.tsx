@@ -20,18 +20,23 @@ export const metadata: Metadata = {
 };
 
 import ToastContainer from "../components/Ui/Toast/ToastContainer";
+import { CurrentUser } from "../util/currentUser";
 
-export default function MarketingLayout({
+export default async function MarketingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await CurrentUser();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SidebarProvider topBar={<TopBar />}>{children}</SidebarProvider>
+        <SidebarProvider topBar={<TopBar />} userRole={user?.role}>
+          {children}
+        </SidebarProvider>
         <ToastContainer />
       </body>
     </html>

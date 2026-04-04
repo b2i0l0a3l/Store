@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using StoreSystem.Core.common;
+using StoreSystem.Core.interfaces;
 using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command.Register
@@ -14,5 +15,8 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command.Register
         public string Password { get; set; } = string.Empty;
         public string FullName { get; set; } = string.Empty;
         public string? ImagePath { get; set; }
+
+        public IFileData? Image { get; set; }
+
     }
 }

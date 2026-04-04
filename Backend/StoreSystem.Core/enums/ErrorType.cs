@@ -4,6 +4,7 @@ namespace StoreSystem.Core.enums
     {
         NotFound,
         Validation,
-        General
+        General,
+        Failure
     }
 }

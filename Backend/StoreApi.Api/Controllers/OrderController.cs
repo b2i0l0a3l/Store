@@ -16,7 +16,7 @@ namespace StoreApi.Api.Controllers
     [ApiVersion("1")]
 
     [Authorize]
-    public class OrderController : ControllerBase
+    public class OrderController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -56,9 +56,7 @@ namespace StoreApi.Api.Controllers
                 return Forbid();
             }
             var result = await _mediator.Send(new GetOrderByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
 
@@ -67,9 +65,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateOrderRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -77,9 +73,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteOrderRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("GetOrderItemsByOrderId")]
@@ -87,9 +81,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetOrderItemsByOrderId([FromQuery] GetOrderItemsByOrderIdRequest req)
         {
             var result = await _mediator.Send(req);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
 
         }
         [HttpPost("AddOrderWithItems")]
@@ -97,9 +89,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> AddOrderWithItems([FromBody] AddOrderWithItemsRequest req)
         {
             var result = await _mediator.Send(req);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
 
         }
     }

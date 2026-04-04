@@ -35,6 +35,23 @@ namespace StoreSystem.Application.Common.Behaviors
 
             if (failures.Count != 0)
             {
+                var errorMessage = string.Join("; ", failures.Select(f => f.ErrorMessage));
+                var error = new StoreSystem.Core.common.Error("ValidationError", StoreSystem.Core.enums.ErrorType.Validation, errorMessage);
+
+                if (typeof(TResponse).IsGenericType &&
+                    typeof(TResponse).GetGenericTypeDefinition() == typeof(StoreSystem.Core.common.Result<>))
+                {
+                    var method = typeof(TResponse).GetMethod("op_Implicit", new[] { typeof(StoreSystem.Core.common.Error) });
+                    if (method != null)
+                    {
+                        return (TResponse)method.Invoke(null, new object[] { error })!;
+                    }
+                }
+                else if (typeof(TResponse) == typeof(StoreSystem.Core.common.Result))
+                {
+                    return (TResponse)(object)StoreSystem.Core.common.Result.Failure(error);
+                }
+
                 throw new ValidationException(failures);
             }
 

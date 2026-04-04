@@ -74,9 +74,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                     RefreshToken = newRefreshToken
                 };
                 return model;
-            }catch(Exception ex)
+            }catch
             {
-                return new Error("LoginError",Core.enums.ErrorType.General, ex.Message);
+                return new Error("LoginError",Core.enums.ErrorType.Failure, "An error occurred during login.");
             }
             
         }

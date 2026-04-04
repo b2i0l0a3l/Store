@@ -15,7 +15,7 @@ namespace StoreApi.Api.Controllers
 
 
     [Authorize]
-    public class OrderItemController : ControllerBase
+    public class OrderItemController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
@@ -46,9 +46,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetOrderItemByIdRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
 
@@ -58,9 +56,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateOrderItemRequest request)
         {
             var result = await _mediator.Send(request);
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result);
+            return result.IsSuccess ? Ok() : HandleFailure(result);
         }
 
         [HttpDelete("Delete/{id}")]
@@ -69,9 +65,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteOrderItemRequest { Id = id });
-            if (!result.IsSuccess)
-                return BadRequest(result.Error);
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }
 }

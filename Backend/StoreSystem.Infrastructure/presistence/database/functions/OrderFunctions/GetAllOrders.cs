@@ -31,9 +31,9 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
                 if (orders == null || orders.Count <= 0) return Errors.DataNotFoundError;
                 return orders;
             }
-            catch (Exception ex)
+            catch
             {
-                return new Error("GetOrderItemERROR", ErrorType.General, ex.Message);
+                return new Error("GetOrderItemERROR", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
         }
     }

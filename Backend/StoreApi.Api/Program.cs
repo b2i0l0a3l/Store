@@ -184,8 +184,9 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
 
     var userManager = services.GetRequiredService<UserManager<User>>();
+    var RoleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var config = services.GetRequiredService<IConfiguration>();
-
+    await RoleSeeder.SeedRolesAsync(RoleManager);
     await DbSeeder.SeedAdminAsync(userManager, config);
 }
 app.Run();
