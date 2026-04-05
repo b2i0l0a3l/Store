@@ -5,7 +5,11 @@ import ShowCardButton from "../Buttons/ShowCardButton";
 import DeleteOrderButton from "../Buttons/DeleteOrderButton";
 
 const columns: Column<order>[] = [
-  { key: "clientName", label: "Client Name" },
+  {
+    key: "clientName",
+    label: "Client Name",
+    render: (item) => (!item.clientName || item.clientName === "No Client" ? "Walk-in Customer" : item.clientName),
+  },
   { key: "total", label: "Total", render: (item) => item.total.toFixed(2) },
   { key: "orderType", label: "Order Type" },
   { key: "orderStatus", label: "Order Status" },

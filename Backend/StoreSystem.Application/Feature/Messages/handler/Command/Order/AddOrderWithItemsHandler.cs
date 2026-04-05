@@ -53,8 +53,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Order
 
                     Notifications orderNotification = new ()
                     {
-                        Title = "طلبية جديدة",
-                        Message = $"تم إنشاء طلبية جديدة تحتوي على {itemCount} منتج",
+                        Title = "New Order",
+                        Message = $"New order has been created with {itemCount} products",
                         Type = enNotificationType.NewOrder,
                         RelatedEntityType = "Order"
                     };
@@ -67,8 +67,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Order
                     {
                         var lowStockNotification = new Notifications
                         {
-                            Title = "مخزون منخفض",
-                            Message = $"المنتج \"{product.Name}\" وصل إلى {product.Quantity} وحدات فقط",
+                            Title = "Low Stock",
+                            Message = $"The product \"{product.Name}\" has reached {product.Quantity} units only",
                             Type = enNotificationType.LowStock,
                             RelatedEntityId = product.Id.ToString(),
                             RelatedEntityType = "Product"

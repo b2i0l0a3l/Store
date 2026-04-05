@@ -9,7 +9,24 @@ import GetImageFromBackEnd from "@/app/util/GetImageFromBackEnd";
 export default function SellTable({ data }: { data: product[] }) {
   const columns = useMemo<Column<product>[]>(
     () => [
-      {key: "imagePath", label: "Image", render: (item) => <img className="rounded-2xl" src={GetImageFromBackEnd(item.imagePath || "")} alt={item.name} width={45} height={45} />},
+      {
+        key: "imagePath",
+        label: "Image",
+        render: (item) =>
+          item.imagePath ? (
+            <img
+              className="rounded-2xl object-cover h-[45px] w-[45px]"
+              src={GetImageFromBackEnd(item.imagePath)}
+              alt={item.name}
+            />
+          ) : (
+            <div className="w-[45px] h-[45px] rounded-2xl bg-slate-700/50 flex items-center justify-center border border-slate-600/50">
+              <span className="text-slate-400 font-bold text-sm uppercase">
+                {item.name ? item.name.charAt(0) : "P"}
+              </span>
+            </div>
+          ),
+      },
       { key: "name", label: "Name" },
       { key: "categoryName", label: "Category" },
       { key: "price", label: "Price" , render: (item) => item.price.toFixed(2) },

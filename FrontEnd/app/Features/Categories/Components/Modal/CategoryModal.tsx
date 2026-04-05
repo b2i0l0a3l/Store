@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import CustomModal from "@/app/components/Ui/Modal/Modal";
 import { category } from "@/app/Features/Categories/types";
+import { toast } from "@/app/store/useToastStore";
 
 export default function CategoryModal({
   title,
@@ -16,7 +17,7 @@ export default function CategoryModal({
   onClick: (name: string) => void;
 }) {
   const [name, setName] = useState(data?.name || "");
-
+  const [loading,setLoading]=useState(false)
   const handleNameChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setName(e.target.value);
@@ -24,8 +25,13 @@ export default function CategoryModal({
     [],
   );
 
-  const handleSubmit = useCallback(() => {
-    onClick(name);
+  const handleSubmit = useCallback(async () => {
+    try {
+      setLoading(true);
+      await onClick(name);
+    } finally {
+      setLoading(false);
+    }
   }, [onClick, name]);
 
   return (
@@ -39,11 +45,12 @@ export default function CategoryModal({
       />
       <div className="flex justify-end mt-4">
         <button
+          disabled={loading}
           onClick={handleSubmit}
           type="button"
           className="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-500 transition-colors"
         >
-          Save
+          {loading ? "Saving..." : "Save"}
         </button>
       </div>
     </CustomModal>

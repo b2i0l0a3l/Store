@@ -5,9 +5,8 @@ import { useState, useCallback } from "react";
 import ProductModal from "../Modal/ProductModal";
 import { addProduct } from "@/app/Features/Products/api/productApi";
 import { category } from "@/app/Features/Categories/types";
-import { product } from "@/app/Features/Products/types";
 import { useProductStore } from "@/app/Features/Products/store/product";
-import { toast } from "@/app/store/useToastStore";
+import { product } from "../../types";
 
 export default function AddProductButton({
   categories,
@@ -21,14 +20,11 @@ export default function AddProductButton({
   const handleClose = useCallback(() => setOpenModal(false), []);
 
   const handleSubmit = useCallback(
-    async (payload: any, formData: any) => {
+    async (payload: FormData, formData: product) => {
       const res = await addProduct(payload);
       if (res.succeeded) {
         recordAdd(formData);
-        toast.success(res.message || "تمت إضافة المنتج بنجاح");
         setOpenModal(false);
-      } else {
-        toast.error(res.message || "حدث خطأ أثناء إضافة المنتج");
       }
     },
     [recordAdd],

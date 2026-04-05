@@ -48,9 +48,10 @@ function OrderSection({ data }: { data: order[] }) {
           <CustomSearch onSearch={handleSearch} />
           <CustomFilter 
           categoryOptions={[
-            { value: "All", label: "All" },
+            { value: "All", label: "All Order Status" },
             { value: "Paid", label: "Paid" },
             { value: "Not Paid", label: "Not Paid" },
+            { value: "Partial", label: "Partial" },
           ]}
           selectedCategory={selectedOrderStatus}
           setSelectedCategory={setSelectedOrderStatus}
@@ -59,7 +60,7 @@ function OrderSection({ data }: { data: order[] }) {
           />
           <CustomFilter 
           categoryOptions={[
-            { value: "All", label: "All" },
+            { value: "All", label: "All Order Type" },
             { value: "Debt", label: "Debt" },
             { value: "Sell", label: "Sell" },
           ]}

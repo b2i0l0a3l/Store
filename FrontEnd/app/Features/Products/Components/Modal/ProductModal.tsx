@@ -3,6 +3,7 @@ import CustomModal from "@/app/components/Ui/Modal/Modal";
 import { category } from "@/app/Features/Categories/types";
 import { product } from "@/app/Features/Products/types";
 import CustomComboBox from "@/app/components/Ui/inputs/CustomComboBox";
+import { toast } from "@/app/store/useToastStore";
 
 export default function ProductModal({
   title,
@@ -28,6 +29,7 @@ export default function ProductModal({
     cost: data?.cost || 0,
     quantity: data?.quantity || 0,
   });
+  const [loading, setLoading] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -50,11 +52,14 @@ export default function ProductModal({
     }));
   }, []);
 
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setSelectedFile(e.target.files[0]);
-    }
-  }, []);
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files.length > 0) {
+        setSelectedFile(e.target.files[0]);
+      }
+    },
+    [],
+  );
 
   const handleCategoryChange = useCallback(
     (option: { value: string | number; label: string }) => {
@@ -67,31 +72,53 @@ export default function ProductModal({
     [],
   );
 
-  const handleSubmit = useCallback(async() => {
-    const submitData = new FormData();
-    submitData.append("Name", formData.name);
-    submitData.append("CategoryId", formData.categoryId.toString());
-    submitData.append("Price", formData.price.toString());
-    submitData.append("Cost", formData.cost.toString());
-    submitData.append("Quantity", formData.quantity.toString());
-    if (formData.id) {
-      submitData.append("Id", formData.id.toString());
+  const handleSubmit = useCallback(async () => {
+    try {
+      setLoading(true);
+      const submitData = new FormData();
+      submitData.append("Name", formData.name);
+      submitData.append("CategoryId", formData.categoryId.toString());
+      submitData.append("Price", formData.price.toString());
+      submitData.append("Cost", formData.cost.toString());
+      submitData.append("Quantity", formData.quantity.toString());
+      if (formData.id) {
+        submitData.append("Id", formData.id.toString());
+      }
+      if (data?.barCode) {
+        submitData.append("CodeBar", data.barCode);
+      }
+      if (selectedFile) {
+        submitData.append("ProductImage", selectedFile);
+      }
+      
+      const newProduct: product = {
+        id: formData.id,
+        name: formData.name,
+        categoryName: selectedCategory?.label || "",
+        price: formData.price,
+        cost: formData.cost,
+        quantity: formData.quantity,
+        createdAt: new Date(),
+        barCode: "",
+        imagePath: ""
+      };
+      
+      await onClick(submitData, newProduct);
+      toast.success("Product added successfully");
+    } catch {
+      toast.error("Failed to add product");
+    } finally {
+      setLoading(false);
     }
-    if (data?.barCode) {
-      submitData.append("CodeBar", data.barCode);
-    }
-    if (selectedFile) {
-      submitData.append("ProductImage", selectedFile);
-    }
-    console.log(submitData);
-   await onClick(submitData, submitData);
   }, [onClick, formData, selectedFile, data?.barCode]);
 
   return (
     <CustomModal title={title} icon={icon} onClose={onClose}>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Product Name</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Product Name
+          </label>
           <input
             name="name"
             onChange={handleChange}
@@ -102,7 +129,9 @@ export default function ProductModal({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Category</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Category
+          </label>
           <CustomComboBox
             options={categoryOptions}
             value={selectedCategory}
@@ -112,7 +141,9 @@ export default function ProductModal({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Price</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Price
+          </label>
           <input
             name="price"
             onChange={handleChange}
@@ -123,7 +154,9 @@ export default function ProductModal({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Cost</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Cost
+          </label>
           <input
             name="cost"
             onChange={handleChange}
@@ -134,7 +167,9 @@ export default function ProductModal({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Quantity</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Quantity
+          </label>
           <input
             name="quantity"
             onChange={handleChange}
@@ -145,7 +180,9 @@ export default function ProductModal({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-slate-300 mb-1">Product Image</label>
+          <label className="block text-sm font-medium text-slate-300 mb-1">
+            Product Image
+          </label>
           <input
             type="file"
             accept="image/*"
@@ -157,10 +194,11 @@ export default function ProductModal({
       <div className="flex justify-end mt-4">
         <button
           onClick={handleSubmit}
+          disabled={loading}
           type="button"
           className="px-5 py-2 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-500 transition-colors"
         >
-          Save
+          {loading ? "Saving..." : "Save"}
         </button>
       </div>
     </CustomModal>
