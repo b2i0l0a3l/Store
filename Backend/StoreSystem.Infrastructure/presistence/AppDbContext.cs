@@ -26,6 +26,7 @@ namespace StoreSystem.Infrastructure.Persistence
         public DbSet<Return> Returns { get; set; }
         public DbSet<ReturnItem> ReturnItems { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<Notifications> Notifications { get; set; }
 
    
     }

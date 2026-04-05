@@ -50,7 +50,14 @@ async function parseResponse<T>(res: Response): Promise<MyResponse<T>> {
   }
 
   try {
-    const data = await res.json();
+    const contentType = res.headers.get("content-type");
+    let data;
+    if (contentType && contentType.includes("application/json")) {
+      data = await res.json();
+    } else {
+      data = await res.text();
+    }
+    
     return {
       message: "Success",
       succeeded: true,

@@ -33,21 +33,26 @@ export default function BuyButton() {
       if (!cart || !request) return;
       setLoading(true); 
       clearCart();
-      await buy(request);
-      recordSale(
-        cart.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-      );
-      toast.success("تم الشراء بنجاح");
+      const res = await buy(request);
+      if (res.succeeded) {
+        recordSale(
+          cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        );
+        toast.success(res.message || "تم الشراء بنجاح");
+      } else {
+        useStore.getState().copy(copy);
+        toast.error(res.message || "فشل في الشراء");
+      }
     } catch {
       useStore.getState().copy(copy);
       toast.error("فشل في الشراء");
     } finally {
       setLoading(false);
     }
-  }, [request, clearCart, recordSale]);
+  }, [request, clearCart, recordSale, cart]);
 
   return (
     <CustomButton

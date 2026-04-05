@@ -22,13 +22,13 @@ export default function AddProductButton({
 
   const handleSubmit = useCallback(
     async (payload: any, formData: any) => {
-      const success = await addProduct(payload);
-      if (success) {
+      const res = await addProduct(payload);
+      if (res.succeeded) {
         recordAdd(formData);
-        toast.success("تمت إضافة المنتج بنجاح");
+        toast.success(res.message || "تمت إضافة المنتج بنجاح");
         setOpenModal(false);
       } else {
-        toast.error("حدث خطأ أثناء إضافة المنتج");
+        toast.error(res.message || "حدث خطأ أثناء إضافة المنتج");
       }
     },
     [recordAdd],

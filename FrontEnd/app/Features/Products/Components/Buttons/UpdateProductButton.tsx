@@ -23,13 +23,13 @@ const UpdateProductButton = memo(function UpdateProductButton({
 
   const handleSubmit = useCallback(
     async (payload: any, formData: any) => {
-      const success = await updateProduct(payload);
-      if (success) {
+      const res = await updateProduct(payload);
+      if (res.succeeded) {
         useProductStore.getState().recordUpdate({ ...data, ...formData });
-        toast.success("تم تعديل المنتج بنجاح");
+        toast.success(res.message || "تم تعديل المنتج بنجاح");
         setOpen(false);
       } else {
-        toast.error("حدث خطأ أثناء تعديل المنتج");
+        toast.error(res.message || "حدث خطأ أثناء تعديل المنتج");
       }
     },
     [data],

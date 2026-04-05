@@ -18,15 +18,15 @@ function DeletePaymentButton({ id }: { id: number }) {
 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
-    const success = await DeletePayment(id);
+    const res = await DeletePayment(id);
     setIsDeleting(false);
     setIsModalOpen(false);
 
-    if (success) {
-      toast.success("تم حذف الدفعة بنجاح");
+    if (res.succeeded) {
+      toast.success(res.message || "تم حذف الدفعة بنجاح");
       recordDelete(id);
     } else {
-      toast.error("فشل في حذف الدفعة");
+      toast.error(res.message || "فشل في حذف الدفعة");
     }
   };
 

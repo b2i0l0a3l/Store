@@ -21,15 +21,15 @@ const DeleteCategoryButton = memo(function DeleteCategoryButton({
 
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
-    const success = await deleteCategory({ id: dataId });
+    const res = await deleteCategory({ id: dataId });
     setIsDeleting(false);
     setIsModalOpen(false);
 
-    if (success) {
+    if (res.succeeded) {
       useCategoryStore.getState().recordDelete(dataId);
-      toast.success("تم حذف التصنيف بنجاح");
+      toast.success(res.message || "تم حذف التصنيف بنجاح");
     } else {
-      toast.error("حدث خطأ أثناء حذف التصنيف");
+      toast.error(res.message || "حدث خطأ أثناء حذف التصنيف");
     }
   }, [dataId]);
 

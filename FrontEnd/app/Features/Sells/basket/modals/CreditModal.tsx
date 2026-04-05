@@ -47,15 +47,19 @@ function CreditModal({ cart, onClose }: { cart: CartItem[]; onClose: () => void 
     try {
       setLoading(true);
       if (!cart) return;
-      await buy(request);
-      recordSale(
-        cart.map((item) => ({
-          productId: item.productId,
-          quantity: item.quantity,
-        })),
-      );
-      clearCart();
-      toast.success("تم تسجيل الدين بنجاح");
+      const res = await buy(request);
+      if (res.succeeded) {
+        recordSale(
+          cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        );
+        clearCart();
+        toast.success(res.message || "تم تسجيل الدين بنجاح");
+      } else {
+        toast.error(res.message || "حدث خطأ أثناء تسجيل الدين");
+      }
     } catch (error) {
       console.log(error);
       toast.error("حدث خطأ أثناء تسجيل الدين");

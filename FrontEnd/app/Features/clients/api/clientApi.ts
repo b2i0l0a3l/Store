@@ -1,5 +1,6 @@
 import { fetchApi } from "@/app/util/Api/Api";
 import { client } from "../types";
+import { MyResponse } from "@/app/util/types";
 
 export async function getClients(): Promise<client[]> {
   try {
@@ -24,20 +25,11 @@ export async function addClient({
 }: {
   name: string;
   phoneNumber: string;
-}): Promise<client | null> {
-  try {
-    const result = await fetchApi< client >(`/Client/Add`, {
-      method: "POST",
-      body: JSON.stringify({ name, phoneNumber }),
-    });
-    if (!result.succeeded || !result) {
-      return null;
-    }
-    return result.value;
-  } catch (error) {
-    console.error(error); 
-    return null;
-  }
+}): Promise<MyResponse<client>> {
+  return await fetchApi<client>(`/Client/Add`, {
+    method: "POST",
+    body: JSON.stringify({ name, phoneNumber }),
+  });
 }
 
 export async function updateClient({
@@ -48,37 +40,15 @@ export async function updateClient({
   id: string;
   name: string;
   phoneNumber: string;
-}): Promise<boolean> {
-  try {
-    const result = await fetchApi<{ value: client[] }>(`/Client/Update`, {
-      method: "PUT",
-      body: JSON.stringify({ id, name, phoneNumber }),
-    });
-
-    if (!result.succeeded || !result.value) {
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+}): Promise<MyResponse<client>> {
+  return await fetchApi<client>(`/Client/Update`, {
+    method: "PUT",
+    body: JSON.stringify({ id, name, phoneNumber }),
+  });
 }
 
-export async function deleteClient({ id }: { id: Number }): Promise<boolean> {
-  try {
-    const result = await fetchApi<{ value: client[] }>(`/Client/Delete/${id}`, {
-      method: "DELETE",
-    });
-
-    if (!result.succeeded || !result.value) {
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function deleteClient({ id }: { id: Number }): Promise<MyResponse<string>> {
+  return await fetchApi<string>(`/Client/Delete/${id}`, {
+    method: "DELETE",
+  });
 }

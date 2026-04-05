@@ -55,3 +55,10 @@ export interface ClientRanking {
   totalPurchases: number;
   rank: number;
 }
+
+export interface UserModel {
+  userId: string;
+  role: string;
+  email: string;
+  fullName: string;
+}

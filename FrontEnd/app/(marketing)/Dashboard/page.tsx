@@ -6,7 +6,9 @@ import TopSellingProductsList from "../../Features/Dashboard/components/TopSelli
 import RecentActivitiesFeed from "../../Features/Dashboard/components/RecentActivitiesFeed";
 import CashVsDebtWidget from "../../Features/Dashboard/components/CashVsDebtWidget";
 import TopClientList from "../../Features/Dashboard/components/TopClientList";
+import UsersManagementTable from "../../Features/Dashboard/components/UsersManagementTable";
 import Loading from "../../components/Ui/Loading/Loading";
+import { CurrentUser } from "../../util/currentUser";
 
 import {
   fetchDashboardSummary,
@@ -15,12 +17,16 @@ import {
   fetchTopSellingProducts,
   fetchRecentActivities,
   fetchCashVsDebtRatio,
-  fetchClientRanking
+  fetchClientRanking,
+  fetchUsers,
 } from "../../Features/Dashboard/api/dashboardActions";
 
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
+  const currentUser = await CurrentUser();
+  const isAdmin = currentUser?.role === "Admin";
+
   // Fetch data concurrently for fast rendering
   const [
     summary,
@@ -29,7 +35,8 @@ export default async function DashboardPage() {
     topSelling,
     recent,
     cashVsDebt,
-    clientRanking
+    clientRanking,
+    users,
   ] = await Promise.all([
     fetchDashboardSummary(),
     fetchSalesOverTime(30),
@@ -38,15 +45,16 @@ export default async function DashboardPage() {
     fetchRecentActivities(),
     fetchCashVsDebtRatio(),
     fetchClientRanking(),
+    isAdmin ? fetchUsers() : Promise.resolve([]),
   ]);
 
   return (
     <div className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
-      
+
       {/* Header */}
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
-        <p className="text-sm text-slate-400">Welcome back. Here is what's happening with your store today.</p>
+        <p className="text-sm text-slate-400">Welcome back. Here is what&apos;s happening with your store today.</p>
       </div>
 
       <Suspense fallback={<Loading />}>
@@ -64,7 +72,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Row 3: Lists & Tables */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1 h-[400px]">
             <LowStockAlertsTable data={lowStock} />
           </div>
@@ -78,6 +86,16 @@ export default async function DashboardPage() {
             <RecentActivitiesFeed data={recent} />
           </div>
         </div>
+
+        {/* Row 4: User Management — Admin only */}
+        {isAdmin && (
+          <div className="pb-12">
+            <UsersManagementTable
+              initialUsers={users}
+              currentUserId={undefined}
+            />
+          </div>
+        )}
       </Suspense>
     </div>
   );

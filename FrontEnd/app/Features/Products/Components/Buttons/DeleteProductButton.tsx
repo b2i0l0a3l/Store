@@ -21,15 +21,15 @@ const DeleteProductButton = memo(function DeleteProductButton({
 
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
-    const success = await deleteProduct({ id: dataId });
+    const res = await deleteProduct({ id: dataId });
     setIsDeleting(false);
     setIsModalOpen(false);
 
-    if (success) {
+    if (res.succeeded) {
       useProductStore.getState().recordDelete(dataId);
-      toast.success("تم حذف المنتج بنجاح");
+      toast.success(res.message || "تم حذف المنتج بنجاح");
     } else {
-      toast.error("حدث خطأ أثناء حذف المنتج");
+      toast.error(res.message || "حدث خطأ أثناء حذف المنتج");
     }
   }, [dataId]);
 

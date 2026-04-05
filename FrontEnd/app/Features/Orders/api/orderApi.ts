@@ -1,16 +1,13 @@
 import { fetchApi } from "@/app/util/Api/Api";
 import { order } from "../types";
 import { OrderItem } from "../OrderItem/types";
+import { MyResponse } from "@/app/util/types";
 
-export async function buy(body: any) {
-  try {
-    await fetchApi("/Order/AddOrderWithItems", {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-  } catch (error) {
-    console.error(error);
-  }
+export async function buy(body: any): Promise<MyResponse<string>> {
+  return await fetchApi<string>("/Order/AddOrderWithItems", {
+    method: "POST",
+    body: JSON.stringify(body),
+  });
 }
 
 export async function getOrders(): Promise<order[]> {
@@ -46,16 +43,10 @@ export async function getOrderById(id: number): Promise<order | null> {
   }
 }
 
-export async function deleteOrder(id: number) : Promise<boolean> {
-  try {
-    const result = await fetchApi(`/Order/Delete/${id}`, {
-      method: "DELETE",
-    });
-    return result.succeeded;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function deleteOrder(id: number) : Promise<MyResponse<string>> {
+  return await fetchApi<string>(`/Order/Delete/${id}`, {
+    method: "DELETE",
+  });
 }
 
 export async function getOrderItems(id: number): Promise<OrderItem[] | null> {

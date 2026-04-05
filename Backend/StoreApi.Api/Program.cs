@@ -44,7 +44,10 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddInfrastructurServiceRegistration(builder.Configuration);
 builder.Services.AddApplicationServices();
-
+builder.Services.AddSignalR();
+builder.Services.AddScoped<StoreSystem.Application.Interface.INotificationService, StoreApi.Api.Services.NotificationService>();
+builder.Services.AddSingleton<StoreSystem.Application.Interface.IBackgroundTaskQueue, StoreSystem.Application.Interface.BackgroundTaskQueue>();
+builder.Services.AddHostedService<StoreApi.Api.Services.QueuedHostedService>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -64,6 +67,20 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.FromMinutes(5),
         IssuerSigningKey = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(builder.Configuration["JWT_SECRET"]!)),
+    };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
     };
 });
 
@@ -178,6 +195,7 @@ app.UseAuthentication();
 app.UseMiddleware<AuditMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<StoreApi.Api.Hubs.NotificationHub>("/hubs/notifications");
 
 using (var scope = app.Services.CreateScope())
 {

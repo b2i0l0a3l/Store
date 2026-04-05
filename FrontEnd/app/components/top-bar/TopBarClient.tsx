@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { user } from "@/app/util/types";
 import GetImageFromBackEnd from "@/app/util/GetImageFromBackEnd";
+import NotificationBell from "./NotificationBell";
 
 interface TopBarClientProps {
   user: user | null;
@@ -68,15 +69,18 @@ export default function TopBarClient({ user }: TopBarClientProps) {
       </div>
 
       {user && (
-        <div className="flex items-center gap-3">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              gap: "1px",
-            }}
-          >
+        <div className="flex items-center gap-4">
+          <NotificationBell />
+          
+          <div className="flex items-center gap-3">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                gap: "1px",
+              }}
+            >
             <span
               style={{
                 fontSize: "0.875rem",
@@ -157,6 +161,7 @@ export default function TopBarClient({ user }: TopBarClientProps) {
               }}
             />
           </div>
+        </div>
         </div>
       )}
     </header>

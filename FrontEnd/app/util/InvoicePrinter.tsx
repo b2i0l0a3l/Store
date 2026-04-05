@@ -3,6 +3,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { useReactToPrint } from "react-to-print";
 import { fetchApi } from "./Api/Api";
 import { useStore } from "../Features/Sells/store/store";
+import { toast } from "../store/useToastStore";
 
 interface Props {
   clientId?: number;
@@ -45,13 +46,12 @@ const InvoicePrinter = ({ clientId, showButton = true }: Props) => {
       });
 
       if (response.succeeded && response.value) {
-        const invoiceHtml = response.value.value || "";
+        const invoiceHtml = typeof response.value === 'string' ? response.value : (response.value.value || "");
         setHtml(invoiceHtml);
-        // Wait for React to render the HTML, then print
         setTimeout(() => handlePrint(), 100);
       }
-    } catch (err) {
-      console.error("Error fetching invoice:", err);
+    } catch{
+      toast.error("Error fetching invoice");
     } finally {
       setLoading(false);
     }
@@ -73,8 +73,6 @@ const InvoicePrinter = ({ clientId, showButton = true }: Props) => {
           {loading ? "Loading..." : "Print"}
         </button>
       )}
-
-      {/* Hidden printable area */}
       <div style={{ position: "absolute", top: "-9999px", left: "-9999px" }}>
         <div
           ref={componentRef}
@@ -86,7 +84,7 @@ const InvoicePrinter = ({ clientId, showButton = true }: Props) => {
             @page { size: auto; margin: 10mm; }
             body { margin: 0; }
             .no-print { display: none !important; }
-            .print-container { width: 100%; direction: rtl; }
+            .print-container { width: 100%; direction: ltr; }
           `}
         </style>
       </div>

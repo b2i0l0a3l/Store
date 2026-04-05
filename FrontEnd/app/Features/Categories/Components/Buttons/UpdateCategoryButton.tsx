@@ -19,15 +19,15 @@ const UpdateCategoryButton = memo(function UpdateCategoryButton({
 
   const handleSubmit = useCallback(
     async (name: string) => {
-      const success = await updateCategory({ id: data.id, name });
-      if (success) {
+      const res = await updateCategory({ id: data.id, name });
+      if (res.succeeded) {
         useCategoryStore
           .getState()
           .recordUpdate({ id: data.id, name, totalCount: data.totalCount });
-        toast.success("تم تعديل التصنيف بنجاح");
+        toast.success(res.message || "تم تعديل التصنيف بنجاح");
         setOpen(false);
       } else {
-        toast.error("حدث خطأ أثناء تعديل التصنيف");
+        toast.error(res.message || "حدث خطأ أثناء تعديل التصنيف");
       }
     },
     [data.id, data.totalCount],

@@ -70,6 +70,8 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IFnRecentOrdersFunction, FnRecentOrdersFunction>();
             services.AddScoped<IFnRecentPaymentsFunction, FnRecentPaymentsFunction>();
             services.AddScoped<IFnCashVsDebtRatioFunction, FnCashVsDebtRatioFunction>();
+
+            services.AddScoped<StoreSystem.Application.Interface.ILowStockChecker, LowStockChecker>();
         }
     }
 }

@@ -37,6 +37,19 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             }
         }
 
+        public async Task<Result<IEnumerable<T>>> AddRange(IEnumerable<T> entities)
+        {
+            try
+            {
+                await _Set.AddRangeAsync(entities);
+                await _Context.SaveChangesAsync();
+                return Result<IEnumerable<T>>.Success(entities);
+            }
+            catch
+            {
+                return new Error("AddRangeFailed", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred during bulk insert.");
+            }
+        }
 
         public async Task<Result<bool>> Delete(int Id)
         {

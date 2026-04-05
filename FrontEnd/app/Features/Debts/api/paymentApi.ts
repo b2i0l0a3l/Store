@@ -1,15 +1,10 @@
 import { fetchApi } from "@/app/util/Api/Api";
 import { order } from "@/app/Features/Orders/types";
+import { MyResponse } from "@/app/util/types";
 
-export async function pay({ debtId, amount }: { debtId: number; amount: number }) {
-  try {
-    await fetchApi("/Payment/Add", {
-      method: "POST",
-      body: JSON.stringify({ debtId, amount }),
-    });
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function pay({ debtId, amount }: { debtId: number; amount: number }): Promise<MyResponse<string>> {
+  return await fetchApi<string>("/Payment/Add", {
+    method: "POST",
+    body: JSON.stringify({ debtId, amount }),
+  });
 }

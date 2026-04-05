@@ -10,6 +10,7 @@ namespace StoreSystem.Core.interfaces
     public interface IRepository<T> where T :class
     {
         Task<Result<T>> Add(T Entity);
+        Task<Result<IEnumerable<T>>> AddRange(IEnumerable<T> entities);
         Task<Result<bool>> Delete(int Id);
         Task<Result<bool>> Update(int Id, Action<T> UpdateAction);
         Task<Result<T?>> GetById(int Id);

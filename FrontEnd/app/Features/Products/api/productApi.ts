@@ -1,5 +1,6 @@
 import { fetchApi } from "@/app/util/Api/Api";
 import { product } from "../types";
+import { MyResponse } from "@/app/util/types";
 
 export async function getProducts(): Promise<product[]> {
   try {
@@ -18,58 +19,22 @@ export async function getProducts(): Promise<product[]> {
   }
 }
 
-export async function addProduct(productData: FormData): Promise<boolean> {
-  try {
-    const result = await fetchApi<{ value: product[] }>(`/Product/Add`, {
-      method: "POST",
-      body: productData,
-    });
-
-    if (!result.succeeded || !result.value) {
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function addProduct(productData: FormData): Promise<MyResponse<product>> {
+  return await fetchApi<product>(`/Product/Add`, {
+    method: "POST",
+    body: productData,
+  });
 }
 
-export async function updateProduct(productData: FormData): Promise<boolean> {
-  try {
-    const result = await fetchApi<{ value: product[] }>(`/Product/Update`, {
-      method: "PUT",
-      body: productData,
-    });
-
-    if (!result.succeeded || !result.value) {
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function updateProduct(productData: FormData): Promise<MyResponse<product>> {
+  return await fetchApi<product>(`/Product/Update`, {
+    method: "PUT",
+    body: productData,
+  });
 }
 
-export async function deleteProduct({ id }: { id: number }): Promise<boolean> {
-  try {
-    const result = await fetchApi<{ value: product[] }>(
-      `/Product/Delete/${id}`,
-      {
-        method: "DELETE",
-      },
-    );
-
-    if (!result.succeeded || !result.value) {
-      return false;
-    }
-
-    return true;
-  } catch (error) {
-    console.error(error);
-    return false;
-  }
+export async function deleteProduct({ id }: { id: number }): Promise<MyResponse<string>> {
+  return await fetchApi<string>(`/Product/Delete/${id}`, {
+    method: "DELETE",
+  });
 }

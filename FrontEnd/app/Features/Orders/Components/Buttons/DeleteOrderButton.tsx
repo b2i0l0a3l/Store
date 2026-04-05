@@ -18,8 +18,13 @@ export default function DeleteOrderButton({ id }: { id: number }) {
     setIsDeleting(true);
     try{ 
       useOrderStore.getState().recordDelete(id);
-      await deleteOrder(id);
-      toast.success("تم حذف الطلب بنجاح");
+      const res = await deleteOrder(id);
+      if (res.succeeded) {
+        toast.success(res.message || "تم حذف الطلب بنجاح");
+      } else {
+        toast.error(res.message || "حدث خطأ أثناء حذف الطلب");
+        useOrderStore.getState().deletedOrderIds.delete(id);
+      }
     }catch(error){
       toast.error("حدث خطأ أثناء حذف الطلب");
       useOrderStore.getState().deletedOrderIds.delete(id);

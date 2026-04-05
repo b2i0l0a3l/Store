@@ -22,13 +22,13 @@ const UpdateClientButton = memo(function UpdateClientButton({
 
   const handleSubmit = useCallback(
     async (name: string, phoneNumber: string): Promise<client | null> => {
-      const success = await updateClient({ id: data.id, name, phoneNumber });
-      if (success) {
+      const res = await updateClient({ id: data.id, name, phoneNumber });
+      if (res.succeeded) {
         recordUpdate({ id: data.id, name, phoneNumber });
-        toast.success("تم تعديل بيانات العميل بنجاح");
+        toast.success(res.message || "تم تعديل بيانات العميل بنجاح");
         setOpen(false);
       } else {
-        toast.error("حدث خطأ أثناء التعديل");
+        toast.error(res.message || "حدث خطأ أثناء التعديل");
       }
       return null;
     },

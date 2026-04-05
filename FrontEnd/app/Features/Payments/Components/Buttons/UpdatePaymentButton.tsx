@@ -16,17 +16,17 @@ function UpdatePaymentButton({ data }: { data: Payment }) {
 
   const handleSubmit = useCallback(
     async (debtId: number, amount: number) => {
-      const success = await UpdatePayment({
+      const res = await UpdatePayment({
         id: data.id,
         debtID: debtId,
         amount,
       });
-      if (success) {
-        toast.success("Payment updated successfully");
+      if (res.succeeded) {
+        toast.success(res.message || "Payment updated successfully");
         recordUpdate({ ...data, debtID: debtId, amount });
         setOpen(false);
       } else {
-        toast.error("Failed to update payment");
+        toast.error(res.message || "Failed to update payment");
       }
     },
     [data, recordUpdate],

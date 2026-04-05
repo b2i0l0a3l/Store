@@ -8,6 +8,8 @@ import {
   getSalesOverTime,
   getRecentActivities,
   getCashVsDebtRatio,
+  getUsers,
+  changeUserRole,
 } from "./dashboardApi";
 
 export async function fetchDashboardSummary() {
@@ -36,4 +38,12 @@ export async function fetchRecentActivities() {
 
 export async function fetchCashVsDebtRatio() {
   return getCashVsDebtRatio();
+}
+
+export async function fetchUsers() {
+  return getUsers();
+}
+
+export async function changeUserRoleAction(userId: string, role: string) {
+  return changeUserRole(userId, role);
 }

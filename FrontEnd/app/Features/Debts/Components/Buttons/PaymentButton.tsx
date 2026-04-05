@@ -22,12 +22,12 @@ function PaymentButton({
   const handleSubmit = async (data: any) => {
     console.log(data);
     
-    const success = await pay(data);
-    if (success) {
+    const res = await pay(data);
+    if (res.succeeded) {
       debtStore.recordUpdate({ ...data, id: debtId });
-      toast.success("تم تسجيل الدفعة بنجاح");
+      toast.success(res.message || "تم تسجيل الدفعة بنجاح");
     } else {
-      toast.error("حدث خطأ أثناء تسجيل الدفعة");
+      toast.error(res.message || "حدث خطأ أثناء تسجيل الدفعة");
     }
     setOpen(false);
   };

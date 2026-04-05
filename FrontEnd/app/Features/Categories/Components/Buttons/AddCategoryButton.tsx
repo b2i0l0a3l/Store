@@ -15,13 +15,13 @@ export default function AddCategoryButton() {
   const handleClose = useCallback(() => setOpenModal(false), []);
 
   const handleSubmit = useCallback(async (name: string) => {
-    const addedCategory = await addCategory({ name });
-    if (addedCategory) {
-      recordAdd(addedCategory);
-      toast.success("تمت إضافة التصنيف بنجاح");
+    const res = await addCategory({ name });
+    if (res.succeeded && res.value) {
+      recordAdd(res.value);
+      toast.success(res.message || "تمت إضافة التصنيف بنجاح");
       setOpenModal(false);
     } else {
-      toast.error("حدث خطأ أثناء إضافة التصنيف");
+      toast.error(res.message || "حدث خطأ أثناء إضافة التصنيف");
     }
   }, [recordAdd]);
 

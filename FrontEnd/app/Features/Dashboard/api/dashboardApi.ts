@@ -1,4 +1,5 @@
 import { fetchApi } from "@/app/util/Api/Api";
+import { MyResponse } from "@/app/util/types";
 import {
   DashboardSummary,
   LowStockAlert,
@@ -7,6 +8,7 @@ import {
   RecentActivities,
   CashVsDebtRatio,
   ClientRanking,
+  UserModel,
 } from "../types";
 
 export async function getDashboardSummary(): Promise<DashboardSummary | null> {
@@ -42,4 +44,16 @@ export async function getRecentActivities(): Promise<RecentActivities | null> {
 export async function getCashVsDebtRatio(): Promise<CashVsDebtRatio | null> {
   const res = await fetchApi<CashVsDebtRatio>(`/Dashboard/CashVsDebtRatio`, { cache: "no-store" });
   return res.succeeded && res.value ? res.value : null;
+}
+
+export async function getUsers(): Promise<UserModel[]> {
+  const res = await fetchApi<UserModel[]>(`/User/GetUsers`, { cache: "no-store" });
+  return res.succeeded && res.value ? res.value : [];
+}
+
+export async function changeUserRole(userId: string, role: string): Promise<MyResponse<string>> {
+  return await fetchApi<string>(`/User/ChangeRole`, {
+    method: "POST",
+    body: JSON.stringify({ userId, role }),
+  });
 }

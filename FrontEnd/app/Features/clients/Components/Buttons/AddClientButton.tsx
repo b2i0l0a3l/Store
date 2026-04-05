@@ -17,15 +17,15 @@ export default function AddClientButton() {
 
   const handleSubmit = useCallback(
     async (name: string, phoneNumber: string): Promise<client | null> => {
-      const addedClient = await addClient({ name, phoneNumber });
-      if (addedClient) {
-        toast.success("تمت إضافة العميل بنجاح");
+      const res = await addClient({ name, phoneNumber });
+      if (res.succeeded && res.value) {
+        toast.success(res.message || "تمت إضافة العميل بنجاح");
         setOpenModal(false);
-        recordAdd(addedClient);
+        recordAdd(res.value);
       } else {
-        toast.error("حدث خطأ أثناء إضافة العميل");
+        toast.error(res.message || "حدث خطأ أثناء إضافة العميل");
       }
-      return addedClient;
+      return res.value;
     },
     [recordAdd],
   );

@@ -23,15 +23,15 @@ const DeleteClientButton = memo(function DeleteClientButton({
 
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
-    const success = await deleteClient({ id: dataId });
+    const res = await deleteClient({ id: dataId });
     setIsDeleting(false);
     setIsModalOpen(false);
 
-    if (success) {
+    if (res.succeeded) {
       recordDelete(dataId);
-      toast.success("تم حذف العميل بنجاح");
+      toast.success(res.message || "تم حذف العميل بنجاح");
     } else {
-      toast.error("حدث خطأ أثناء الحذف");
+      toast.error(res.message || "حدث خطأ أثناء الحذف");
     }
   }, [dataId, recordDelete]);
 

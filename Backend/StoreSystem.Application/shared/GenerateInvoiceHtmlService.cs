@@ -48,10 +48,11 @@ namespace StoreSystem.Application.shared
 <head>
 <meta charset='UTF-8'>
 <style>
-    body {{
+    .invoice-wrapper {{
         font-family: Tahoma, Arial;
-        width: 80mm;
-        direction: rtl;
+        width: auto;
+        max-width: 80mm;
+        direction: ltr;
         margin: 0;
         padding: 5px;
     }}
@@ -73,7 +74,7 @@ namespace StoreSystem.Application.shared
 </head>
 
 <body>
-
+<div class='invoice-wrapper'>
 <div class='center'>
     <h3>متجري</h3>
     <p>phone: 0600000000</p>
@@ -104,7 +105,7 @@ namespace StoreSystem.Application.shared
 <div class='center'>
     <p>Thank You 🙏</p>
 </div>
-
+</div>
 </body>
 </html>";
         }
