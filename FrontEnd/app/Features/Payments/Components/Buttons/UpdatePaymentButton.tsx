@@ -18,12 +18,13 @@ function UpdatePaymentButton({ data }: { data: Payment }) {
     async (debtId: number, amount: number) => {
       const res = await UpdatePayment({
         id: data.id,
-        debtID: debtId,
+        debtId: debtId,
         amount,
+        clientName: data.clientName,
       });
       if (res.succeeded) {
         toast.success(res.message || "Payment updated successfully");
-        recordUpdate({ ...data, debtID: debtId, amount });
+        recordUpdate({ ...data, debtId: debtId, amount });
         setOpen(false);
       } else {
         toast.error(res.message || "Failed to update payment");

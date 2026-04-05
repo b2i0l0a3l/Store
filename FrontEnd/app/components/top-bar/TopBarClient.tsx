@@ -10,7 +10,7 @@ interface TopBarClientProps {
 }
 
 const PAGE_META: Record<string, { title: string }> = {
-  "/": { title: "Selling" },
+  "/": { title: "Home" },
   "/Dashboard": { title: "Dashboard" },
   "/Products": { title: "Products" },
   "/Clients": { title: "Clients" },
@@ -33,7 +33,7 @@ export default function TopBarClient({ user }: TopBarClientProps) {
   const pathname = usePathname();
 
   const pageMeta = PAGE_META[pathname] ?? {
-    title: pathname.replace("/", "") || "Home",
+    title: pathname.replace("/", ""),
   };
 
   const initials = user?.fullName ? getInitials(user.fullName) : "?";

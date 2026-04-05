@@ -10,12 +10,10 @@ export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  // Initialize connection
   useSignalR();
   
   const { notifications, unreadCount, markAsRead, markAllAsRead, isLoading } = useNotificationStore();
 
-  // Close dropdown when clicked outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -29,7 +27,7 @@ export default function NotificationBell() {
   const handleMarkAsRead = async (id: number, isRead: boolean) => {
     if (isRead) return;
     try {
-      const resp = await fetchApi(`/api/v1/Notification/MarkAsRead/${id}`, { method: 'PUT' });
+      const resp = await fetchApi(`/Notification/MarkAsRead/${id}`, { method: 'PUT' });
       if (resp.succeeded) {
         markAsRead(id);
       }
@@ -40,7 +38,7 @@ export default function NotificationBell() {
 
   const handleMarkAllAsRead = async () => {
     try {
-      const resp = await fetchApi('/api/v1/Notification/MarkAllAsRead', { method: 'PUT' });
+      const resp = await fetchApi('/Notification/MarkAllAsRead', { method: 'PUT' });
       if (resp.succeeded) {
         markAllAsRead();
       }
@@ -99,7 +97,7 @@ export default function NotificationBell() {
                       <span className={`text-sm font-semibold ${notif.type === 1 ? 'text-rose-400' : 'text-blue-400'}`}>
                         {notif.title}
                       </span>
-                      {!notif.isRead && <span className="w-2 h-2 rounded-full bg-blue-500 mt-1 flex-shrink-0" />}
+                      {!notif.isRead && <span className="w-2 h-2 rounded-full bg-blue-500 mt-1 shrink-0" />}
                     </div>
                     <p className="text-xs text-slate-300 leading-relaxed text-right" dir="rtl">{notif.message}</p>
                     <span className="text-[10px] text-slate-500 mt-2 text-right">{formatTime(notif.createdAt)}</span>

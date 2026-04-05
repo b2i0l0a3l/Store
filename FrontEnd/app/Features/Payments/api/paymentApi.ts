@@ -22,7 +22,7 @@ export async function AddPayment(body: Omit<Payment, "id" | "paidAt">): Promise<
 export async function UpdatePayment(body: Omit<Payment, "paidAt">): Promise<MyResponse<string>> {
   return await fetchApi<string>("/Payment/Update", {
     method: "PUT",
-    body: JSON.stringify({ model: body }),
+    body: JSON.stringify(body),
   });
 }
 

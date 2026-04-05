@@ -31,7 +31,7 @@ export default function PaymentSection({ data }: { data: Payment[] }) {
       .filter((p) => {
         const actualPayment = updatedPayments[p.id] || p;
         return (
-          actualPayment.debtID.toString().includes(searchLower) ||
+          actualPayment.debtId.toString().includes(searchLower) ||
           actualPayment.amount.toString().includes(searchLower)
         );
       })

@@ -62,6 +62,7 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IGetProductCountFunction, GetProductCountFunction>();
             services.AddScoped<IGetTotalOrdersFunction, GetTotalOrdersFunction>();
             services.AddScoped<IGetTotalRemainingFunction, GetTotalRemainingFunction>();
+            services.AddScoped<IFnGetAllPaymentsFunction, FnGetAllPaymentsFunction>();
 
             // Advanced Dashboard Functions
             services.AddScoped<IFnLowStockAlertsFunction, FnLowStockAlertsFunction>();

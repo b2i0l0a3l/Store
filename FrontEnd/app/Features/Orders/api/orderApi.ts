@@ -51,15 +51,14 @@ export async function deleteOrder(id: number) : Promise<MyResponse<string>> {
 
 export async function getOrderItems(id: number): Promise<OrderItem[] | null> {
   try {
-    const result = await fetchApi<{ value: OrderItem[] }>(`/Order/GetOrderItemsByOrderId?OrderId=${id}`, {
+    const result = await fetchApi<OrderItem[]>(`/Order/GetOrderItemsByOrderId?OrderId=${id}`, {
       cache: "no-store",
     });
 
     if (!result.succeeded || !result.value) {
       return null;
     }
-    console.log(result);
-    return result.value.value || null;
+    return result.value || null;
   } catch (error) {
     console.error(error);
     return null;

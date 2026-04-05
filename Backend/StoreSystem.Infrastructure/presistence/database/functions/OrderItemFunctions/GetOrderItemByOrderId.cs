@@ -33,7 +33,7 @@ namespace StoreSystem.Infrastructure.presistence.database.functions.OrderFunctio
                 var result = await connection.QueryAsync<GetOrderItemFunctionModel>("select * from fn_get_all_order_item_by_order_id(@p_order_id)",
                     parameters
                 );
-                var list = result.ToList();
+                List<GetOrderItemFunctionModel> list = result.ToList();
                 if (list.Count == 0) return Errors.DataNotFoundError;
 
                 return list;

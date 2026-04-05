@@ -15,7 +15,7 @@ export default function PaymentModal({
   onClose: () => void;
   onClick: (debtId: number, amount: number) => void;
 }) {
-  const [debtId, setDebtId] = useState(data?.debtID || 0);
+  const [debtId, setDebtId] = useState(data?.debtId || 0);
   const [amount, setAmount] = useState(data?.amount || 0);
 
   const handleSubmit = useCallback(() => {

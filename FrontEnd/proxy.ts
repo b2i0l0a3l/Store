@@ -74,6 +74,12 @@ export async function proxy(request: NextRequest) {
   const TokenID = await CurrentTokenId();
   const refreshToken = request.cookies.get("refreshToken")?.value;
 
+  if(pathname === "/login" || pathname === "/register"){
+    if(accessToken && refreshToken){
+      request.cookies.clear();
+    }
+  }
+
   if (!accessToken || !refreshToken) {
     return NextResponse.redirect(new URL("/login", request.url));
   }

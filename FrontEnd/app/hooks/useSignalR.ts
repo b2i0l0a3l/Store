@@ -25,7 +25,7 @@ export const useSignalR = () => {
       }
 
       try {
-        const response = await fetchApi<AppNotification[]>('/api/v1/Notification/All');
+        const response = await fetchApi<AppNotification[]>('/Notification/All');
         if (response.succeeded && response.value && isMounted) {
           setNotifications(response.value);
         }

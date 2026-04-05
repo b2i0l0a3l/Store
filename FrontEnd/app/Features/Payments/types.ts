@@ -1,6 +1,7 @@
 export interface Payment {
   id: number;
-  debtID: number;
+  debtId: number;
+  clientName: string;
   amount: number;
   paidAt: string;
 }

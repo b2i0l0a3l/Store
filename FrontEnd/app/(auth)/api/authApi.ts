@@ -84,8 +84,6 @@ export async function refresh(
     }
 
     const data = await response.json();
-    console.log("new RefreshToken",data.refreshToken);
-    console.log("new AccessToken",data.accessToken);
     return {
       isSuccess: true,
       message: "Refresh successful",
@@ -113,7 +111,6 @@ export async function Logout(): Promise<AuthResponse> {
     await response.json();
     return { isSuccess: true, message: "Logout successful" };
   } catch (error) {
-    console.error("Refresh error:", error);
     return { isSuccess: false, message: "Network error. Please try again." };
   }
 }

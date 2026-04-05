@@ -12,12 +12,12 @@ export async function updateOrderItem(orderItemData: {
       method: "PUT",
       body: JSON.stringify(orderItemData),
     });
-    if (!result.succeeded || !result.value) {
+    console.log(result);
+    if (!result.succeeded) {
       return false;
     }
     return true;
   } catch (error) {
-    console.error(error);
     return false;
   }
 }

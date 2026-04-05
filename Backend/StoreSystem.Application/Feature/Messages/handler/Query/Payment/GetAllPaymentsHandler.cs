@@ -8,24 +8,24 @@ using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
+using StoreSystem.Core.interfaces.functions.PaymentFunctions;
 using StoreSystem.Core.Models;
+using StoreSystem.Core.Models.PaymentModels;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
-    public class GetAllPaymentsHandler : IRequestHandler<GetAllPaymentsRequest, Result<IEnumerable<PaymentModel>>>
+    public class GetAllPaymentsHandler : IRequestHandler<GetAllPaymentsRequest, Result<IEnumerable<GetAllPaymentModel>>>
     {
-        private readonly IRepository<Payment> _repo;
-        public GetAllPaymentsHandler(IRepository<Payment> repo)
+        private readonly IFnGetAllPaymentsFunction _repo;
+        public GetAllPaymentsHandler(IFnGetAllPaymentsFunction repo)
         {
             _repo = repo;        }
 
-        public async Task<Result<IEnumerable<PaymentModel>>> Handle(GetAllPaymentsRequest request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<GetAllPaymentModel>>> Handle(GetAllPaymentsRequest request, CancellationToken cancellationToken)
         {
-            var result = await _repo.All();
+            var result = await _repo.Handle();
             if (!result.IsSuccess) return result.Error!;
-
-            var records = result.Value!.Select(x => PaymentModel.FromEntity(x));
-            return Result<IEnumerable<PaymentModel>>.Success(records);
+            return result;
         }
     }
 }

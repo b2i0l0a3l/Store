@@ -77,12 +77,12 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetOrderItemsByOrderId")]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetOrderItemsByOrderId([FromQuery] GetOrderItemsByOrderIdRequest req)
         {
             var result = await _mediator.Send(req);
-            return result.IsSuccess ? Ok() : HandleFailure(result);
-
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
         [HttpPost("AddOrderWithItems")]
         [ProducesResponseType(StatusCodes.Status200OK)]

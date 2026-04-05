@@ -28,15 +28,14 @@ export default function SideBarNavBar({ onClose, userRole }: { onClose?: () => v
   const allLinks: NavLink[] = [  
     { name: "Selling", Path: "/", icon: HomeIcon ,allowedRoles:["Admin"]},
     { name: "Dashboard", Path: "/Dashboard", icon: Squares2X2Icon ,allowedRoles:["Admin"]},
-    { name: "Products", Path: "/Products", icon: ShoppingBagIcon ,allowedRoles:["Admin","Staff","Viewer"]},
-    { name: "Clients", Path: "/Clients", icon: UsersIcon ,allowedRoles:["Admin","Staff"]},
-    { name: "Categories", Path: "/Categories", icon: TagIcon ,allowedRoles:["Admin","Staff","Viewer"]},
-    { name: "Orders", Path: "/Orders", icon: ShoppingCartIcon ,allowedRoles:["Admin","Staff"]},
-    { name: "Debts", Path: "/Debts", icon: CurrencyDollarIcon ,allowedRoles:["Admin","Staff"]},
-    { name: "Payments", Path: "/Payments", icon: BanknotesIcon ,allowedRoles:["Admin","Staff"]},
+    { name: "Products", Path: "/Products", icon: ShoppingBagIcon ,allowedRoles:["Admin","Staff"]},
+    { name: "Clients", Path: "/Clients", icon: UsersIcon ,allowedRoles:["Admin"]},
+    { name: "Categories", Path: "/Categories", icon: TagIcon ,allowedRoles:["Admin"]},
+    { name: "Orders", Path: "/Orders", icon: ShoppingCartIcon ,allowedRoles:["Admin"]},
+    { name: "Debts", Path: "/Debts", icon: CurrencyDollarIcon ,allowedRoles:["Admin"]},
+    { name: "Payments", Path: "/Payments", icon: BanknotesIcon ,allowedRoles:["Admin"]},
   ];
 
-  // Filter links based on user role
   const links = allLinks.filter((link) => {
     if (!link.allowedRoles || link.allowedRoles.length === 0) return true;
     if (!userRole) return false;
