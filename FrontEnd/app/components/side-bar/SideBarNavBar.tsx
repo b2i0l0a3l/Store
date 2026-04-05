@@ -1,8 +1,6 @@
 "use client";
 import Link from "next/link";
-
 import { usePathname } from "next/navigation";
-
 import {
   ShoppingBagIcon,
   HomeIcon,
@@ -21,19 +19,59 @@ interface NavLink {
   allowedRoles?: string[];
 }
 
-
-export default function SideBarNavBar({ onClose, userRole }: { onClose?: () => void; userRole?: string }) {
+export default function SideBarNavBar({
+  onClose,
+  userRole,
+}: {
+  onClose?: () => void;
+  userRole?: string;
+}) {
   const CurrentPath = usePathname();
 
-  const allLinks: NavLink[] = [  
-    { name: "Selling", Path: "/", icon: HomeIcon ,allowedRoles:["Admin"]},
-    { name: "Dashboard", Path: "/Dashboard", icon: Squares2X2Icon ,allowedRoles:["Admin"]},
-    { name: "Products", Path: "/Products", icon: ShoppingBagIcon ,allowedRoles:["Admin","Staff"]},
-    { name: "Clients", Path: "/Clients", icon: UsersIcon ,allowedRoles:["Admin"]},
-    { name: "Categories", Path: "/Categories", icon: TagIcon ,allowedRoles:["Admin"]},
-    { name: "Orders", Path: "/Orders", icon: ShoppingCartIcon ,allowedRoles:["Admin"]},
-    { name: "Debts", Path: "/Debts", icon: CurrencyDollarIcon ,allowedRoles:["Admin"]},
-    { name: "Payments", Path: "/Payments", icon: BanknotesIcon ,allowedRoles:["Admin"]},
+  const allLinks: NavLink[] = [
+    { name: "Selling", Path: "/", icon: HomeIcon, allowedRoles: ["Admin"] },
+    {
+      name: "Dashboard",
+      Path: "/Dashboard",
+      icon: Squares2X2Icon,
+      allowedRoles: ["Admin"],
+    },
+    {
+      name: "Products",
+      Path: "/Products",
+      icon: ShoppingBagIcon,
+      allowedRoles: ["Admin", "Staff"],
+    },
+    {
+      name: "Clients",
+      Path: "/Clients",
+      icon: UsersIcon,
+      allowedRoles: ["Admin"],
+    },
+    {
+      name: "Categories",
+      Path: "/Categories",
+      icon: TagIcon,
+      allowedRoles: ["Admin"],
+    },
+    {
+      name: "Orders",
+      Path: "/Orders",
+      icon: ShoppingCartIcon,
+      allowedRoles: ["Admin"],
+    },
+    {
+      name: "Debts",
+      Path: "/Debts",
+      icon: CurrencyDollarIcon,
+      allowedRoles: ["Admin"],
+    },
+    {
+      name: "Payments",
+      Path: "/Payments",
+      icon: BanknotesIcon,
+      allowedRoles: ["Admin"],
+    },
   ];
 
   const links = allLinks.filter((link) => {
@@ -47,17 +85,17 @@ export default function SideBarNavBar({ onClose, userRole }: { onClose?: () => v
       <ul className="flex flex-col gap-3 w-full">
         {links.map((link) => {
           const isActive = CurrentPath === link.Path;
-          const IconComponent = link.icon || HomeIcon;   
+          const IconComponent = link.icon || HomeIcon;
           return (
             <li key={link.name}>
               <Link href={link.Path} onClick={onClose}>
                 <div
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out
                     ${
-                    isActive
-                      ? "bg-linear-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                      : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-                  }`}
+                      isActive
+                        ? "bg-linear-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
+                        : "text-slate-300 hover:text-white hover:bg-slate-700/50"
+                    }`}
                 >
                   <IconComponent className="w-5 h-5 shrink-0" />
                   <span className="font-medium text-sm">{link.name}</span>

@@ -57,7 +57,6 @@ function getRoleAccessRedirect(token: string, pathname: string): string | null {
         isAllowed = true;
       }
     }
-
     if (!isAllowed) {
       const fallbackPath = role === "Admin" ? "/" : "/Products";
       if (pathname !== fallbackPath) return fallbackPath;
