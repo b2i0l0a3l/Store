@@ -48,7 +48,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email!),
-                    new Claim(ClaimTypes.Role, user.Role ?? "Viewer"),
+                    new Claim(ClaimTypes.Role, user.Role ?? "Staff"),
                     new Claim("TokenId", TokenId),
                     new Claim("FullName", user.FullName),
                 };
