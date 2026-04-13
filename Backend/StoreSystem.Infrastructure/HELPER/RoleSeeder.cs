@@ -11,7 +11,7 @@ namespace StoreSystem.Infrastructure.HELPER
     {
         public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
     {
-        string[] roles = { Roles.Admin, Roles.Staff, Roles.User};
+        string[] roles = { Roles.Admin, Roles.Staff};
 
         foreach (var role in roles)
         {
