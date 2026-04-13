@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import SummaryCards from "../../Features/Dashboard/components/SummaryCards";
 import SalesChart from "../../Features/Dashboard/components/SalesChart";
 import LowStockAlertsTable from "../../Features/Dashboard/components/LowStockAlertsTable";
@@ -68,7 +68,9 @@ async function RecentActivitiesSection() {
 
 async function UsersManagementSection() {
   const data = await fetchUsers();
-  return <UsersManagementTable initialUsers={data} currentUserId={undefined} />;
+  const currentUser = await CurrentUser();
+
+  return <UsersManagementTable initialUsers={data} currentUserId={currentUser?.userId} />;
 }
 
 export default async function DashboardPage() {

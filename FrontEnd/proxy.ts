@@ -8,15 +8,15 @@ const ROLE_CLAIM = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role
 
 const routePermissions = [
   { path: "/Dashboard", allowedRoles: ["Admin"] },
-  { path: "/Products", allowedRoles: ["Admin", "Staff", "Viewer"] },
-  { path: "/Clients", allowedRoles: ["Admin", "Staff"] },
-  { path: "/Categories", allowedRoles: ["Admin", "Staff", "Viewer"] },
-  { path: "/Orders", allowedRoles: ["Admin", "Staff"] },
-  { path: "/Debts", allowedRoles: ["Admin", "Staff"] },
-  { path: "/Payments", allowedRoles: ["Admin", "Staff"] },
-  { path: "/", allowedRoles: ["Admin"], exact: true },
+  { path: "/Products", allowedRoles: ["Admin"] },
+  { path: "/Clients", allowedRoles: ["Admin"] },
+  { path: "/Categories", allowedRoles: ["Admin"] },
+  { path: "/Orders", allowedRoles: ["Admin","Staff"] },
+  { path: "/Debts", allowedRoles: ["Admin"] },
+  { path: "/Payments", allowedRoles: ["Admin"] },
+  { path: "/", allowedRoles: ["Admin","Staff"], exact: true },
 ];
-
+ 
 function isTokenExpired(token: string): boolean {
   try {
     const decoded = decodeJwt(token);
@@ -58,7 +58,7 @@ function getRoleAccessRedirect(token: string, pathname: string): string | null {
       }
     }
     if (!isAllowed) {
-      const fallbackPath = role === "Admin" ? "/" : "/Products";
+      const fallbackPath = role === "Admin" ? "/Dashboard" : "/";
       if (pathname !== fallbackPath) return fallbackPath;
     }
     return null;

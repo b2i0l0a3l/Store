@@ -4,9 +4,11 @@ import { useStore } from "@/app/Features/Sells/store/store";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 
 export default function ClearButton() {
-  const clearCart = useStore((state: any) => state.clearCart);
+  const clearCart = useStore((state) => state.clearCart);
+  const cart = useStore((state) => state.cart);
   return (
     <CustomButton
+      
       className="w-full py-1.5 px-3 text-xs"
       hoverColor="hover:bg-red-500/90"
       hoverTextColor="hover:text-white"
@@ -14,7 +16,7 @@ export default function ClearButton() {
       text="Clear"
       icon={TrashIcon}
       onClick={() => clearCart()}
-      disabled={false}
+      disabled={cart.length === 0}
     />
   );
 }

@@ -6,11 +6,12 @@ using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
+using BookingSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
     [ApiController]
-                [Route("api/v{version:apiVersion}/Payment")]
+    [Route("api/v{version:apiVersion}/Payment")]
     [ApiVersion("1")]
     [Authorize]
     public class PaymentController : ApiControllerBase
@@ -24,6 +25,7 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> GetAll([FromQuery] GetPaymentsRequest req)
         {
             var result = await _mediator.Send(req);
@@ -32,6 +34,8 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.Admin)]
+    
         public async Task<IActionResult> All()
         {
             var result = await _mediator.Send(new GetAllPaymentsRequest());
@@ -41,6 +45,7 @@ namespace StoreApi.Api.Controllers
         [HttpGet("GetById/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetPaymentByIdRequest { Id = id });
@@ -59,6 +64,7 @@ namespace StoreApi.Api.Controllers
         [HttpPut("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Update([FromBody] UpdatePaymentRequest request)
         {
             var result = await _mediator.Send(request);
@@ -68,6 +74,7 @@ namespace StoreApi.Api.Controllers
         [HttpDelete("Delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeletePaymentRequest { Id = id });

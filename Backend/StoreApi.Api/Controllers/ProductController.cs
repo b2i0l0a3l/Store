@@ -57,6 +57,7 @@ namespace StoreApi.Api.Controllers
         [Consumes("multipart/form-data")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Add(AddProduct req)
         {
             AddProductRequest request = new()
@@ -81,6 +82,7 @@ namespace StoreApi.Api.Controllers
 
         [HttpPut("Update")]
         [Consumes("multipart/form-data")]
+        [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update([FromForm] UpdateProduct req)

@@ -6,6 +6,7 @@ using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
+using BookingSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
@@ -53,6 +54,7 @@ namespace StoreApi.Api.Controllers
         [HttpPut("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        
         public async Task<IActionResult> Update([FromBody] UpdateOrderItemRequest request)
         {
             var result = await _mediator.Send(request);
@@ -62,6 +64,7 @@ namespace StoreApi.Api.Controllers
         [HttpDelete("Delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteOrderItemRequest { Id = id });

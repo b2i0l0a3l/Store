@@ -29,7 +29,7 @@ export default function SideBarNavBar({
   const CurrentPath = usePathname();
 
   const allLinks: NavLink[] = [
-    { name: "Selling", Path: "/", icon: HomeIcon, allowedRoles: ["Admin"] },
+    { name: "Selling", Path: "/", icon: HomeIcon, allowedRoles: ["Admin", "Staff"] },
     {
       name: "Dashboard",
       Path: "/Dashboard",
@@ -40,7 +40,7 @@ export default function SideBarNavBar({
       name: "Products",
       Path: "/Products",
       icon: ShoppingBagIcon,
-      allowedRoles: ["Admin", "Staff"],
+      allowedRoles: ["Admin"],
     },
     {
       name: "Clients",

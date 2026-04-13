@@ -6,13 +6,14 @@ using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using StoreSystem.Application.Feature.Messages.Request.Command.Invoice;
+using Microsoft.AspNetCore.Authorization;
 
 namespace StoreApi.Api.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/Ivoice")]
     [ApiVersion("1")]
-
+    [Authorize]
     public class InvoiceController : ApiControllerBase
     {
         private readonly IMediator _mediator;

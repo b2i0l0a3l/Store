@@ -22,6 +22,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.UserHandler
         public async Task<Result> Handle(ChangeUserRoleRequest request, CancellationToken cancellationToken)
         {
             if (string.IsNullOrEmpty(request.Role)) return new Error("RoleIsRequired", Core.enums.ErrorType.General, "Role Not Found");
+            if (request.Role == "Admin") return new Error("InvalidRole", Core.enums.ErrorType.General, "You can't change the role of the admin");
             User? User = await _UserManager.FindByIdAsync(request.UserId);
             if (User == null) return Errors.UserNotFoundError;
           

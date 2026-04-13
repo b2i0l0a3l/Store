@@ -8,6 +8,7 @@ type JwtPayload = {
   FullName: string;
   ImagePath?: string;
   TokenId?: string;
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier": string;
 };
 
 export async function CurrentUser(): Promise<user | null> {
@@ -25,8 +26,8 @@ export async function CurrentUser(): Promise<user | null> {
   ] as string;
   const fullName = decoded["FullName"] ?? "";
   const imagePath = decoded["ImagePath"];
-
-  return { email, role, fullName, imagePath };
+  const userId = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+  return { email, role, fullName, imagePath, userId };
 }
 export async function CurrentTokenId(): Promise<string | undefined> {
   const token = await getAccessToken();

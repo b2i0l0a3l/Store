@@ -6,13 +6,14 @@ using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
+using BookingSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/Debt")]
     [ApiVersion("1")]
-    [Authorize]
+    [Authorize(Roles = Roles.Admin)]
     public class DebtController : ApiControllerBase
     {
         private readonly IMediator _mediator;

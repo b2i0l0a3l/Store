@@ -10,4 +10,5 @@ export type user = {
   role: string;
   fullName: string;
   imagePath?: string;
+  userId: string;
 };

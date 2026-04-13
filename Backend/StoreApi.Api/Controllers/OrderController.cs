@@ -8,13 +8,13 @@ using StoreSystem.Application.Feature.Messages.Request.Query.Order;
 using StoreSystem.Application.Feature.Messages.Request.Command.Order;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
+using BookingSystem.Core.common;
 
 namespace StoreApi.Api.Controllers
 {
     [ApiController]
     [Route("api/v{version:apiVersion}/Order")]
     [ApiVersion("1")]
-
     [Authorize]
     public class OrderController : ApiControllerBase
     {
@@ -27,6 +27,7 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> GetAll([FromQuery]GetOrdersRequest req)
         {
             var result = await _mediator.Send(req);
@@ -35,6 +36,8 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("All")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> All()
         {
             var result = await _mediator.Send(new GetAllOrdersRequest());
@@ -45,6 +48,8 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> GetById(int id,[FromServices] IAuthorizationService authorizationService)
         {
             var authResult = await authorizationService.AuthorizeAsync(
@@ -62,6 +67,7 @@ namespace StoreApi.Api.Controllers
 
         [HttpPut("Update")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> Update([FromBody] UpdateOrderRequest request)
         {
             var result = await _mediator.Send(request);
@@ -70,6 +76,8 @@ namespace StoreApi.Api.Controllers
 
         [HttpDelete("Delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize(Roles = Roles.Admin)]
+
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteOrderRequest { Id = id });
@@ -77,7 +85,6 @@ namespace StoreApi.Api.Controllers
         }
 
         [HttpGet("GetOrderItemsByOrderId")]
-        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetOrderItemsByOrderId([FromQuery] GetOrderItemsByOrderIdRequest req)
         {

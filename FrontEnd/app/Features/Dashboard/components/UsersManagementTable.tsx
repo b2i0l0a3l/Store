@@ -7,13 +7,11 @@ import { toast } from "@/app/store/useToastStore";
 import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 import MyTable, { Column } from "@/app/components/Ui/customtable/MyTable";
 
-const ROLES = ["Admin", "Staff", "User"];
+const ROLES = ["Admin", "Staff"];
 
 const ROLE_STYLES: Record<string, string> = {
   Admin: "bg-blue-500/20 text-blue-400 border border-blue-500/30",
-  Staff: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
-  User: "bg-slate-500/20 text-slate-400 border border-slate-500/30",
-};
+  Staff: "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"};
 
 function getInitials(name: string): string {
   return name
@@ -190,7 +188,6 @@ export default function UsersManagementTable({
         </div>
       </div>
 
-      {/* Table */}
       <MyTable<UserModel>
         columns={columns}
         data={users}
