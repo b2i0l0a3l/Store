@@ -1,11 +1,11 @@
 <div align="center">
 
-# 🏪 Store Management System
+# 🏪 Store Management System (POS)
 
-### نظام إدارة المتاجر المتكامل
+### نظام إدارة المتاجر ونقاط البيع المتكامل
 
 <p align="center">
-  <strong>A modern, full-stack store management solution built with cutting-edge technologies</strong>
+  <strong>An Enterprise-Grade, Full-Stack Store & Point of Sale Management Solution</strong>
 </p>
 
 <br/>
@@ -20,71 +20,98 @@
 <br/>
 
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
-![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square)
-![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg?style=flat-square)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20%7C%20CQRS-blue?style=flat-square)
 
 ---
 
-[Features](#-features) •
+[Features](#-key-features) •
 [Tech Stack](#-tech-stack) •
-[Architecture](#-architecture) •
+[Architecture](#-architecture-design) •
+[Screenshots](#-screenshots) •
 [Getting Started](#-getting-started) •
-[API Endpoints](#-api-endpoints) •
-[Project Structure](#-project-structure)
+[API Endpoints](#-essential-api-endpoints)
 
 </div>
 
 <br/>
 
-## ✨ Features
+## 🎯 Overview
 
-| Feature                    | Description                                         |
-| -------------------------- | --------------------------------------------------- |
-| 🔐 **Authentication**      | Secure JWT-based auth with refresh token rotation   |
-| 📦 **Product Management**  | Full CRUD with category-based organization          |
-| 🏷️ **Categories**          | Hierarchical product categorization                 |
-| 👥 **Client Management**   | Track and manage customer information               |
-| 🛒 **Order Processing**    | Complete order lifecycle with item management       |
-| 💰 **Payment Tracking**    | Monitor and record payments                         |
-| 📊 **Debt Management**     | Track client debts and balances                     |
-| 🔄 **Returns & Refunds**   | Handle product returns with item-level tracking     |
-| 🚚 **Supplier Management** | Manage suppliers and supplier-product relationships |
-| 📋 **Audit Logging**       | Track all system changes for accountability         |
+The **Store Management System** is a robust, highly scalable web application designed to handle all aspects of point-of-sale (POS) and inventory management operations. Built with a clean architecture approach, it enforces strict separation of concerns, utilizing CQRS with MediatR on the backend and a feature-based modular structure on the frontend. This system is designed for high performance, reliability, and ease of expansion.
+
+## ✨ Key Features
+
+### 📦 Inventory & Product Management
+- **Smart Categorization:** Organize products with multi-level category support.
+- **Real-time Tracking:** Accurate inventory tracking with automated low-stock alerts via SignalR.
+
+
+### 🛒 Sales & Order Processing (POS)
+- **Fast Checkout:** Optimized Point of Sale interface for rapid transactions.
+- **Invoice Generation:** Electronic invoicing with direct print support and QR code generation for compliance.
+- **Returns Management:** Flexible and detailed tracking of product returns and exchanges.
+
+### 💰 Finance & Debt Management
+- **Payment Tracking:** Log and monitor payments across multiple payment methods.
+- **Debt Tracking:** Dedicated management of client debts with automated reminders.
+- **Client Profiles:** Comprehensive client management with purchase and debt histories.
+
+### 📊 Real-time Dashboard & Analytics
+- **Live Metrics:** Real-time financial statistics and reporting pushed via SignalR.
+- **Interactive Charts:** Visual analysis of sales trends and revenue over time using Recharts.
+- **Customizable KPIs:** Track the most important metrics at a glance.
+
+### 🔐 Advanced Security & Auditing
+- **Multi-layer Auth:** Secure JWT implementation with Refresh Token rotation.
+- **RBAC:** Strict Role-Based Access Control and custom authorization policies.
+- **Audit Logging:** Comprehensive tracking of all system modifications across administrative actions.
 
 <br/>
 
 ## 📸 Screenshots
 
+
+
 <div align="center">
   <table>
     <tr>
       <td align="center">
-        <img src="screenshots/dashboard.png" width="400" alt="Dashboard"/>
-        <br/><strong>Dashboard / Analytics</strong>
+        <img src="screenshots/login.png" width="400" alt="Login Page"/>
+        <br/><strong>Secure Login</strong>
       </td>
       <td align="center">
-        <img src="screenshots/selling.png" width="400" alt="Point of Sale"/>
-        <br/><strong>Point of Sale (POS)</strong>
+        <img src="screenshots/dashboard.png" width="400" alt="Dashboard"/>
+        <br/><strong>Real-time Dashboard</strong>
       </td>
     </tr>
     <tr>
       <td align="center">
-        <img src="screenshots/products.png" width="400" alt="Products Management"/>
-        <br/><strong>Products Management</strong>
+        <img src="screenshots/selling.png" width="400" alt="Point of Sale"/>
+        <br/><strong>Point of Sale (POS) Interface</strong>
       </td>
+      <td align="center">
+        <img src="screenshots/products.png" width="400" alt="Products Management"/>
+        <br/><strong>Products & Inventory</strong>
+      </td>
+    </tr>
+    <tr>
       <td align="center">
         <img src="screenshots/clients.png" width="400" alt="Client Management"/>
         <br/><strong>Client Management</strong>
       </td>
-    </tr>
-    <tr>
       <td align="center">
         <img src="screenshots/orders.png" width="400" alt="Orders Management"/>
-        <br/><strong>Orders Management</strong>
+        <br/><strong>Orders History</strong>
       </td>
+    </tr>
+     <tr>
       <td align="center">
         <img src="screenshots/payments.png" width="400" alt="Payments Tracking"/>
         <br/><strong>Payments Tracking</strong>
+      </td>
+      <td align="center">
+        <img src="screenshots/debts.png" width="400" alt="Debts Management"/>
+        <br/><strong>Client Debts Management</strong>
       </td>
     </tr>
   </table>
@@ -96,112 +123,62 @@
 
 ## 🛠️ Tech Stack
 
-### Frontend
+### Frontend (Next.js & React)
 
-<table>
-  <tr>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" width="40" height="40" alt="Next.js"/>
-      <br/><strong>Next.js 16</strong>
-      <br/><sub>App Router + Turbopack</sub>
-    </td>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" width="40" height="40" alt="React"/>
-      <br/><strong>React 19</strong>
-      <br/><sub>Server Components</sub>
-    </td>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" width="40" height="40" alt="TypeScript"/>
-      <br/><strong>TypeScript 5</strong>
-      <br/><sub>Type Safety</sub>
-    </td>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" width="40" height="40" alt="Tailwind"/>
-      <br/><strong>Tailwind CSS 4</strong>
-      <br/><sub>Utility-First</sub>
-    </td>
-  </tr>
-</table>
+| Library / Tool | Purpose |
+|----------------|---------|
+| **Next.js 16** | App Router, Server Components, Turbopack |
+| **React 19** | Core UI library |
+| **TypeScript 5** | Type-safe development |
+| **Tailwind CSS 4** | Utility-first styling framework |
+| **Zustand** | Lightweight, fast client-side state management |
+| **TanStack React Query** | Server state management, caching, and synchronization |
+| **SignalR Client (`@microsoft/signalr`)** | Real-time WebSockets communication |
+| **Recharts** | Interactive data visualization and charts |
 
-| Library                                                                                                                    | Purpose                             |
-| -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| ![TanStack Query](https://img.shields.io/badge/TanStack_Query-v5-FF4154?style=flat-square&logo=reactquery&logoColor=white) | Server state management & caching   |
-| ![Zustand](https://img.shields.io/badge/Zustand-v5-433E38?style=flat-square)                                               | Lightweight client state management |
-| ![Jose](https://img.shields.io/badge/Jose-v6-000000?style=flat-square)                                                     | JWT token handling & validation     |
-| ![Heroicons](https://img.shields.io/badge/Heroicons-v2-8B5CF6?style=flat-square)                                           | Beautiful SVG icon library          |
+### Backend (.NET 10 Web API)
 
-### Backend
-
-<table>
-  <tr>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dotnetcore/dotnetcore-original.svg" width="40" height="40" alt=".NET"/>
-      <br/><strong>.NET 10</strong>
-      <br/><sub>Web API</sub>
-    </td>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/csharp/csharp-original.svg" width="40" height="40" alt="C#"/>
-      <br/><strong>C#</strong>
-      <br/><sub>Clean Code</sub>
-    </td>
-    <td align="center" width="120">
-      <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" width="40" height="40" alt="PostgreSQL"/>
-      <br/><strong>PostgreSQL</strong>
-      <br/><sub>Database</sub>
-    </td>
-  </tr>
-</table>
-
-| Library                                                                                                    | Purpose                                        |
-| ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| ![EF Core](https://img.shields.io/badge/EF_Core-10-512BD4?style=flat-square&logo=dotnet)                   | ORM & database migrations                      |
-| ![Dapper](https://img.shields.io/badge/Dapper-2.1-512BD4?style=flat-square)                                | High-performance micro-ORM for complex queries |
-| ![MediatR](https://img.shields.io/badge/MediatR-11-239120?style=flat-square)                               | Implementing CQRS pattern in Application layer |
-| ![JWT Bearer](https://img.shields.io/badge/JWT_Bearer-10-000000?style=flat-square)                         | Authentication middleware                      |
-| ![Swagger](https://img.shields.io/badge/Swagger-8.1-85EA2D?style=flat-square&logo=swagger&logoColor=black) | API documentation & testing                    |
-| ![ASP.NET Identity](https://img.shields.io/badge/ASP.NET_Identity-10-512BD4?style=flat-square)             | User & role management                         |
+| Technology / Pattern | Purpose |
+|----------------------|---------|
+| **.NET 10** | High-performance backend framework |
+| **Clean Architecture** | Separation of concerns (Core, Application, Infrastructure, API) |
+| **CQRS (MediatR)** | Command Query Responsibility Segregation for decoupled logic |
+| **PostgreSQL** | Primary relational database |
+| **EF Core 10 & Dapper** | Dual ORM strategy: EF for CRUD, Dapper for complex query performance |
+| **ASP.NET Identity** | User and Role management |
+| **JWT Bearer Key** | Secure authentication and authorization |
+| **FluentValidation** | Strongly-typed request validation |
+| **SignalR** | Real-time push notifications to the frontend |
 
 <br/>
 
-## 🏗️ Architecture
+## 🏗️ Architecture Design
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Frontend                             │
-│  ┌───────────┐  ┌──────────┐  ┌──────────┐  ┌───────────┐  │
-│  │  Next.js   │  │  Zustand  │  │ TanStack │  │ Tailwind  │  │
-│  │ App Router │  │  Store    │  │  Query   │  │   CSS 4   │  │
-│  └─────┬─────┘  └────┬─────┘  └────┬─────┘  └───────────┘  │
-│        │              │             │                        │
-│        └──────────────┴─────────────┘                        │
-│                       │                                      │
-└───────────────────────┼──────────────────────────────────────┘
-                        │  REST API (JWT Auth)
-┌───────────────────────┼──────────────────────────────────────┐
-│                       │           Backend                    │
-│  ┌────────────────────▼────────────────────────────────────┐ │
-│  │              StoreApi.Api (Presentation)                │ │
-│  │         Controllers · Middleware · Authorization        │ │
-│  └────────────────────┬────────────────────────────────────┘ │
-│  ┌────────────────────▼────────────────────────────────────┐ │
-│  │         StoreSystem.Application (Business Logic)        │ │
-│  │              Services · DTOs · Validators               │ │
-│  └────────────────────┬────────────────────────────────────┘ │
-│  ┌────────────────────▼────────────────────────────────────┐ │
-│  │              StoreSystem.Core (Domain)                  │ │
-│  │        Entities · Interfaces · Enums · Models           │ │
-│  └────────────────────┬────────────────────────────────────┘ │
-│  ┌────────────────────▼────────────────────────────────────┐ │
-│  │       StoreSystem.Infrastructure (Data Access)          │ │
-│  │     EF Core · Dapper · Migrations · Repositories       │ │
-│  └─────────────────────────────────────────────────────────┘ │
-│                           │                                  │
-└───────────────────────────┼──────────────────────────────────┘
-                            │
-                   ┌────────▼────────┐
-                   │   PostgreSQL    │
-                   │    Database     │
-                   └─────────────────┘
+```mermaid
+graph TD
+    subgraph Frontend [Frontend: Next.js 16 App Router]
+        UI[UI Components & Pages]
+        State[Zustand & React Query]
+        UI <--> State
+    end
+
+    subgraph Backend [Backend: .NET 10 Clean Architecture]
+        API[StoreApi.Api Layer<br/>Controllers, SignalR Hubs]
+        App[Application Layer<br/>CQRS Handlers, DTOs, Validation]
+        Domain[Core Layer<br/>Entities, Interfaces]
+        Infra[Infrastructure Layer<br/>EF Core, Dapper Repositories]
+
+        API --> App
+        App --> Domain
+        Infra --> Domain
+        API --> Infra
+    end
+
+    Frontend <-->|REST API / JWT| API
+    Frontend <-->|WebSockets| API
+    
+    DB[(PostgreSQL Database)]
+    Infra <--> DB
 ```
 
 <br/>
@@ -210,201 +187,82 @@
 
 ### Prerequisites
 
-| Tool       | Version   |
-| ---------- | --------- |
-| Node.js    | `>= 18.x` |
-| .NET SDK   | `10.0`    |
-| PostgreSQL | `>= 14`   |
+| Requirements | Version |
+|--------------|---------|
+| Node.js | `>= 18.x` |
+| .NET SDK | `10.0` |
+| PostgreSQL | `>= 14` |
 
-### 1️⃣ Clone the Repository
+### 1️⃣ Backend Setup
 
-```bash
-git clone https://github.com/b2i0l0a3l/Store.git
-cd Store
-```
+1. **Navigate to the Backend directory:**
+   ```bash
+   cd Backend
+   ```
+2. **Configure Environment:**
+   Copy `.env.example` to `.env` and fill in your PostgreSQL connection string and JWT secret.
+   ```bash
+   cp .env.example .env
+   ```
+3. **Run Migrations & Start Server:**
+   ```bash
+   dotnet restore
+   dotnet ef database update --project StoreSystem.Infrastructure --startup-project StoreApi.Api
+   dotnet run --project StoreApi.Api
+   ```
+   *The API will be available at `http://localhost:5107` with Swagger UI at `/swagger`.*
 
-### 2️⃣ Backend Setup
+### 2️⃣ Frontend Setup
 
-```bash
-# Navigate to backend
-cd Backend
-
-# Copy environment variables
-cp .env.example .env
-# Edit .env with your database connection string and JWT settings
-
-# Restore dependencies
-dotnet restore
-
-# Apply database migrations
-dotnet ef database update --project StoreSystem.Infrastructure --startup-project StoreApi.Api
-
-# Run the API server
-dotnet run --project StoreApi.Api
-```
-
-> [!TIP]
-> The API will be available at `https://localhost:5001` with Swagger UI at `/swagger`
-
-### 3️⃣ Frontend Setup
-
-```bash
-# Navigate to frontend
-cd FrontEnd
-
-# Install dependencies
-npm install
-
-# Configure environment
-cp .env.local.example .env.local
-# Set NEXT_PUBLIC_API_URL to your backend URL
-
-# Start development server (with Turbopack ⚡)
-npm run dev
-```
-
-> [!TIP]
-> The app will be available at `http://localhost:3000`
+1. **Navigate to the Frontend directory:**
+   ```bash
+   cd FrontEnd
+   ```
+2. **Install Dependencies:**
+   ```bash
+   npm install
+   ```
+3. **Configure Environment:**
+   Create `.env.local` and configure the API URL.
+   ```bash
+   # Add your API path here
+   NEXT_PUBLIC_API_URL="http://localhost:5107/api/v1"
+   ```
+4. **Start Development Server:**
+   ```bash
+   npm run dev
+   ```
+   *The web application will be accessible at `http://localhost:3000`.*
 
 <br/>
 
-## 📡 API Endpoints
+## 📡 Essential API Endpoints
 
-<details>
-<summary><strong>🔐 Authentication</strong></summary>
+A fully documented **Swagger UI** is available when running the application. Below is a subset of core endpoints:
 
-| Method | Endpoint             | Description            |
-| ------ | -------------------- | ---------------------- |
-| `POST` | `/api/auth/register` | Register a new user    |
-| `POST` | `/api/auth/login`    | Login & get JWT tokens |
-| `POST` | `/api/auth/refresh`  | Refresh access token   |
+- **Auth:** `POST /api/v1/Auth/login`, `POST /api/v1/Auth/refresh`
+- **Products:** `GET /api/v1/Product`, `POST /api/v1/Product`
+- **Orders:** `GET /api/v1/Order`, `POST /api/v1/Order`
+- **Dashboard:** `GET /api/v1/Dashboard`, `GET /api/v1/Dashboard/revenue`
 
-</details>
-
-<details>
-<summary><strong>📦 Products</strong></summary>
-
-| Method   | Endpoint             | Description          |
-| -------- | -------------------- | -------------------- |
-| `GET`    | `/api/products`      | Get all products     |
-| `GET`    | `/api/products/{id}` | Get product by ID    |
-| `POST`   | `/api/products`      | Create a new product |
-| `PUT`    | `/api/products/{id}` | Update a product     |
-| `DELETE` | `/api/products/{id}` | Delete a product     |
-
-</details>
-
-<details>
-<summary><strong>🏷️ Categories</strong></summary>
-
-| Method   | Endpoint               | Description           |
-| -------- | ---------------------- | --------------------- |
-| `GET`    | `/api/categories`      | Get all categories    |
-| `GET`    | `/api/categories/{id}` | Get category by ID    |
-| `POST`   | `/api/categories`      | Create a new category |
-| `PUT`    | `/api/categories/{id}` | Update a category     |
-| `DELETE` | `/api/categories/{id}` | Delete a category     |
-
-</details>
-
-<details>
-<summary><strong>👥 Clients</strong></summary>
-
-| Method   | Endpoint            | Description         |
-| -------- | ------------------- | ------------------- |
-| `GET`    | `/api/clients`      | Get all clients     |
-| `GET`    | `/api/clients/{id}` | Get client by ID    |
-| `POST`   | `/api/clients`      | Create a new client |
-| `PUT`    | `/api/clients/{id}` | Update a client     |
-| `DELETE` | `/api/clients/{id}` | Delete a client     |
-
-</details>
-
-<details>
-<summary><strong>🛒 Orders · 💰 Payments · 📊 Debts · 🔄 Returns · 🚚 Suppliers</strong></summary>
-
-> Full CRUD endpoints available for all resources. See Swagger UI for complete documentation.
-
-</details>
-
-<br/>
-
-## 📁 Project Structure
-
-```
-store/
-├── 📂 Backend/                          # .NET 10 Web API
-│   ├── 📂 StoreApi.Api/                 # Presentation Layer
-│   │   ├── 📂 Controllers/              # API Controllers (12)
-│   │   ├── 📂 Authorization/            # Auth configuration
-│   │   ├── 📂 Middleware/               # Custom middleware
-│   │   └── 📄 Program.cs               # App entry point
-│   ├── 📂 StoreSystem.Application/      # Business Logic Layer
-│   ├── 📂 StoreSystem.Core/             # Domain Layer
-│   │   ├── 📂 Entities/                 # Domain entities (14)
-│   │   ├── 📂 Models/                   # DTOs & view models
-│   │   ├── 📂 Interfaces/              # Repository contracts
-│   │   └── 📂 Enums/                   # Enumerations
-│   └── 📂 StoreSystem.Infrastructure/   # Data Access Layer
-│       ├── 📂 Migrations/              # EF Core migrations
-│       ├── 📂 Presistence/             # DbContext & configs
-│       └── 📂 Shared/                  # Shared implementations
-│
-└── 📂 FrontEnd/                         # Next.js 16 App
-    └── 📂 app/
-        ├── 📂 (auth)/                   # Auth pages (Login/Register)
-        ├── 📂 (marketing)/              # Public pages
-        ├── 📂 Features/                 # Feature modules
-        │   ├── 📂 Products/             # Product management
-        │   ├── 📂 Categories/           # Category management
-        │   ├── 📂 clients/              # Client management
-        │   ├── 📂 Orders/               # Order management
-        │   ├── 📂 Debts/                # Debt tracking
-        │   └── 📂 Sells/               # Sales management
-        ├── 📂 components/               # Shared UI components
-        └── 📂 util/                     # Utilities & helpers
-```
-
-<br/>
-
-## 🔑 Key Design Decisions
-
-- **CQRS Pattern** — Clear separation of Commands (Writes) and Queries (Reads) using **MediatR** in the Application layer
-- **Clean Architecture** — Backend follows layered architecture with dependency inversion
-- **Feature-Based Architecture** — Frontend organized by business feature for scalability
-- **Dual ORM Strategy** — EF Core for CRUD operations + Dapper for complex/performance-critical queries
-- **Server Components** — Leverages React 19 Server Components for optimal performance
-- **Turbopack** — Uses Next.js Turbopack for lightning-fast development builds
+*(Refer to swagger for full documentation including sorting, filtering, and pagination details).*
 
 <br/>
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions, issues, and feature requests are welcome!
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
-
-<br/>
 
 ## 📝 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
-<br/>
+Distributed under the MIT License. See `LICENSE` for more information.
 
 <div align="center">
-
----
-
-<p>
-  <sub>Built with ❤️ using modern web technologies</sub>
-</p>
-
-![Stars](https://img.shields.io/github/stars/your-username/store-management-system?style=social)
-![Forks](https://img.shields.io/github/forks/your-username/store-management-system?style=social)
-
+  <p>Built with ❤️ using modern web technologies</p>
 </div>
