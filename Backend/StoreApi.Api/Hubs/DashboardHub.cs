@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using StoreSystem.Core.Entities;
+using BookingSystem.Core.common;
 
 namespace StoreApi.Api.Hubs
 {
-    [Authorize]
-    public class NotificationHub : Hub
+    [Authorize(Roles = Roles.Admin)]
+    public class DashboardHub : Hub
     {
         public override async Task OnConnectedAsync()
         {

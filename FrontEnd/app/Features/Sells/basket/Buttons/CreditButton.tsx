@@ -2,11 +2,13 @@
 "use client";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { CurrencyDollarIcon } from "@heroicons/react/16/solid";
-import { memo, useCallback, useMemo, useState } from "react";
-import CreditModal from "../modals/CreditModal";
+import { memo, useState } from "react";
 import { useStore } from "../../store/store";
-import { useProductStore } from "@/app/Features/Products/store/product";
+import dynamic from "next/dynamic";
 
+const CreditModal = dynamic(() => import("../modals/CreditModal"), {
+    loading: () => <div>Loading...</div>,
+});
 function CreditButton() {
     const [open, setOpen] = useState(false);
     const cart = useStore((state) => state.cart);

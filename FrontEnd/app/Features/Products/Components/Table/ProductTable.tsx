@@ -34,9 +34,33 @@ export default function ProductTable({
           ),
       },
       { key: "name", label: "Name" },
-      { key: "categoryName", label: "Category" },
-      { key: "price", label: "Price" , render: (item) => item.price.toFixed(2) },
-      { key: "cost", label: "Cost" , render: (item) => item.cost.toFixed(2) },
+      {
+        key: "categoryName",
+        label: "Category",
+        render: (item) => (
+          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-violet-500/15 text-violet-400 border border-violet-500/25">
+            {item.categoryName}
+          </span>
+        ),
+      },
+      {
+        key: "price",
+        label: "Price",
+        render: (item) => (
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
+            {item.price.toFixed(2)} DA
+          </span>
+        ),
+      },
+      {
+        key: "cost",
+        label: "Cost",
+        render: (item) => (
+          <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-400 border border-amber-500/25">
+            {item.cost.toFixed(2)} DA
+          </span>
+        ),
+      },
       { 
         key: "quantity", 
         label: "Quantity",

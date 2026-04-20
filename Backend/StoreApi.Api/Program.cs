@@ -46,6 +46,7 @@ builder.Services.AddInfrastructurServiceRegistration(builder.Configuration);
 builder.Services.AddApplicationServices();
 builder.Services.AddSignalR();
 builder.Services.AddScoped<StoreSystem.Application.Interface.INotificationService, StoreApi.Api.Services.NotificationService>();
+builder.Services.AddScoped<StoreSystem.Application.Interface.IDashboardNotificationService, StoreApi.Api.Services.DashboardNotificationService>();
 builder.Services.AddSingleton<StoreSystem.Application.Interface.IBackgroundTaskQueue, StoreSystem.Application.Interface.BackgroundTaskQueue>();
 builder.Services.AddHostedService<StoreApi.Api.Services.QueuedHostedService>();
 
@@ -196,6 +197,7 @@ app.UseMiddleware<AuditMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<StoreApi.Api.Hubs.NotificationHub>("/hubs/notifications");
+app.MapHub<StoreApi.Api.Hubs.DashboardHub>("/hubs/dashboard");
 
 using (var scope = app.Services.CreateScope())
 {

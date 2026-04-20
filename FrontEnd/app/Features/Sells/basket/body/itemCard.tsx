@@ -7,6 +7,7 @@ import QuantityInput from "../input/quantityInput";
 
 export default function ItemCard({ item, idx }: { item: item; idx: number }) {
   const removeFromCart = useStore((state: any) => state.removeFromCart);
+  const updatePrice = useStore((state: any) => state.updatePrice);
 
   return (
     <div>
@@ -22,9 +23,17 @@ export default function ItemCard({ item, idx }: { item: item; idx: number }) {
             <h3 className="text-sm font-medium text-slate-200 line-clamp-2">
               {item.name}
             </h3>
-            <p className="text-sm font-bold text-blue-400 mt-1">
-              ${item.price?.toFixed(2)}
-            </p>
+            <div className="flex items-center gap-1 mt-1">
+              <span className="text-sm font-bold text-blue-400">$</span>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={item.price === 0 ? "" : item.price}
+                onChange={(e) => updatePrice(item.productId, parseFloat(e.target.value) || 0)}
+                className="w-20 bg-slate-900/50 text-sm font-bold text-blue-400 p-0.5 border border-slate-700/50 rounded-md focus:border-blue-500 focus:outline-none"
+              />
+            </div>
           </div>
           <button
             type="button"

@@ -8,6 +8,7 @@ import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CustomButton from "@/app/components/Ui/buttons/CustomButton";
 import { toast } from "@/app/store/useToastStore";
 
+
 export default function BuyButton() {
   const [loading, setLoading] = useState(false);
 

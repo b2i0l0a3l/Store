@@ -42,6 +42,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                     await notificationRepo.Add(orderNotification);
 
                     await  notificationService.BroadcastNotificationAsync(orderNotification);
+
+                    var dashboardService = sp.GetService<IDashboardNotificationService>();
+                    if (dashboardService != null)
+                    {
+                        await dashboardService.BroadcastDashboardUpdateAsync();
+                    }
                 
                     });
             return result;

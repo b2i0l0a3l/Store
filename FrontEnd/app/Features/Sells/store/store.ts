@@ -13,6 +13,7 @@ interface CartState {
   copy : (item: CartItem[]) => void;
   addToCart: (item: CartItem) => void;
   updateQuantity: (productId: number, quantity: number) => void;
+  updatePrice: (productId: number, price: number) => void;
   removeFromCart: (productId: number) => void;
   clearCart: () => void;
 }
@@ -50,6 +51,14 @@ export const useStore = create<CartState>((set) => ({
       cart: state.cart.map((cItem) =>
         cItem.productId === productId
           ? { ...cItem, quantity: cItem?.stockQuantity ? checkQuantity(quantity , cItem.stockQuantity ) : quantity }
+          : cItem,
+      ),
+    })),
+  updatePrice: (productId, price) =>
+    set((state) => ({
+      cart: state.cart.map((cItem) =>
+        cItem.productId === productId
+          ? { ...cItem, price: price < 0 ? 0 : price }
           : cItem,
       ),
     })),

@@ -11,12 +11,30 @@ import { useMemo } from "react";
 export default function OrderItemTable({ data , orderId}: { data: OrderItem[] , orderId: number}) {
   const columns: Column<OrderItem>[] = [
     { key: "productName", label: "Product Name" },
-    { key: "quantity", label: "Quantity" },
-    { key: "price", label: "Price", render: (item) => item.price.toFixed(2) },
+    {
+      key: "quantity",
+      label: "Quantity",
+      render: (item) => (
+        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/15 text-sky-400 border border-sky-500/25">
+          ×{item.quantity}
+        </span>
+      ),
+    },
+    {
+      key: "price",
+      label: "Price",
+      render: (item) => (
+        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
+          {item.price.toFixed(2)} DA
+        </span>
+      ),
+    },
     {
       key: "createdAt",
       label: "Created At",
-      render: (item) => formatDate(item.createdAt),
+      render: (item) => (
+        <span className="text-slate-400 text-xs">{formatDate(item.createdAt)}</span>
+      ),
     },
     {
       key: "action",

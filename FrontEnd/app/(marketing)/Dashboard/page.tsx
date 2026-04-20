@@ -9,6 +9,7 @@ import TopClientList from "../../Features/Dashboard/components/TopClientList";
 import UsersManagementTable from "../../Features/Dashboard/components/UsersManagementTable";
 import Loading from "../../components/Ui/Loading/Loading";
 import { CurrentUser } from "../../util/currentUser";
+import DashboardLiveRefresher from "../../Features/Dashboard/components/DashboardLiveRefresher";
 
 import {
   fetchDashboardSummary,
@@ -79,7 +80,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
-
+      <DashboardLiveRefresher />
       <div className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
         <p className="text-sm text-slate-400">Welcome back. Here is what&apos;s happening with your store today.</p>

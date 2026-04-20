@@ -9,12 +9,18 @@ const columns: Column<Payment>[] = [
   {
     key: "amount",
     label: "Amount",
-    render: (item) => <span>{item.amount.toFixed(2)}</span>,
+    render: (item) => (
+      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/25">
+        {item.amount.toFixed(2)} DA
+      </span>
+    ),
   },
   {
     key: "paidAt",
     label: "Paid At",
-    render: (item) => formatDate(new Date(item.paidAt)),
+    render: (item) => (
+      <span className="text-slate-400 text-xs">{formatDate(new Date(item.paidAt))}</span>
+    ),
   },
   {
     key: "action",

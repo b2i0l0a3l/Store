@@ -83,6 +83,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Order
                         var batch = notificationsToInsert.Skip(i).Take(batchSize).ToList();
                         await Task.WhenAll(batch.Select(n => notificationService.BroadcastNotificationAsync(n)));
                     }
+                    
+                    var dashboardService = sp.GetService<IDashboardNotificationService>();
+                    if (dashboardService != null)
+                    {
+                        await dashboardService.BroadcastDashboardUpdateAsync();
+                    }
                 
                     });
             }
