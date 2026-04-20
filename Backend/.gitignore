@@ -111,3 +111,8 @@ obj/
 
 # Logs
 *.log
+
+# Publish
+publish/
+ 
+bin\

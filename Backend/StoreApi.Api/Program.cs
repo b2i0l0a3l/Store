@@ -180,6 +180,8 @@ app.UseStaticFiles(new StaticFileOptions
 
 
 app.UseRouting();
+app.UseCors("Allow"); 
+
 app.UseRateLimiter();
 app.Use(async (context, next) =>
 {
@@ -190,7 +192,6 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsync("Too many login attempts. Please try again later.");
     }
 });
-app.UseCors("Allow"); 
 
 app.UseAuthentication(); 
 app.UseMiddleware<AuditMiddleware>();
