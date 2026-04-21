@@ -40,7 +40,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
                     FullName = request.FullName,
                     UserName = request.Email,
                     Email = request.Email,
-                    Role = Roles.Staff,
                     ImagePath = request.ImagePath ?? null
                 };
                 var result = await _UserManager.CreateAsync(user, request.Password);
@@ -56,7 +55,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
                 return new RegisterModel()
                 {
                     Email = user.UserName,
-                    Role = user.Role
                 };
             }catch
             {

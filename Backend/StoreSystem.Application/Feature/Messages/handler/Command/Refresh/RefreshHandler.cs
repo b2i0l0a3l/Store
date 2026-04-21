@@ -48,14 +48,15 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             if (refreshToken.RefreshTokenExpiresAt == null || refreshToken.RefreshTokenExpiresAt <= DateTime.UtcNow)
                 return new Error("RefreshTokenExpiredError", Core.enums.ErrorType.General, "Refresh token expired");
             bool isVerified = BCrypt.Net.BCrypt.Verify(request.RefreshToken, refreshToken.RefreshTokenHash);
-            if(!isVerified)
+            if (!isVerified)
                 return new Error("RefreshTokenERROR", Core.enums.ErrorType.General, "Invalid refresh token");
  
+            string userRole = _UManager.GetRolesAsync(user).Result.FirstOrDefault() ?? "Staff";
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.Role, user.Role ?? "Viewer"),
+                new Claim(ClaimTypes.Role, userRole),
                 new Claim("TokenId", refreshToken.TokenId),
                 new Claim("FullName", user.FullName),
             };

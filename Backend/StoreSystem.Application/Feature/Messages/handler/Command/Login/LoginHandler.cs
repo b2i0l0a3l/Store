@@ -43,12 +43,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                 if (!result) return Errors.InvalidCredError;
 
                 string TokenId = _RefreshToken.Generate(16);
-
+                var roles = await _UManager.GetRolesAsync(user);
                 List<Claim> Claims = new()
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email!),
-                    new Claim(ClaimTypes.Role, user.Role ?? "Staff"),
+                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Staff"),
                     new Claim("TokenId", TokenId),
                     new Claim("FullName", user.FullName),
                 };

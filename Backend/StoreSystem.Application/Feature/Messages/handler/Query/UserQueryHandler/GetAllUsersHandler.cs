@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using StoreSystem.Application.Feature.Messages.Request.Query.UserQuery;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
@@ -14,9 +15,11 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query.UserQueryHandle
     public class GetAllUsersHandler : IRequestHandler<GetAllUsersRequest, Result<IEnumerable<UserModel>>>
     {
         private readonly IRepository<User> _Repo;
-        public  GetAllUsersHandler(IRepository<User> Repo)
+        private readonly UserManager<User> _UserManager;
+        public  GetAllUsersHandler(IRepository<User> Repo, UserManager<User> UserManager)
         {
             _Repo = Repo;
+            _UserManager = UserManager;
         }
         public async Task<Result<IEnumerable<UserModel>>> Handle(GetAllUsersRequest request, CancellationToken cancellationToken)
         {

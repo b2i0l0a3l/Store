@@ -39,8 +39,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.UserHandler
             var addResult = await _UserManager.AddToRoleAsync(User, request.Role);
             if (!addResult.Succeeded)
                 return new Error("AddRoleFailed", Core.enums.ErrorType.General, "Failed to add new role");
-            User.Role = request.Role;
-            await _UserManager.UpdateAsync(User);
             return Result.Success();    
         }
     }

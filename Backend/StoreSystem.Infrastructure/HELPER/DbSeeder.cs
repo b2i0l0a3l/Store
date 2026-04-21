@@ -27,10 +27,9 @@ namespace StoreSystem.Infrastructure.HELPER
                 UserName = config["ADMIN_EMAIL"],
                 Email = config["ADMIN_EMAIL"],
                 EmailConfirmed = true,
-                FullName = "Admin",
-                Role = Roles.Admin
+                FullName = "Admin"
             };
-
+            await userManager.AddToRoleAsync(admin,Roles.Admin);
             var result = await userManager.CreateAsync(
                 admin,
                 config["ADMIN_PASSWORD"]!
