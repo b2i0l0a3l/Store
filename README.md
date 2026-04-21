@@ -115,7 +115,8 @@ The **Store Management System** is a robust, highly scalable web application des
       </td>
     </tr>
   </table>
-  
+
+  DEMO:
   *Default Admin Login: `Admin@Store.com` / `Admin123!`*
 </div>
 
