@@ -1,7 +1,7 @@
 import { getAccessToken, getRefreshToken } from "@/app/(auth)/util/session";
-import { API_URL, fetchApi } from "@/app/util/Api/Api";
-import { CurrentTokenId, CurrentUser } from "@/app/util/currentUser";
-import { MyResponse } from "@/app/util/types";
+import { API_URL, fetchApi } from "@/util/Api/Api";
+import { CurrentTokenId, CurrentUser } from "@/util/currentUser";
+import { MyResponse } from "@/util/types";
 
 export interface LoginRequest {
   email: string;
@@ -75,7 +75,7 @@ export async function refresh(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -106,7 +106,11 @@ export async function Logout(): Promise<AuthResponse> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${await getAccessToken()}`,
       },
-      body: JSON.stringify({email:user?.email,tokenId :TokenId,refreshToken: refreshToken}),
+      body: JSON.stringify({
+        email: user?.email,
+        tokenId: TokenId,
+        refreshToken: refreshToken,
+      }),
     });
     await response.json();
     return { isSuccess: true, message: "Logout successful" };

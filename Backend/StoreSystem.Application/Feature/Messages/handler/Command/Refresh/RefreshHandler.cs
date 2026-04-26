@@ -56,10 +56,21 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email!),
-                new Claim(ClaimTypes.Role, userRole),
                 new Claim("TokenId", refreshToken.TokenId),
                 new Claim("FullName", user.FullName),
             };
+            var roles = await _UManager.GetRolesAsync(user);
+            if (roles.Any())
+                {
+                    foreach (var role in roles)
+                    {
+                        claims.Add(new Claim(ClaimTypes.Role, role));
+                    }
+                }
+                else
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Staff"));
+                }
             if (user.ImagePath != null)
                 claims.Add(new Claim("ImagePath", user.ImagePath));
            

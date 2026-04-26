@@ -1,6 +1,6 @@
-import { GetPayments } from "@/app/Features/Payments/api/paymentApi";
-import PaymentSection from "@/app/Features/Payments/Components/PaymentSection";
-import Loading from "@/app/components/Ui/Loading/Loading";
+import { GetPayments } from "@/Features/Payments/api/paymentApi";
+import PaymentSection from "@/Features/Payments/Components/PaymentSection";
+import Loading from "@/components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

@@ -26,6 +26,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             {
                 p.DebtID = request.DebtID;
                 p.Amount = request.Amount;
+                p.Notes = request.Notes;
+                p.PaymentMethod = request.PaymentMethod;
             });
 
             return result;

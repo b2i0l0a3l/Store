@@ -1,22 +1,23 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { decodeJwt } from "jose";
-import { CurrentTokenId } from "./app/util/currentUser";
+import { CurrentTokenId } from "./util/currentUser";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const ROLE_CLAIM = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+const ROLE_CLAIM =
+  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
 const routePermissions = [
   { path: "/Dashboard", allowedRoles: ["Admin"] },
   { path: "/Products", allowedRoles: ["Admin"] },
   { path: "/Clients", allowedRoles: ["Admin"] },
   { path: "/Categories", allowedRoles: ["Admin"] },
-  { path: "/Orders", allowedRoles: ["Admin","Staff"] },
+  { path: "/Orders", allowedRoles: ["Admin", "Staff"] },
   { path: "/Debts", allowedRoles: ["Admin"] },
   { path: "/Payments", allowedRoles: ["Admin"] },
-  { path: "/", allowedRoles: ["Admin","Staff"], exact: true },
+  { path: "/", allowedRoles: ["Admin", "Staff"], exact: true },
 ];
- 
+
 function isTokenExpired(token: string): boolean {
   try {
     const decoded = decodeJwt(token);
@@ -48,9 +49,14 @@ function getRoleAccessRedirect(token: string, pathname: string): string | null {
 
     let isAllowed = false;
     if (pathname === "/") {
-      isAllowed = routePermissions.find(r => r.path === "/")?.allowedRoles?.includes(role) ?? false;
+      isAllowed =
+        routePermissions
+          .find((r) => r.path === "/")
+          ?.allowedRoles?.includes(role) ?? false;
     } else {
-      const permission = routePermissions.find((r) => !r.exact && pathname.startsWith(r.path));
+      const permission = routePermissions.find(
+        (r) => !r.exact && pathname.startsWith(r.path),
+      );
       if (permission) {
         isAllowed = permission.allowedRoles?.includes(role) ?? false;
       } else {
@@ -73,8 +79,8 @@ export async function proxy(request: NextRequest) {
   const TokenID = await CurrentTokenId();
   const refreshToken = request.cookies.get("refreshToken")?.value;
 
-  if(pathname === "/login" || pathname === "/register"){
-    if(accessToken && refreshToken){
+  if (pathname === "/login" || pathname === "/register") {
+    if (accessToken && refreshToken) {
       request.cookies.clear();
     }
   }
@@ -118,9 +124,9 @@ export async function proxy(request: NextRequest) {
 
     const redirectPath = getRoleAccessRedirect(newAccessToken, pathname);
     let finalResponse = NextResponse.next();
-    
+
     if (redirectPath) {
-       finalResponse = NextResponse.redirect(new URL(redirectPath, request.url));
+      finalResponse = NextResponse.redirect(new URL(redirectPath, request.url));
     }
 
     finalResponse.cookies.set("accessToken", newAccessToken, {

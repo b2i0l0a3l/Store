@@ -1,10 +1,10 @@
-import Cart from "../Features/Sells/basket/Cart";
-import CardSection from "../components/Ui/Card/Card";
-import SellSection from "../Features/Sells/SellSection";
+import Cart from "../../Features/Sells/basket/Cart";
+import CardSection from "../../components/Ui/Card/Card";
+import SellSection from "../../Features/Sells/SellSection";
 import { ArchiveBoxIcon } from "@heroicons/react/24/solid";
-import { fetchProducts } from "../Features/Products/api/productActions";
-import { getCategories } from "../Features/Categories/api/categoryApi";
-import Loading from "../components/Ui/Loading/Loading";
+import { fetchProducts } from "../../Features/Products/api/productActions";
+import { getCategories } from "../../Features/Categories/api/categoryApi";
+import Loading from "../../components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

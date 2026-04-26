@@ -31,14 +31,16 @@ namespace StoreSystem.Infrastructure.presistence.database.procedures
 
                 parameters.Add("p_debt_id", req.DebtId);
                 parameters.Add("p_amount", req.Amount);
+                parameters.Add("p_notes", req.Notes);
+                parameters.Add("p_payment_method", req.PaymentMethod);
 
-                var result = await connection.ExecuteAsync("CALL sp_add_payment(@p_debt_id,@p_amount)",
+                var result = await connection.ExecuteAsync("CALL sp_add_payment(@p_debt_id,@p_amount,@p_notes,@p_payment_method)",
                     parameters,
                     transaction: transaction.GetDbTransaction()
                 );
                 await transaction.CommitAsync();
                 return Result.Success();
-            }
+            }   
             catch (Exception ex)
             {
                 await _Context.Database.RollbackTransactionAsync();

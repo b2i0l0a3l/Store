@@ -24,8 +24,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
 
         public async Task<Result> Handle(AddPaymentRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.Handle(new AddPaymentModel { Amount = request.Amount, DebtId = request.DebtId });
-              await _taskQueue.EnqueueAsync(async (sp, ct) =>
+            var result = await _Repo.Handle(new AddPaymentModel { Amount = request.Amount, DebtId = request.DebtId, Notes = request.Notes, PaymentMethod = request.PaymentMethod });
+            await _taskQueue.EnqueueAsync(async (sp, ct) =>
                 {
 
                     IRepository<Notifications> notificationRepo = sp.GetRequiredService<IRepository<Notifications>>();

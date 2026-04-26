@@ -1,15 +1,21 @@
-import { useEffect, useState } from 'react';
-import * as signalR from '@microsoft/signalr';
-import { useNotificationStore, AppNotification } from '../store/useNotificationStore';
-import { getAccessToken } from '../(auth)/util/session';
-import { useToastStore } from '../store/useToastStore';
-import { fetchApi } from '../util/Api/Api';
+import { useEffect, useState } from "react";
+import * as signalR from "@microsoft/signalr";
+import {
+  useNotificationStore,
+  AppNotification,
+} from "@/store/useNotificationStore";
+import { getAccessToken } from "../(auth)/util/session";
+import { useToastStore } from "@/store/useToastStore";
+import { fetchApi } from "../../util/Api/Api";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "");
 
 export const useSignalR = () => {
-  const [connection, setConnection] = useState<signalR.HubConnection | null>(null);
-  const { addNotification, setNotifications, setLoading } = useNotificationStore();
+  const [connection, setConnection] = useState<signalR.HubConnection | null>(
+    null,
+  );
+  const { addNotification, setNotifications, setLoading } =
+    useNotificationStore();
   const addToast = useToastStore((state) => state.addToast);
 
   useEffect(() => {
@@ -18,14 +24,14 @@ export const useSignalR = () => {
 
     const setupConnection = async () => {
       const token = await getAccessToken();
-      
+
       if (!token) {
         setLoading(false);
         return;
       }
 
       try {
-        const response = await fetchApi<AppNotification[]>('/Notification/All');
+        const response = await fetchApi<AppNotification[]>("/Notification/All");
         if (response.succeeded && response.value && isMounted) {
           setNotifications(response.value);
         }
@@ -39,17 +45,23 @@ export const useSignalR = () => {
         .withUrl(`${BASE_URL}/hubs/notifications`, {
           accessTokenFactory: () => token,
           skipNegotiation: true,
-          transport: signalR.HttpTransportType.WebSockets
+          transport: signalR.HttpTransportType.WebSockets,
         })
         .withAutomaticReconnect()
         .build();
 
-      hubConnection.on('ReceiveNotification', (notification: AppNotification) => {
-        if (isMounted) {
-          addNotification(notification);
-          addToast({ message: notification.title, type: notification.type === 1 ? "warning" : "info" });
-        }
-      });
+      hubConnection.on(
+        "ReceiveNotification",
+        (notification: AppNotification) => {
+          if (isMounted) {
+            addNotification(notification);
+            addToast({
+              message: notification.title,
+              type: notification.type === 1 ? "warning" : "info",
+            });
+          }
+        },
+      );
 
       try {
         await hubConnection.start();
@@ -57,7 +69,7 @@ export const useSignalR = () => {
           setConnection(hubConnection);
         }
       } catch (err) {
-        console.error('SignalR Connection Error: ', err);
+        console.error("SignalR Connection Error: ", err);
       }
     };
 

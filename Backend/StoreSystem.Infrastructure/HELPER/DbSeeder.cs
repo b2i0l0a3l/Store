@@ -16,11 +16,10 @@ namespace StoreSystem.Infrastructure.HELPER
             UserManager<User> userManager,
             IConfiguration config)
         {
-          
-            var adminExists = userManager.Users
-                .Any(u => u.Email == config["ADMIN_EMAIL"]);
+            
+            var adminExists = await userManager.FindByEmailAsync(config["ADMIN_EMAIL"]);
 
-            if (adminExists) return;
+            if (adminExists != null) return;
 
             User admin = new ()
             {
@@ -29,11 +28,12 @@ namespace StoreSystem.Infrastructure.HELPER
                 EmailConfirmed = true,
                 FullName = "Admin"
             };
-            await userManager.AddToRoleAsync(admin,Roles.Admin);
             var result = await userManager.CreateAsync(
                 admin,
                 config["ADMIN_PASSWORD"]!
             );
+            if(result.Succeeded)
+                await userManager.AddToRoleAsync(admin,Roles.Admin);
         }
     }
 }

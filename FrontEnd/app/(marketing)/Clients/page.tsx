@@ -1,6 +1,6 @@
-import ClientSection from "@/app/Features/clients/Components/ClientSection";
-import { getClients } from "@/app/Features/clients/api/clientApi";
-import Loading from "@/app/components/Ui/Loading/Loading";
+import ClientSection from "@/Features/clients/Components/ClientSection";
+import { getClients } from "@/Features/clients/api/clientApi";
+import Loading from "@/components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

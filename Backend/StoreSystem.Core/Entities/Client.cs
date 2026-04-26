@@ -14,7 +14,8 @@ namespace StoreSystem.Core.Entities
         public string? Name { get; set; } = string.Empty;
         [MaxLength(10)]
         public string? PhoneNumber { get; set; } 
-
+        public string? Address { get; set; }
+        
         public ICollection<Order>? Orders { get; set; }
         public ICollection<Debt>? Debts { get; set; }
         public ICollection<Invoice>? Invoices { get; set; }

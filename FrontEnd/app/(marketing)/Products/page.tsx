@@ -1,7 +1,7 @@
-import ProductSection from "@/app/Features/Products/Components/ProductSection";
-import { getProducts } from "@/app/Features/Products/api/productApi";
-import { getCategories } from "@/app/Features/Categories/api/categoryApi";
-import Loading from "@/app/components/Ui/Loading/Loading";
+import ProductSection from "@/Features/Products/Components/ProductSection";
+import { getProducts } from "@/Features/Products/api/productApi";
+import { getCategories } from "@/Features/Categories/api/categoryApi";
+import Loading from "@/components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

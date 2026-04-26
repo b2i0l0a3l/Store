@@ -7,21 +7,19 @@ namespace StoreSystem.Application.Feature.Messages.Validators.Product
     {
         public UpdateProductValidator()
         {
-            RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("معرف المنتج غير صالح");
-
-            RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("اسم المنتج مطلوب")
-                .MaximumLength(100).WithMessage("اسم المنتج يجب أن لا يتجاوز 100 حرف");
+RuleFor(x => x.Name)
+                .NotEmpty().WithMessage("Product name is required")
+                .MaximumLength(100).WithMessage("Product name must not exceed 100 characters");
 
             RuleFor(x => x.Price)
-                .GreaterThan(0).WithMessage("سعر المنتج يجب أن يكون أكبر من صفر");
+                .GreaterThan(0).WithMessage("Product price must be a positive number");
 
             RuleFor(x => x.Cost)
-                .GreaterThanOrEqualTo(0).WithMessage("تكلفة المنتج يجب أن تكون صفر أو أكبر");
+                .GreaterThanOrEqualTo(0).WithMessage("Product cost must be zero or greater");
+            RuleFor(x => x.Cost)
+                .GreaterThanOrEqualTo(0).WithMessage("Product quantity must be greater than zero");
 
             RuleFor(x => x.CategoryId)
-                .GreaterThan(0).WithMessage("يجب اختيار تصنيف صالح");
-        }
+                .NotEmpty().WithMessage("A valid category must be selected");        }
     }
 }

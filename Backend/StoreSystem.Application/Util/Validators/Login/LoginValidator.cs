@@ -13,6 +13,7 @@ namespace StoreSystem.Application.shared.Validators.Login
         {
             RuleFor(x => x.Email).NotEmpty().WithMessage("Email is Required") .EmailAddress().WithMessage("Invalid email format");;
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password is Required");
+            
         }
     }
 }

@@ -21,12 +21,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             var client = new Client
             {
                 Name = request.Name,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
+                Address = request.Address
             };
 
             var result = await _Repo.Add(client);
             if (!result.IsSuccess) return result.Error!;
-
             return ClientModel.FromEntity(result.Value!);
         }
     }

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { validateLoginFields } from "../util/validation";
 import { login } from "@/app/(auth)/api/authApi";
-import { setAccessToken, setRefreshToken } from "../util/session";
+import { setAccessToken, setRefreshToken } from "@/app/(auth)/util/session";
 import type { LoginState } from "../util/types";
 
 export default function LoginForm() {

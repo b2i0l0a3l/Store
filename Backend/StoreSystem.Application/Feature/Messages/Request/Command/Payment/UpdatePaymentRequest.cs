@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using StoreSystem.Core.common;
+using StoreSystem.Core.enums;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command
 {
@@ -12,5 +13,7 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command
         public int Id { get; set; }
         public int DebtID { get; set; }
         public decimal Amount { get; set; }
+        public string? Notes { get; set; }
+        public enPaymentMethod PaymentMethod { get; set; } = enPaymentMethod.Cash;
     }
 }

@@ -1,0 +1,232 @@
+
+> learning-next@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 8 errors:
+./components/Ui/Toast/Toast.tsx:2:1
+Module not found: Can't resolve '../../../app/store/useToastStore'
+[0m [90m 1 |[39m [36mimport[39m { useEffect[33m,[39m useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 2 |[39m [36mimport[39m { [33mToastMessage[39m[33m,[39m useToastStore } [36mfrom[39m [32m"../../../app/store/useToastStore"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 3 |[39m [36mimport[39m {
+ [90m 4 |[39m   [33mCheckCircleIcon[39m[33m,[39m
+ [90m 5 |[39m   [33mExclamationCircleIcon[39m[33m,[39m[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./components/Ui/Toast/Toast.tsx [Client Component Browser]
+    ./components/Ui/Toast/ToastContainer.tsx [Client Component Browser]
+    ./components/Ui/Toast/ToastContainer.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/Ui/Toast/Toast.tsx [Client Component SSR]
+    ./components/Ui/Toast/ToastContainer.tsx [Client Component SSR]
+    ./components/Ui/Toast/ToastContainer.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./components/Ui/Toast/ToastContainer.tsx:3:1
+Module not found: Can't resolve '../../../app/store/useToastStore'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { useToastStore } [36mfrom[39m [32m"../../../app/store/useToastStore"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m [33mToast[39m [36mfrom[39m [32m"./Toast"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { useEffect[33m,[39m useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 6 |[39m[0m
+
+
+
+Import trace:
+  Server Component:
+    ./components/Ui/Toast/ToastContainer.tsx
+    ./app/(marketing)/layout.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./app/(auth)/login/form.tsx:4:1
+Module not found: Can't resolve '@/(auth)/api/authApi'
+[0m [90m 2 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 3 |[39m [36mimport[39m { validateLoginFields } [36mfrom[39m [32m"../util/validation"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { login } [36mfrom[39m [32m"@/(auth)/api/authApi"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m { setAccessToken[33m,[39m setRefreshToken } [36mfrom[39m [32m"@/app/(auth)/util/session"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m type { [33mLoginState[39m } [36mfrom[39m [32m"../util/types"[39m[33m;[39m
+ [90m 7 |[39m[0m
+
+Import map: aliased to relative './(auth)/api/authApi' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./app/(auth)/login/form.tsx
+    ./app/(auth)/login/LoginForm.tsx
+    ./app/(auth)/login/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./app/(auth)/register/form.tsx:5:1
+Module not found: Can't resolve '@/(auth)/api/authApi'
+[0m [90m 3 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { register } [36mfrom[39m [32m"@/(auth)/api/authApi"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { validateRegisterFields } [36mfrom[39m [32m"../util/validation"[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m type { [33mRegisterState[39m } [36mfrom[39m [32m"../util/types"[39m[33m;[39m
+ [90m 8 |[39m[0m
+
+Import map: aliased to relative './(auth)/api/authApi' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./app/(auth)/register/form.tsx
+    ./app/(auth)/register/RegisterForm.tsx
+    ./app/(auth)/register/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./components/side-bar/LogoutButton.tsx:3:1
+Module not found: Can't resolve '@/(auth)/api/authApi'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m
+ [90m 2 |[39m
+[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { [33mLogout[39m } [36mfrom[39m [32m"@/(auth)/api/authApi"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 4 |[39m [36mimport[39m { clearTokens } [36mfrom[39m [32m"@/(auth)/util/session"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33mCustomButton[39m [36mfrom[39m [32m"../Ui/buttons/CustomButton"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { [33mArrowLeftEndOnRectangleIcon[39m } [36mfrom[39m [32m"@heroicons/react/24/outline"[39m[33m;[39m[0m
+
+Import map: aliased to relative './(auth)/api/authApi' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./components/side-bar/LogoutButton.tsx [Client Component Browser]
+    ./components/side-bar/sidebar.tsx [Client Component Browser]
+    ./components/side-bar/SidebarProvider.tsx [Client Component Browser]
+    ./components/side-bar/SidebarProvider.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/side-bar/LogoutButton.tsx [Client Component SSR]
+    ./components/side-bar/sidebar.tsx [Client Component SSR]
+    ./components/side-bar/SidebarProvider.tsx [Client Component SSR]
+    ./components/side-bar/SidebarProvider.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./Features/Dashboard/components/DashboardLiveRefresher.tsx:6:1
+Module not found: Can't resolve '@/(auth)/util/session'
+[0m [90m 4 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m [33m*[39m [36mas[39m signalR [36mfrom[39m [32m"@microsoft/signalr"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { getAccessToken } [36mfrom[39m [32m"@/(auth)/util/session"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m
+ [90m 8 |[39m [36mconst[39m [33mBASE_URL[39m [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_API_URL[39m[33m?[39m[33m.[39mreplace([32m"/api/v1"[39m[33m,[39m [32m""[39m)[33m;[39m
+ [90m 9 |[39m[0m
+
+Import map: aliased to relative './(auth)/util/session' inside of [project]/
+
+
+Import trace:
+  Server Component:
+    ./Features/Dashboard/components/DashboardLiveRefresher.tsx
+    ./app/(marketing)/Dashboard/page.tsx
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./components/side-bar/LogoutButton.tsx:4:1
+Module not found: Can't resolve '@/(auth)/util/session'
+[0m [90m 2 |[39m
+ [90m 3 |[39m [36mimport[39m { [33mLogout[39m } [36mfrom[39m [32m"@/(auth)/api/authApi"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 4 |[39m [36mimport[39m { clearTokens } [36mfrom[39m [32m"@/(auth)/util/session"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 5 |[39m [36mimport[39m [33mCustomButton[39m [36mfrom[39m [32m"../Ui/buttons/CustomButton"[39m[33m;[39m
+ [90m 6 |[39m [36mimport[39m { [33mArrowLeftEndOnRectangleIcon[39m } [36mfrom[39m [32m"@heroicons/react/24/outline"[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m { useRouter } [36mfrom[39m [32m"next/navigation"[39m[33m;[39m[0m
+
+Import map: aliased to relative './(auth)/util/session' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./components/side-bar/LogoutButton.tsx [Client Component Browser]
+    ./components/side-bar/sidebar.tsx [Client Component Browser]
+    ./components/side-bar/SidebarProvider.tsx [Client Component Browser]
+    ./components/side-bar/SidebarProvider.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/side-bar/LogoutButton.tsx [Client Component SSR]
+    ./components/side-bar/sidebar.tsx [Client Component SSR]
+    ./components/side-bar/SidebarProvider.tsx [Client Component SSR]
+    ./components/side-bar/SidebarProvider.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./components/top-bar/NotificationBell.tsx:5:1
+Module not found: Can't resolve '@/hooks/useSignalR'
+[0m [90m 3 |[39m [36mimport[39m { useState[33m,[39m useRef[33m,[39m useEffect } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { [33mBellIcon[39m } [36mfrom[39m [32m"@heroicons/react/24/outline"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { useSignalR } [36mfrom[39m [32m"@/hooks/useSignalR"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { useNotificationStore } [36mfrom[39m [32m"@/store/useNotificationStore"[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m { fetchApi } [36mfrom[39m [32m"@/util/Api/Api"[39m[33m;[39m
+ [90m 8 |[39m[0m
+
+Import map: aliased to relative './hooks/useSignalR' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./components/top-bar/NotificationBell.tsx [Client Component Browser]
+    ./components/top-bar/TopBarClient.tsx [Client Component Browser]
+    ./components/top-bar/TopBarClient.tsx [Server Component]
+    ./components/top-bar/TopBar.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./components/top-bar/NotificationBell.tsx [Client Component SSR]
+    ./components/top-bar/TopBarClient.tsx [Client Component SSR]
+    ./components/top-bar/TopBarClient.tsx [Server Component]
+    ./components/top-bar/TopBar.tsx [Server Component]
+    ./app/(marketing)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./components/Ui/Toast/Toast.tsx:2:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./components/Ui/Toast/ToastContainer.tsx:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./app/(auth)/login/form.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./app/(auth)/register/form.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./components/side-bar/LogoutButton.tsx:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./Features/Dashboard/components/DashboardLiveRefresher.tsx:6:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./components/side-bar/LogoutButton.tsx:4:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./components/top-bar/NotificationBell.tsx:5:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

@@ -1,15 +1,15 @@
 import { Suspense } from "react";
-import SummaryCards from "../../Features/Dashboard/components/SummaryCards";
-import SalesChart from "../../Features/Dashboard/components/SalesChart";
-import LowStockAlertsTable from "../../Features/Dashboard/components/LowStockAlertsTable";
-import TopSellingProductsList from "../../Features/Dashboard/components/TopSellingProductsList";
-import RecentActivitiesFeed from "../../Features/Dashboard/components/RecentActivitiesFeed";
-import CashVsDebtWidget from "../../Features/Dashboard/components/CashVsDebtWidget";
-import TopClientList from "../../Features/Dashboard/components/TopClientList";
-import UsersManagementTable from "../../Features/Dashboard/components/UsersManagementTable";
-import Loading from "../../components/Ui/Loading/Loading";
-import { CurrentUser } from "../../util/currentUser";
-import DashboardLiveRefresher from "../../Features/Dashboard/components/DashboardLiveRefresher";
+import SummaryCards from "../../../Features/Dashboard/components/SummaryCards";
+import SalesChart from "../../../Features/Dashboard/components/SalesChart";
+import LowStockAlertsTable from "../../../Features/Dashboard/components/LowStockAlertsTable";
+import TopSellingProductsList from "../../../Features/Dashboard/components/TopSellingProductsList";
+import RecentActivitiesFeed from "../../../Features/Dashboard/components/RecentActivitiesFeed";
+import CashVsDebtWidget from "../../../Features/Dashboard/components/CashVsDebtWidget";
+import TopClientList from "../../../Features/Dashboard/components/TopClientList";
+import UsersManagementTable from "../../../Features/Dashboard/components/UsersManagementTable";
+import Loading from "../../../components/Ui/Loading/Loading";
+import { CurrentUser } from "../../../util/currentUser";
+import DashboardLiveRefresher from "../../../Features/Dashboard/components/DashboardLiveRefresher";
 
 import {
   fetchDashboardSummary,
@@ -20,13 +20,15 @@ import {
   fetchCashVsDebtRatio,
   fetchClientRanking,
   fetchUsers,
-} from "../../Features/Dashboard/api/dashboardActions";
+} from "../../../Features/Dashboard/api/dashboardActions";
 
 export const dynamic = "force-dynamic";
 
 function CardSkeleton({ heightClass = "h-[400px]" }) {
   return (
-    <div className={`w-full ${heightClass} bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl flex items-center justify-center animate-pulse`}>
+    <div
+      className={`w-full ${heightClass} bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl flex items-center justify-center animate-pulse`}
+    >
       <Loading />
     </div>
   );
@@ -71,7 +73,12 @@ async function UsersManagementSection() {
   const data = await fetchUsers();
   const currentUser = await CurrentUser();
 
-  return <UsersManagementTable initialUsers={data} currentUserId={currentUser?.userId} />;
+  return (
+    <UsersManagementTable
+      initialUsers={data}
+      currentUserId={currentUser?.userId}
+    />
+  );
 }
 
 export default async function DashboardPage() {
@@ -82,8 +89,12 @@ export default async function DashboardPage() {
     <div className="flex flex-col gap-6 p-4 sm:p-6 lg:p-8 min-h-screen bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
       <DashboardLiveRefresher />
       <div className="flex flex-col gap-1">
-        <h1 className="text-3xl font-bold tracking-tight text-white">Dashboard Overview</h1>
-        <p className="text-sm text-slate-400">Welcome back. Here is what&apos;s happening with your store today.</p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">
+          Dashboard Overview
+        </h1>
+        <p className="text-sm text-slate-400">
+          Welcome back. Here is what&apos;s happening with your store today.
+        </p>
       </div>
 
       <Suspense fallback={<CardSkeleton heightClass="h-32" />}>

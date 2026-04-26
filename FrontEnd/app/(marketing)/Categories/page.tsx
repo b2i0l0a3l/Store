@@ -1,6 +1,6 @@
-import CategorySection from "@/app/Features/Categories/Components/CategorySection";
-import { getCategories } from "@/app/Features/Categories/api/categoryApi";
-import Loading from "@/app/components/Ui/Loading/Loading";
+import CategorySection from "@/Features/Categories/Components/CategorySection";
+import { getCategories } from "@/Features/Categories/api/categoryApi";
+import Loading from "@/components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

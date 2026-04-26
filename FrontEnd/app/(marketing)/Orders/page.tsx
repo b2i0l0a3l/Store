@@ -1,6 +1,6 @@
-import OrderSection from "@/app/Features/Orders/Components/OrderSection";
-import { getOrders } from "@/app/Features/Orders/api/orderApi";
-import Loading from "@/app/components/Ui/Loading/Loading";
+import OrderSection from "@/Features/Orders/Components/OrderSection";
+import { getOrders } from "@/Features/Orders/api/orderApi";
+import Loading from "@/components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";

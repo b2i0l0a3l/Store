@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SidebarProvider from "../components/side-bar/SidebarProvider";
-import TopBar from "../components/top-bar/TopBar";
+import SidebarProvider from "../../components/side-bar/SidebarProvider";
+import TopBar from "../../components/top-bar/TopBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   description: "  description: Verwalten sie dein Geschaft.",
 };
 
-import ToastContainer from "../components/Ui/Toast/ToastContainer";
-import { CurrentUser } from "../util/currentUser";
+import ToastContainer from "../../components/Ui/Toast/ToastContainer";
+import { CurrentUser } from "../../util/currentUser";
 
 export default async function MarketingLayout({
   children,

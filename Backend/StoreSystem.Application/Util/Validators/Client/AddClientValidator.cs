@@ -8,11 +8,11 @@ namespace StoreSystem.Application.Feature.Messages.Validators.Client
         public AddClientValidator()
         {
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("اسم العميل مطلوب")
-                .MaximumLength(100).WithMessage("اسم العميل يجب أن لا يتجاوز 100 حرف");
+                .NotEmpty().WithMessage("Client name is required")
+                .MaximumLength(100).WithMessage("Client name must not exceed 100 characters");
 
             RuleFor(x => x.PhoneNumber)
-                .MaximumLength(20).WithMessage("رقم الهاتف يجب أن لا يتجاوز 20 حرف")
+                .MaximumLength(20).WithMessage("Phone number must not exceed 20 characters")
                 .When(x => !string.IsNullOrEmpty(x.PhoneNumber));
         }
     }

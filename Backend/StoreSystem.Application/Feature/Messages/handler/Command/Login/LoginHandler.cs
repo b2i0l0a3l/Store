@@ -48,10 +48,21 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email!),
-                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Staff"),
                     new Claim("TokenId", TokenId),
                     new Claim("FullName", user.FullName),
                 };
+
+                if (roles.Any())
+                {
+                    foreach (var role in roles)
+                    {
+                        Claims.Add(new Claim(ClaimTypes.Role, role));
+                    }
+                }
+                else
+                {
+                    Claims.Add(new Claim(ClaimTypes.Role, "Staff"));
+                }
                 if (user.ImagePath != null)
                     Claims.Add(new Claim("ImagePath", user.ImagePath));
                 

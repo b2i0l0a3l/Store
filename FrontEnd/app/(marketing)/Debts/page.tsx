@@ -1,6 +1,6 @@
-import { GetDebts } from "@/app/Features/Debts/api/DebtApi";
-import DebtSection from "@/app/Features/Debts/Components/DebtSection";
-import Loading from "@/app/components/Ui/Loading/Loading";
+import { GetDebts } from "@/Features/Debts/api/DebtApi";
+import DebtSection from "@/Features/Debts/Components/DebtSection";
+import Loading from "@/components/Ui/Loading/Loading";
 import { Suspense } from "react";
 
 export const dynamic = "force-dynamic";
@@ -13,6 +13,6 @@ export default async function DebtsPage() {
       <Suspense fallback={<Loading />}>
         <DebtSection data={debts} />
       </Suspense>
-    </div>  
+    </div>
   );
 }

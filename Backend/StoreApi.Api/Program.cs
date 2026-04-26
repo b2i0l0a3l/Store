@@ -40,7 +40,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddApiServices(builder.Configuration);
 
 
-
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminAndStaff", policy =>
+        policy.RequireRole("Admin", "Staff"));
+});
 
 
 var app = builder.Build();
@@ -86,15 +90,23 @@ app.UseAuthentication();
 app.UseMiddleware<AuditMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
-app.MapPost("api/v{version:apiVersion}/sell", async (AddOrderWithItemsRequest req, IMediator mediator) =>
+var versionSet = app.NewApiVersionSet()
+    .HasApiVersion(new ApiVersion(1, 0))
+    .ReportApiVersions()
+    .Build(); 
+
+app.MapPost("api/v{version:apiVersion}/Order/sell", async (AddOrderWithItemsRequest req, IMediator mediator) =>
 {
     var result = await mediator.Send(req);
 
     return result.IsSuccess
-        ? Results.Ok()
+        ? Results.Ok("Done")
         : Results.BadRequest(result);
-});
-app.MapHub<StoreApi.Api.Hubs.NotificationHub>("/hubs/notifications");
+})
+.RequireAuthorization("AdminAndStaff")
+.WithApiVersionSet(versionSet)
+.MapToApiVersion(1, 0);
+app.MapHub<StoreApi.Api.Hubs.NotificationHub>("/hubs/notifications"); 
 app.MapHub<StoreApi.Api.Hubs.DashboardHub>("/hubs/dashboard");
 
 using (var scope = app.Services.CreateScope())

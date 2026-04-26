@@ -12,5 +12,7 @@ namespace StoreSystem.Core.Models.PaymentModels
         public string ClientName { get; set; } = string.Empty;
         public decimal Amount { get; set; }
         public DateTime PaidAt { get; set; }
+        public enPaymentMethod PaymentMethod { get; set; } 
+        public string Notes { get; set; } = string.Empty;
     }
 }

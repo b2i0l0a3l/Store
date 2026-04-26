@@ -8,11 +8,11 @@ namespace StoreSystem.Application.Feature.Messages.Validators.Category
         public UpdateCategoryValidator()
         {
             RuleFor(x => x.Id)
-                .GreaterThan(0).WithMessage("معرف التصنيف غير صالح");
+                .GreaterThan(0).WithMessage("Category ID is not valid");
 
             RuleFor(x => x.Name)
-                .NotEmpty().WithMessage("اسم التصنيف مطلوب")
-                .MaximumLength(20).WithMessage("اسم التصنيف يجب أن لا يتجاوز 20 حرفاً");
+                .NotEmpty().WithMessage("Category name is required")
+                .MaximumLength(20).WithMessage("Category name must not exceed 20 characters");
         }
     }
 }
