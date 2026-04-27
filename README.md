@@ -16,6 +16,7 @@
 ![.NET](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![xUnit](https://img.shields.io/badge/xUnit-Tests_19_Passed-brightgreen?style=for-the-badge&logo=dotnet&logoColor=white)
 
 <br/>
 
@@ -27,6 +28,7 @@
 [Features](#-key-features) •
 [Tech Stack](#-tech-stack) •
 [Architecture](#-architecture-design) •
+[Testing](#-testing) •
 [Screenshots](#-screenshots) •
 [Getting Started](#-getting-started) •
 [API Endpoints](#-essential-api-endpoints)
@@ -150,6 +152,7 @@ The **Store Management System** is a robust, highly scalable web application des
 | **JWT Bearer Key** | Secure authentication and authorization |
 | **FluentValidation** | Strongly-typed request validation |
 | **SignalR** | Real-time push notifications to the frontend |
+| **xUnit + Moq + FluentAssertions** | Unit testing with mocking and expressive assertions |
 
 <br/>
 
@@ -181,6 +184,46 @@ graph TD
     DB[(PostgreSQL Database)]
     Infra <--> DB
 ```
+
+<br/>
+
+## 🧪 Testing
+
+The project includes a comprehensive unit testing suite using **xUnit**, **Moq**, and **FluentAssertions**.
+
+### Test Coverage
+
+| Module | Tests | What's Verified |
+|--------|:-----:|-----------------|
+| **Category** | 4 | Add, GetById — success & failure |
+| **Login** | 3 | Valid credentials, user not found, wrong password + **Role claims** |
+| **Register** | 2 | Successful registration, duplicate email |
+| **Refresh Token** | 2 | Valid refresh, expired token |
+| **Logout** | 1 | Token revocation |
+| **Sale (Order)** | 2 | Order creation, procedure failure + background task queue |
+| **Audit Middleware** | 2 | POST requests logged, GET requests skipped |
+| **Rate Limiting** | 3 | 5-request limit enforced, config validation, 429 status code |
+| **Total** | **19** | ✅ **All Passed** |
+
+### Running Tests
+
+```bash
+cd Backend
+dotnet test
+```
+
+For detailed output with individual test names:
+```bash
+dotnet test --verbosity normal
+```
+
+### Testing Stack
+
+| Library | Purpose |
+|---------|---------|
+| **xUnit** | Testing framework |
+| **Moq** | Mocking dependencies (UserManager, IRepository, etc.) |
+| **FluentAssertions** | Expressive, readable assertions |
 
 <br/>
 
