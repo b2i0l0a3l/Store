@@ -6,6 +6,8 @@ import { DeletePayment } from "@/Features/Payments/api/paymentApi";
 import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
 import { toast } from "@/store/useToastStore";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
+import { db } from "@/util/db";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
 
 function DeletePaymentButton({ id }: { id: number }) {
   const recordDelete = usePaymentStore((state) => state.recordDelete);
@@ -18,16 +20,19 @@ function DeletePaymentButton({ id }: { id: number }) {
 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
-    const res = await DeletePayment(id);
+    await executeOfflineMutation({
+      type: 'DELETE_PAYMENT',
+      payload: { id },
+      apiCall: () => DeletePayment(id),
+      localDbUpdate: async () => {
+        await db.payments.delete(id);
+      },
+      onSuccess: () => {
+        recordDelete(id);
+      }
+    });
     setIsDeleting(false);
     setIsModalOpen(false);
-
-    if (res.succeeded) {
-      toast.success(res.message || "تم حذف الدفعة بنجاح");
-      recordDelete(id);
-    } else {
-      toast.error(res.message || "فشل في حذف الدفعة");
-    }
   };
 
   return (

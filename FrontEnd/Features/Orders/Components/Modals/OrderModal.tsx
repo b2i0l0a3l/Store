@@ -4,6 +4,7 @@ import OrderItemTable from "../../OrderItem/Components/Table/OrderItemTable";
 import { getOrderItems } from "../../api/orderApi";
 import { OrderItem } from "../../OrderItem/types";
 import { toast } from "@/store/useToastStore";
+import { db } from "@/util/db";
 
 export default function OrderModal({
   title,
@@ -22,8 +23,24 @@ export default function OrderModal({
     const fetchOrderItems = async () => {
       try {
         setLoading(true);
-        const orderItems = await getOrderItems(OrderId);
-        setOrderItems(orderItems);
+        if (!navigator.onLine) {
+          // Read from local DB
+          const localItems = await db.orderItems.where('orderId').equals(OrderId).toArray();
+          setOrderItems(localItems);
+        } else {
+          // Fetch from API
+          const orderItemsData = await getOrderItems(OrderId);
+          if (orderItemsData) {
+            setOrderItems(orderItemsData);
+            // Save to local DB for offline access
+            // Delete old items for this order first
+            const existingIds = await db.orderItems.where('orderId').equals(OrderId).primaryKeys();
+            await db.orderItems.bulkDelete(existingIds);
+            await db.orderItems.bulkAdd(orderItemsData);
+          } else {
+            setOrderItems([]);
+          }
+        }
       } catch (error) {
         toast.error("حدث خطأ أثناء تحميل عناصر الطلب");
       } finally {

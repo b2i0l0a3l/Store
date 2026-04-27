@@ -7,6 +7,8 @@ import { UpdatePayment } from "@/Features/Payments/api/paymentApi";
 import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
 import { toast } from "@/store/useToastStore";
 import { Payment } from "@/Features/Payments/types";
+import { db } from "@/util/db";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
 
 function UpdatePaymentButton({ data }: { data: Payment }) {
   const [open, setOpen] = useState(false);
@@ -21,21 +23,27 @@ function UpdatePaymentButton({ data }: { data: Payment }) {
       paymentMethod: number,
       notes: string,
     ) => {
-      const res = await UpdatePayment({
+      const payload = {
         id: data.id,
         debtId: debtId,
         amount,
         clientName: data.clientName,
         paymentMethod,
         notes,
+      };
+
+      await executeOfflineMutation({
+        type: 'UPDATE_PAYMENT',
+        payload: payload,
+        apiCall: UpdatePayment,
+        localDbUpdate: async () => {
+          await db.payments.update(data.id, { debtId, amount, paymentMethod, notes });
+        },
+        onSuccess: () => {
+          recordUpdate({ ...data, debtId: debtId, amount, paymentMethod, notes });
+          setOpen(false);
+        }
       });
-      if (res.succeeded) {
-        toast.success(res.message || "Payment updated successfully");
-        recordUpdate({ ...data, debtId: debtId, amount, paymentMethod, notes });
-        setOpen(false);
-      } else {
-        toast.error(res.message || "Failed to update payment");
-      }
     },
     [data, recordUpdate],
   );

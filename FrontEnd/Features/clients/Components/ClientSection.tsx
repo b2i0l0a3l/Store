@@ -6,11 +6,15 @@ import ClientTable from "./Table/ClientTable";
 import { useCallback, useMemo, useState } from "react";
 import AddClientButton from "./Buttons/AddClientButton";
 import { useClientStore } from "@/Features/clients/store/client";
-
 import { client } from "@/Features/clients/types";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
+import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
 
 export default function ClientSection({ data }: { data: client[] }) {
   const [search, setSearch] = useState("");
+  
+  useSyncToLocalDb(data, db.clients);
 
   const handleSearch = useCallback((value: string) => {
     setSearch(value);
@@ -20,8 +24,11 @@ export default function ClientSection({ data }: { data: client[] }) {
   const deletedClientIds = useClientStore((state) => state.deletedClientIds);
   const addedClients = useClientStore((state) => state.addedClients);
 
+  const localClients = useLiveQuery(() => db.clients.toArray()) || [];
+  const actualData = localClients.length > 0 ? localClients : data;
+
   const filteredData = useMemo(() => {
-    let currentData = [...data, ...addedClients];
+    let currentData = [...actualData, ...addedClients];
 
     if (deletedClientIds.size > 0) {
       currentData = currentData.filter((c) => !deletedClientIds.has(c.id));

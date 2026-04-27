@@ -17,10 +17,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "My Store",
   description: "  description: Verwalten sie dein Geschaft.",
+  manifest: "/manifest.json",
 };
 
 import ToastContainer from "../../components/Ui/Toast/ToastContainer";
 import { CurrentUser } from "../../util/currentUser";
+import OfflineManager from "../../components/OfflineManager";
 
 export default async function MarketingLayout({
   children,
@@ -38,6 +40,7 @@ export default async function MarketingLayout({
           {children}
         </SidebarProvider>
         <ToastContainer />
+        <OfflineManager />
       </body>
     </html>
   );

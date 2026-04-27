@@ -6,6 +6,8 @@ import CategoryModal from "../Modal/CategoryModal";
 import { updateCategory } from "@/Features/Categories/api/categoryApi";
 import { useCategoryStore } from "@/Features/Categories/store/category";
 import { toast } from "@/store/useToastStore";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 const UpdateCategoryButton = memo(function UpdateCategoryButton({
   data,
@@ -19,16 +21,20 @@ const UpdateCategoryButton = memo(function UpdateCategoryButton({
 
   const handleSubmit = useCallback(
     async (name: string) => {
-      const res = await updateCategory({ id: data.id, name });
-      if (res.succeeded) {
-        useCategoryStore
-          .getState()
-          .recordUpdate({ id: data.id, name, totalCount: data.totalCount });
-        toast.success(res.message || "تم تعديل التصنيف بنجاح");
-        setOpen(false);
-      } else {
-        toast.error(res.message || "حدث خطأ أثناء تعديل التصنيف");
-      }
+      await executeOfflineMutation({
+        type: 'UPDATE_CATEGORY',
+        payload: { id: data.id, name },
+        apiCall: updateCategory,
+        localDbUpdate: async () => {
+          await db.categories.update(data.id, { name });
+        },
+        onSuccess: () => {
+          useCategoryStore
+            .getState()
+            .recordUpdate({ id: data.id, name, totalCount: data.totalCount });
+          setOpen(false);
+        }
+      });
     },
     [data.id, data.totalCount],
   );

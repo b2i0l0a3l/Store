@@ -4,6 +4,7 @@ import { CartItem, useStore } from "@/Features/Sells/store/store";
 import { useProductStore } from "@/Features/Products/store/product";
 import { useState, useMemo, useCallback } from "react";
 import { buy } from "@/Features/Orders/api/orderApi";
+import { db } from "@/util/db";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { toast } from "@/store/useToastStore";
@@ -33,6 +34,26 @@ export default function BuyButton() {
       if (!cart || !request) return;
       setLoading(true);
       clearCart();
+
+      // Offline First Approach
+      if (!navigator.onLine) {
+        await db.syncQueue.add({
+          type: 'BUY',
+          payload: request,
+          createdAt: new Date(),
+          status: 'pending'
+        });
+        
+        recordSale(
+          cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        );
+        toast.success("Saved offline. Will sync when online.");
+        return;
+      }
+
       const res = await buy(request);
       if (res.succeeded) {
         recordSale(

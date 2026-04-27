@@ -8,8 +8,12 @@ import { order } from "@/Features/Orders/types";
 import OrderTable from "./Table/OrderTable";
 import { useOrderStore } from "@/Features/Orders/store/order";
 import CustomFilter from "@/components/Ui/Filter/CustomFilter";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
+import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
 
 function OrderSection({ data }: { data: order[] }) {
+  useSyncToLocalDb(data, db.orders);
   const [search, setSearch] = useState("");
   const [selectedOrderStatus, setSelectedOrderStatus] = useState<{
     value: string | number;
@@ -23,15 +27,18 @@ function OrderSection({ data }: { data: order[] }) {
   const updatedOrders = useOrderStore((state) => state.updatedOrders);
   const deletedOrderIds = useOrderStore((state) => state.deletedOrderIds);
 
+  const localOrders = useLiveQuery(() => db.orders.toArray()) || [];
+  const actualData = localOrders.length > 0 ? localOrders : data;
+
   const handleSearch = useCallback((value: string) => {
     setSearch(value);
   }, []);
 
   const displayData = useMemo(() => {
-    return data
+    return actualData
       .filter((item) => !deletedOrderIds.has(item.id))
       .map((item) => updatedOrders[item.id] || item);
-  }, [data, updatedOrders, deletedOrderIds]);
+  }, [actualData, updatedOrders, deletedOrderIds]);
 
   const filteredData = useMemo(() => {
     return displayData.filter((order) => {

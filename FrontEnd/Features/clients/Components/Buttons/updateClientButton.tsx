@@ -7,6 +7,8 @@ import { updateClient } from "@/Features/clients/api/clientApi";
 import { useClientStore } from "@/Features/clients/store/client";
 import { toast } from "@/store/useToastStore";
 import { client } from "../../types";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 const UpdateClientButton = memo(function UpdateClientButton({
   data,
@@ -26,19 +28,18 @@ const UpdateClientButton = memo(function UpdateClientButton({
       phoneNumber: string,
       address: string,
     ): Promise<client | null> => {
-      const res = await updateClient({
-        id: data.id,
-        name,
-        phoneNumber,
-        address,
+      await executeOfflineMutation({
+        type: 'UPDATE_CLIENT',
+        payload: { id: data.id, name, phoneNumber, address },
+        apiCall: updateClient,
+        localDbUpdate: async () => {
+          await db.clients.update(data.id, { name, phoneNumber, address });
+        },
+        onSuccess: () => {
+          recordUpdate({ id: data.id, name, phoneNumber, address });
+          setOpen(false);
+        }
       });
-      if (res.succeeded) {
-        recordUpdate({ id: data.id, name, phoneNumber, address });
-        toast.success(res.message || "تم تعديل بيانات العميل بنجاح");
-        setOpen(false);
-      } else {
-        toast.error(res.message || "حدث خطأ أثناء التعديل");
-      }
       return null;
     },
     [data.id, recordUpdate],

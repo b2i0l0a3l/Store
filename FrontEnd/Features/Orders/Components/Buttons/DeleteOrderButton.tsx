@@ -5,6 +5,8 @@ import { useState } from "react";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
 import { deleteOrder } from "../../api/orderApi";
 import { toast } from "@/store/useToastStore";
+import { db } from "@/util/db";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
 
 export default function DeleteOrderButton({ id }: { id: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,22 +18,22 @@ export default function DeleteOrderButton({ id }: { id: number }) {
 
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
-    try {
-      useOrderStore.getState().recordDelete(id);
-      const res = await deleteOrder(id);
-      if (res.succeeded) {
-        toast.success(res.message || "تم حذف الطلب بنجاح");
-      } else {
-        toast.error(res.message || "حدث خطأ أثناء حذف الطلب");
+    await executeOfflineMutation({
+      type: 'DELETE_ORDER',
+      payload: { id },
+      apiCall: () => deleteOrder(id),
+      localDbUpdate: async () => {
+        await db.orders.delete(id);
+      },
+      onSuccess: () => {
+        useOrderStore.getState().recordDelete(id);
+      },
+      onError: () => {
         useOrderStore.getState().deletedOrderIds.delete(id);
       }
-    } catch (error) {
-      toast.error("حدث خطأ أثناء حذف الطلب");
-      useOrderStore.getState().deletedOrderIds.delete(id);
-    } finally {
-      setIsDeleting(false);
-      setIsModalOpen(false);
-    }
+    });
+    setIsDeleting(false);
+    setIsModalOpen(false);
   };
 
   return (

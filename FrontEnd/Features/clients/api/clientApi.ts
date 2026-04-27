@@ -40,7 +40,7 @@ export async function updateClient({
   phoneNumber,
   address,
 }: {
-  id: string;
+  id: number;
   name: string;
   phoneNumber: string;
   address?: string;

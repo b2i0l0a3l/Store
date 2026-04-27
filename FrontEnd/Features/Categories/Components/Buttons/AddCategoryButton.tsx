@@ -6,6 +6,8 @@ import CategoryModal from "../Modal/CategoryModal";
 import { addCategory } from "@/Features/Categories/api/categoryApi";
 import { useCategoryStore } from "@/Features/Categories/store/category";
 import { toast } from "@/store/useToastStore";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 export default function AddCategoryButton() {
   const [openModal, setOpenModal] = useState(false);
@@ -16,14 +18,23 @@ export default function AddCategoryButton() {
 
   const handleSubmit = useCallback(
     async (name: string) => {
-      const res = await addCategory({ name });
-      if (res.succeeded && res.value) {
-        recordAdd(res.value);
-        toast.success(res.message || "تمت إضافة التصنيف بنجاح");
-        setOpenModal(false);
-      } else {
-        toast.error(res.message || "حدث خطأ أثناء إضافة التصنيف");
-      }
+      await executeOfflineMutation({
+        type: 'ADD_CATEGORY',
+        payload: { name },
+        apiCall: addCategory,
+        localDbUpdate: async () => {
+          // Optimistically add to local DB if offline. ID will be random/temporary.
+          if (!navigator.onLine) {
+            const tempId = Date.now();
+            await db.categories.add({ id: tempId, name, totalCount: 0 });
+            recordAdd({ id: tempId, name, totalCount: 0 });
+          }
+        },
+        onSuccess: (data) => {
+          if (data) recordAdd(data);
+          setOpenModal(false);
+        }
+      });
     },
     [recordAdd],
   );

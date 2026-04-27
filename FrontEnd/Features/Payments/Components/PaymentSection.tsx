@@ -6,9 +6,14 @@ import PaymentTable from "./Table/PaymentTable";
 import { Payment } from "@/Features/Payments/types";
 import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
 import { useCallback, useMemo, useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
+import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
 
 export default function PaymentSection({ data }: { data: Payment[] }) {
   const [search, setSearch] = useState("");
+  
+  useSyncToLocalDb(data, db.payments);
 
   const handleSearch = useCallback((value: string) => {
     setSearch(value);
@@ -18,9 +23,12 @@ export default function PaymentSection({ data }: { data: Payment[] }) {
   const updatedPayments = usePaymentStore((state) => state.updatedPayments);
   const deletedPaymentIds = usePaymentStore((state) => state.deletedPaymentIds);
 
+  const localPayments = useLiveQuery(() => db.payments.toArray()) || [];
+  const actualData = localPayments.length > 0 ? localPayments : data;
+
   const filteredData = useMemo(() => {
     const addedList = Object.values(addedPayments);
-    let currentData = [...data, ...addedList];
+    let currentData = [...actualData, ...addedList];
 
     if (deletedPaymentIds.size > 0) {
       currentData = currentData.filter((p) => !deletedPaymentIds.has(p.id));
@@ -36,7 +44,7 @@ export default function PaymentSection({ data }: { data: Payment[] }) {
         );
       })
       .map((p) => updatedPayments[p.id] || p);
-  }, [data, search, addedPayments, updatedPayments, deletedPaymentIds]);
+  }, [actualData, search, addedPayments, updatedPayments, deletedPaymentIds]);
 
   return (
     <>

@@ -4,6 +4,8 @@ import { product } from "@/Features/Products/types";
 import CustomSearch from "@/components/Ui/Search/CustomSearch";
 import SellTable from "./SellTable";
 import { useCallback, useMemo, useState } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
 import { useProductStore } from "@/Features/Products/store/product";
 import CustomFilter from "@/components/Ui/Filter/CustomFilter";
 
@@ -27,9 +29,17 @@ export default function SellSection({
 
   const soldQuantities = useProductStore((state) => state.soldQuantities);
 
+  // Read from IndexedDB
+  const localProducts = useLiveQuery(() => db.products.toArray()) || [];
+  const localCategories = useLiveQuery(() => db.categories.toArray()) || [];
+
+  // Use local data if available, otherwise fallback to server data
+  const actualData = localProducts.length > 0 ? localProducts : data;
+  const actualCategories = localCategories.length > 0 ? localCategories : categories;
+
   const searchData = useMemo(() => {
     const searchLower = search.toLowerCase();
-    let filtered = data;
+    let filtered = actualData;
 
     if (search) {
       filtered = filtered.filter(
@@ -52,13 +62,13 @@ export default function SellSection({
       }
       return item;
     });
-  }, [data, search, soldQuantities, selectedCategory]);
+  }, [actualData, search, soldQuantities, selectedCategory]);
 
   const categoryOptions = useMemo(() => {
     const defaultOption = { value: "", label: "All Categories" };
-    const apiOptions = categories.map((c) => ({ value: c.id, label: c.name }));
+    const apiOptions = actualCategories.map((c) => ({ value: c.id, label: c.name }));
     return [defaultOption, ...apiOptions];
-  }, [categories]);
+  }, [actualCategories]);
 
   return (
     <>

@@ -6,6 +6,8 @@ import { memo, useCallback, useState } from "react";
 import { useProductStore } from "@/Features/Products/store/product";
 import { toast } from "@/store/useToastStore";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 const DeleteProductButton = memo(function DeleteProductButton({
   dataId,
@@ -21,16 +23,19 @@ const DeleteProductButton = memo(function DeleteProductButton({
 
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
-    const res = await deleteProduct({ id: dataId });
+    await executeOfflineMutation({
+      type: 'DELETE_PRODUCT',
+      payload: { id: dataId },
+      apiCall: () => deleteProduct({ id: dataId }),
+      localDbUpdate: async () => {
+        await db.products.delete(dataId);
+      },
+      onSuccess: () => {
+        useProductStore.getState().recordDelete(dataId);
+      }
+    });
     setIsDeleting(false);
     setIsModalOpen(false);
-
-    if (res.succeeded) {
-      useProductStore.getState().recordDelete(dataId);
-      toast.success(res.message || "تم حذف المنتج بنجاح");
-    } else {
-      toast.error(res.message || "حدث خطأ أثناء حذف المنتج");
-    }
   }, [dataId]);
 
   return (

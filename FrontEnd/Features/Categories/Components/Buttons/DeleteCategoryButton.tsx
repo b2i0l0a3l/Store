@@ -6,6 +6,8 @@ import { memo, useCallback, useState } from "react";
 import { useCategoryStore } from "@/Features/Categories/store/category";
 import { toast } from "@/store/useToastStore";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 const DeleteCategoryButton = memo(function DeleteCategoryButton({
   dataId,
@@ -21,16 +23,19 @@ const DeleteCategoryButton = memo(function DeleteCategoryButton({
 
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
-    const res = await deleteCategory({ id: dataId });
+    await executeOfflineMutation({
+      type: 'DELETE_CATEGORY',
+      payload: { id: dataId },
+      apiCall: () => deleteCategory({ id: dataId }),
+      localDbUpdate: async () => {
+        await db.categories.delete(dataId);
+      },
+      onSuccess: () => {
+        useCategoryStore.getState().recordDelete(dataId);
+      }
+    });
     setIsDeleting(false);
     setIsModalOpen(false);
-
-    if (res.succeeded) {
-      useCategoryStore.getState().recordDelete(dataId);
-      toast.success(res.message || "تم حذف التصنيف بنجاح");
-    } else {
-      toast.error(res.message || "حدث خطأ أثناء حذف التصنيف");
-    }
   }, [dataId]);
 
   return (

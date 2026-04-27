@@ -6,19 +6,27 @@ import CustomSearch from "@/components/Ui/Search/CustomSearch";
 import { useCallback, useMemo, useState } from "react";
 import DebtTable from "./Table/DebtTable";
 import { Debt } from "../types";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
+import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
 
 function DebtSection({ data }: { data: Debt[] }) {
   const [search, setSearch] = useState("");
+  
+  useSyncToLocalDb(data, db.debts);
+  
+  const localDebts = useLiveQuery(() => db.debts.toArray()) || [];
+  const actualData = localDebts.length > 0 ? localDebts : data;
 
   const handleSearch = useCallback((value: string) => {
     setSearch(value);
   }, []);
 
   const filteredData = useMemo(() => {
-    return data.filter((debt) =>
+    return actualData.filter((debt) =>
       debt.clientName.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [data, search]);
+  }, [actualData, search]);
 
   return (
     <>

@@ -6,6 +6,8 @@ import { memo, useCallback, useState } from "react";
 import { useClientStore } from "@/Features/clients/store/client";
 import { toast } from "@/store/useToastStore";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 const DeleteClientButton = memo(function DeleteClientButton({
   dataId,
@@ -23,16 +25,19 @@ const DeleteClientButton = memo(function DeleteClientButton({
 
   const handleConfirmDelete = useCallback(async () => {
     setIsDeleting(true);
-    const res = await deleteClient({ id: dataId });
+    await executeOfflineMutation({
+      type: 'DELETE_CLIENT',
+      payload: { id: dataId },
+      apiCall: () => deleteClient({ id: dataId }),
+      localDbUpdate: async () => {
+        await db.clients.delete(dataId);
+      },
+      onSuccess: () => {
+        recordDelete(dataId);
+      }
+    });
     setIsDeleting(false);
     setIsModalOpen(false);
-
-    if (res.succeeded) {
-      recordDelete(dataId);
-      toast.success(res.message || "تم حذف العميل بنجاح");
-    } else {
-      toast.error(res.message || "حدث خطأ أثناء الحذف");
-    }
   }, [dataId, recordDelete]);
 
   return (

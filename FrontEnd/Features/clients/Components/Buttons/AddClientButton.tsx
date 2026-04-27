@@ -7,6 +7,8 @@ import { addClient } from "@/Features/clients/api/clientApi";
 import { toast } from "@/store/useToastStore";
 import { client } from "../../types";
 import { useClientStore } from "@/Features/clients/store/client";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 export default function AddClientButton() {
   const [openModal, setOpenModal] = useState(false);
@@ -21,15 +23,23 @@ export default function AddClientButton() {
       phoneNumber: string,
       address: string,
     ): Promise<client | null> => {
-      const res = await addClient({ name, phoneNumber, address });
-      if (res.succeeded && res.value) {
-        toast.success(res.message || "تمت إضافة العميل بنجاح");
-        setOpenModal(false);
-        recordAdd(res.value);
-      } else {
-        toast.error(res.message || "حدث خطأ أثناء إضافة العميل");
-      }
-      return res.value;
+      await executeOfflineMutation({
+        type: 'ADD_CLIENT',
+        payload: { name, phoneNumber, address },
+        apiCall: addClient,
+        localDbUpdate: async () => {
+          if (!navigator.onLine) {
+            const tempId = Date.now();
+            await db.clients.add({ id: tempId, name, phoneNumber, address });
+            recordAdd({ id: tempId, name, phoneNumber, address });
+          }
+        },
+        onSuccess: (data) => {
+          if (data) recordAdd(data);
+          setOpenModal(false);
+        }
+      });
+      return null;
     },
     [recordAdd],
   );

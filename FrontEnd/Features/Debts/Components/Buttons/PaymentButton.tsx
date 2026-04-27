@@ -6,6 +6,8 @@ import PaymentModal from "../Modal/PaymentModal";
 import { pay } from "@/Features/Debts/api/paymentApi";
 import { useDebtStore } from "@/Features/Debts/store/debt";
 import { toast } from "@/store/useToastStore";
+import { db } from "@/util/db";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
 
 function PaymentButton({
   debtId,
@@ -20,15 +22,19 @@ function PaymentButton({
   const debtStore = useDebtStore();
 
   const handleSubmit = async (data: any) => {
-
-    const res = await pay(data);
-    if (res.succeeded) {
-      debtStore.recordUpdate({ ...data, id: debtId });
-      toast.success(res.message || "تم تسجيل الدفعة بنجاح");
-    } else {
-      toast.error(res.message || "حدث خطأ أثناء تسجيل الدفعة");
-    }
-    setOpen(false);
+    await executeOfflineMutation({
+      type: 'ADD_PAYMENT',
+      payload: data,
+      apiCall: pay,
+      localDbUpdate: async () => {
+        // We might not add payment to local DB instantly if we don't have its full data/ID
+        // But the store update gives optimistic UI
+      },
+      onSuccess: () => {
+        debtStore.recordUpdate({ ...data, id: debtId });
+        setOpen(false);
+      }
+    });
   };
   return (
     <>

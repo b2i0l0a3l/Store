@@ -9,6 +9,9 @@ import { useCallback, useMemo, useState } from "react";
 import AddProductButton from "./Buttons/AddProductButton";
 import { useProductStore } from "@/Features/Products/store/product";
 import CustomFilter from "@/components/Ui/Filter/CustomFilter";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
+import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
 
 export default function ProductSection({
   data,
@@ -18,6 +21,8 @@ export default function ProductSection({
   categories: category[];
 }) {
   const [search, setSearch] = useState("");
+  
+  useSyncToLocalDb(data, db.products);
   const [selectedCategory, setSelectedCategory] = useState<{
     value: string | number;
     label: string;
@@ -31,8 +36,11 @@ export default function ProductSection({
   const deletedProductIds = useProductStore((state) => state.deletedProductIds);
   const addedProducts = useProductStore((state) => state.addedProducts);
 
+  const localProducts = useLiveQuery(() => db.products.toArray()) || [];
+  const actualData = localProducts.length > 0 ? localProducts : data;
+
   const filteredData = useMemo(() => {
-    let currentData = [...data, ...addedProducts];
+    let currentData = [...actualData, ...addedProducts];
     if (deletedProductIds.size > 0) {
       currentData = currentData.filter((c) => !deletedProductIds.has(c.id));
     }

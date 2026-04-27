@@ -1,0 +1,16 @@
+{
+  "name": "My Store POS",
+  "short_name": "Store POS",
+  "description": "Verwalten sie dein Geschaft.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ]
+}

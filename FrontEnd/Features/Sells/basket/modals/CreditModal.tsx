@@ -11,6 +11,8 @@ import { useProductStore } from "@/Features/Products/store/product";
 import { getClients } from "@/Features/clients/api/clientApi";
 import { client } from "@/Features/clients/types";
 import { toast } from "@/store/useToastStore";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "@/util/db";
 
 function CreditModal({
   cart,
@@ -53,6 +55,26 @@ function CreditModal({
     try {
       setLoading(true);
       if (!cart) return;
+
+      if (!navigator.onLine) {
+        await db.syncQueue.add({
+          type: 'CREDIT',
+          payload: request,
+          createdAt: new Date(),
+          status: 'pending'
+        });
+        
+        recordSale(
+          cart.map((item) => ({
+            productId: item.productId,
+            quantity: item.quantity,
+          })),
+        );
+        clearCart();
+        toast.success("Saved offline. Will sync when online.");
+        return;
+      }
+
       const res = await buy(request);
       if (res.succeeded) {
         recordSale(
@@ -75,15 +97,20 @@ function CreditModal({
     }
   }, [request, clearCart, recordSale, selectedClient, cart, onClose]);
 
-  const [clients, setClients] = useState<client[]>([]);
+  const localClients = useLiveQuery(() => db.clients.toArray()) || [];
+  const [serverClients, setServerClients] = useState<client[]>([]);
 
   useEffect(() => {
     const fetchClients = async () => {
-      const data = await getClients();
-      setClients(data);
+      if (navigator.onLine) {
+        const data = await getClients();
+        setServerClients(data);
+      }
     };
     fetchClients();
   }, []);
+
+  const clients = localClients.length > 0 ? localClients : serverClients;
 
   const clientOptions = useMemo(
     () => Object.values(clients).map((c) => ({ value: c.id, label: c.name })),

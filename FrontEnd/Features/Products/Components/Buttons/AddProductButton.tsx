@@ -7,6 +7,8 @@ import { addProduct } from "@/Features/Products/api/productApi";
 import { category } from "@/Features/Categories/types";
 import { useProductStore } from "@/Features/Products/store/product";
 import { product } from "../../types";
+import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { db } from "@/util/db";
 
 export default function AddProductButton({
   categories,
@@ -21,6 +23,29 @@ export default function AddProductButton({
 
   const handleSubmit = useCallback(
     async (payload: FormData, formData: product) => {
+      if (!navigator.onLine) {
+        // Serialize FormData to a plain object for IndexedDB
+        const serialized: Record<string, any> = {};
+        payload.forEach((value, key) => {
+          if (value instanceof File) {
+            // We skip the image for offline — it will be re-uploaded on sync
+          } else {
+            serialized[key] = value;
+          }
+        });
+        await db.syncQueue.add({
+          type: 'ADD_PRODUCT',
+          payload: serialized,
+          createdAt: new Date(),
+          status: 'pending'
+        });
+        // Add to local DB for instant feedback
+        await db.products.add(formData);
+        recordAdd(formData);
+        setOpenModal(false);
+        return;
+      }
+
       const res = await addProduct(payload);
       if (res.succeeded) {
         recordAdd(formData);
