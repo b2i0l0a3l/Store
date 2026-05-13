@@ -7,7 +7,7 @@ import { toast } from "@/store/useToastStore";
 import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 import MyTable, { Column } from "@/components/Ui/customtable/MyTable";
 
-const ROLES = ["Admin", "Staff"];
+const ROLES = ["Admin", "Staff", "User"];
 
 const ROLE_STYLES: Record<string, string> = {
   Admin: "bg-blue-500/20 text-blue-400 border border-blue-500/30",

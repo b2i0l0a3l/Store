@@ -23,6 +23,11 @@ async function makeRequest(
   options: RequestInit,
   headers: Headers,
 ) {
+  const method = options.method || "GET";
+  if (method === "GET" && options.cache === undefined) {
+    options.cache = "force-cache";
+  }
+
   return fetch(`${API_URL}${endpoint}`, {
     ...options,
     headers,
