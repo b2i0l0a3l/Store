@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,13 +21,15 @@ using StoreSystem.Infrastructure.presistence.database.functions.ClientFunctions;
 using StoreSystem.Core.interfaces.functions.PaymentFunctions;
 using StoreSystem.Infrastructure.presistence.database.functions.PaymentFunctions;
 using StoreSystem.Infrastructure.presistence.database.procedures.invoiceProcedure;
+using StoreSystem.Application.Interface;
+using StoreSystem.Infrastructure.Services;
 
 namespace StoreSystem.Infrastructure.shared
 {
     public static class InfrastructurServiceRegistration
     {
 
-        public static void AddInfrastructurServiceRegistration(this IServiceCollection services,IConfiguration configuration)
+        public static void AddInfrastructurServiceRegistration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("MyConn")));
@@ -41,6 +39,15 @@ namespace StoreSystem.Infrastructure.shared
             .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            services.AddScoped<IGenerateJwtToken, GenerateJwtToken>();
+            services.AddScoped<IGenerateToken, GenerateRefreshToken>();
+            services.AddScoped<IUploadImage, UploadImageLocal>();
+            services.AddScoped<IGenerateQrCode, QrCodeGenerator>();
+            services.AddScoped<IGenerateInvoiceHtml, GenerateInvoiceHtmlService>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
+            // Procedures
             services.AddScoped<IHandleOrderWithHisItemsProcedure, HandleOrderWithHisItems>();
             services.AddScoped<IInvoiceProcedure, InvoiceProcedure>();
             services.AddScoped<IHandleReturnProcedure, HandleReturn>();
@@ -48,6 +55,8 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IDeleteOrderItemProcedure, DeleteOrderItem>();
             services.AddScoped<IAddPaymentProcedure, AddPayment>();
             services.AddScoped<IUpdateOrderProcedure, UpdateOrder>();
+
+            // Functions
             services.AddScoped<IGetProductPaginationFucntion, GetProductPagination>();
             services.AddScoped<IGetAllProductsFunction, GetAllProducts>();
             services.AddScoped<ISearchProduct, SearchProductFunction>();
@@ -64,7 +73,6 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IGetTotalRemainingFunction, GetTotalRemainingFunction>();
             services.AddScoped<IFnGetAllPaymentsFunction, FnGetAllPaymentsFunction>();
 
-            // Advanced Dashboard Functions
             services.AddScoped<IFnLowStockAlertsFunction, FnLowStockAlertsFunction>();
             services.AddScoped<IFnTopSellingProductsFunction, FnTopSellingProductsFunction>();
             services.AddScoped<IFnSalesOverTimeFunction, FnSalesOverTimeFunction>();
@@ -72,7 +80,7 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IFnRecentPaymentsFunction, FnRecentPaymentsFunction>();
             services.AddScoped<IFnCashVsDebtRatioFunction, FnCashVsDebtRatioFunction>();
 
-            services.AddScoped<StoreSystem.Application.Interface.ILowStockChecker, LowStockChecker>();
+            services.AddScoped<ILowStockChecker, LowStockChecker>();
         }
     }
 }

@@ -3,11 +3,10 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
-using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class AddSupplierHandler : IRequestHandler<AddSupplierRequest, Result<SupplierModel>>
+    public class AddSupplierHandler : IRequestHandler<AddSupplierRequest, Result<int>>
     {
         private readonly IRepository<Supplier> _Repo;
 
@@ -16,7 +15,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             _Repo = Repo;
         }
 
-        public async Task<Result<SupplierModel>> Handle(AddSupplierRequest request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(AddSupplierRequest request, CancellationToken cancellationToken)
         {
             var supplier = new Supplier
             {
@@ -25,9 +24,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             };
 
             var result = await _Repo.Add(supplier);
-            if (!result.IsSuccess) return result.Error!;
-
-            return SupplierModel.FromEntity(result.Value!);
+            return result;
         }
     }
 }

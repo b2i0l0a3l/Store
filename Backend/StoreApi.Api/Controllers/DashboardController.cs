@@ -3,7 +3,7 @@ using MediatR;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using StoreSystem.Application.Feature.Messages.Request.Query.Dashboard;
-using BookingSystem.Core.common;
+using StoreSystem.Core.common;
 using Asp.Versioning;
 
 namespace StoreApi.Api.Controllers

@@ -1,4 +1,3 @@
-
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,18 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetOrderItemByIdHandler : IRequestHandler<GetOrderItemByIdRequest, Result<OrderItemModel>>
     {
         private readonly IRepository<OrderItem> _Repo;
-        public GetOrderItemByIdHandler(IRepository<OrderItem> repo)
-        {
-            _Repo = repo;
-        }
+        public GetOrderItemByIdHandler(IRepository<OrderItem> repo) => _Repo = repo;
 
         public async Task<Result<OrderItemModel>> Handle(GetOrderItemByIdRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.GetById(request.Id);
-            if (!result.IsSuccess || result.Value == null)
-                return new Error("NotFound", Core.enums.ErrorType.General, $"OrderItem with Id {request.Id} not found");
-
-            return OrderItemModel.FromEntity(result.Value);
+            return await _Repo.GetById(request.Id,
+                projection: oi => new OrderItemModel(oi.Id, oi.ProductId, oi.Price, oi.Quantity));
         }
     }
 }

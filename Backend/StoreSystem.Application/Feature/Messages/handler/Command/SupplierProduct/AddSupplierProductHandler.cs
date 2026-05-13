@@ -3,12 +3,11 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
-using StoreSystem.Core.Models;
 using SupplierProductEntity = StoreSystem.Core.Entities.SupplierProduct;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class AddSupplierProductHandler : IRequestHandler<AddSupplierProductRequest, Result<SupplierProductModel>>
+    public class AddSupplierProductHandler : IRequestHandler<AddSupplierProductRequest, Result<int>>
     {
         private readonly IRepository<SupplierProductEntity> _Repo;
 
@@ -17,19 +16,19 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             _Repo = repo;
         }
 
-        public async Task<Result<SupplierProductModel>> Handle(AddSupplierProductRequest request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(AddSupplierProductRequest request, CancellationToken cancellationToken)
         {
             var supplierProduct = new SupplierProductEntity
             {
                 ProductId = request.ProductId,
                 SupplierId = request.SupplierId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Quantity = request.Quantity,
+                CostPrice = request.CostPrice
             };
 
             var result = await _Repo.Add(supplierProduct);
-            if (!result.IsSuccess) return result.Error!;
-
-            return SupplierProductModel.FromEntity(result.Value!);
+            return result;
         }
     }
 }

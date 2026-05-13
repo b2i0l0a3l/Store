@@ -1,4 +1,3 @@
-
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -11,18 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetReturnItemByIdHandler : IRequestHandler<GetReturnItemByIdRequest, Result<ReturnItemModel>>
     {
         private readonly IRepository<ReturnItem> _Repo;
-        public GetReturnItemByIdHandler(IRepository<ReturnItem> repo)
-        {
-            _Repo = repo;
-        }
+        public GetReturnItemByIdHandler(IRepository<ReturnItem> repo) => _Repo = repo;
 
         public async Task<Result<ReturnItemModel>> Handle(GetReturnItemByIdRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.GetById(request.Id);
-            if (!result.IsSuccess || result.Value == null)
-                return new Error("NotFound", Core.enums.ErrorType.General, $"ReturnItem with Id {request.Id} not found");
-
-            return ReturnItemModel.FromEntity(result.Value);
+            return await _Repo.GetById(request.Id,
+                projection: ri => new ReturnItemModel(ri.Id, ri.ReturnId, ri.ProductId, ri.Quantity, ri.Price, ri.CreatedAt));
         }
     }
 }

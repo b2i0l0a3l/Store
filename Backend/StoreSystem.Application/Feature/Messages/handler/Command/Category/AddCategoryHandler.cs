@@ -3,20 +3,19 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
-using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class AddCategoryHandler : IRequestHandler<AddCategoryRequest, Result<CategoryModel>>
+    public class AddCategoryHandler : IRequestHandler<AddCategoryRequest, Result<int>>
     {
         private readonly IRepository<Category> _Repo;
 
-        public AddCategoryHandler(IRepository<Category> Repo)
+        public AddCategoryHandler(IRepository<Category> repo)
         {
-            _Repo = Repo;
+            _Repo = repo;
         }
 
-        public async Task<Result<CategoryModel>> Handle(AddCategoryRequest request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(AddCategoryRequest request, CancellationToken cancellationToken)
         {
             var category = new Category
             {
@@ -24,9 +23,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             };
 
             var result = await _Repo.Add(category);
-            if (!result.IsSuccess) return result.Error!;
-
-            return CategoryModel.FromEntity(result.Value!);
+            return result;
         }
     }
 }

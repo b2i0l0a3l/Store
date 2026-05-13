@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using StoreSystem.Application.Interface;
 
-namespace StoreSystem.Application.shared
+namespace StoreSystem.Infrastructure.Services
 {
     public class UploadImageLocal : IUploadImage
     {
-        public async Task<string> Upload(Stream FileStream,string FileName,string FolderName)
+        public async Task<string> Upload(Stream FileStream, string FileName, string FolderName)
         {
-            var uploadDirectory = Directory.GetCurrentDirectory()+$"/Assets/{FolderName}";
+            var uploadDirectory = Directory.GetCurrentDirectory() + $"/Assets/{FolderName}";
 
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(FileName);
             var filePath = Path.Combine(uploadDirectory, fileName);

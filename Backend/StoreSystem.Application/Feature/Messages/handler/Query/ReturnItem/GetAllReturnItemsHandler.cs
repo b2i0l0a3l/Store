@@ -1,9 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -16,18 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetAllReturnItemsHandler : IRequestHandler<GetAllReturnItemsRequest, Result<IEnumerable<ReturnItemModel>>>
     {
         private readonly IRepository<ReturnItem> _repo;
-        public GetAllReturnItemsHandler(IRepository<ReturnItem> repo)
-        {
-            _repo = repo;
-        }
+        public GetAllReturnItemsHandler(IRepository<ReturnItem> repo) => _repo = repo;
 
         public async Task<Result<IEnumerable<ReturnItemModel>>> Handle(GetAllReturnItemsRequest request, CancellationToken cancellationToken)
         {
-            var result = await _repo.All();
-            if (!result.IsSuccess) return result.Error!;
-
-            var records = result.Value!.Select(x => ReturnItemModel.FromEntity(x));
-            return Result<IEnumerable<ReturnItemModel>>.Success(records);
+            return await _repo.All(
+                projection: ri => new ReturnItemModel(ri.Id, ri.ReturnId, ri.ProductId, ri.Quantity, ri.Price, ri.CreatedAt));
         }
     }
 }

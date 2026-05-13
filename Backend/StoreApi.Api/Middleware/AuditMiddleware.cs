@@ -1,68 +1,50 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using StoreSystem.Core.Entities;
-using StoreSystem.Core.interfaces;
+using Serilog;
 
 namespace StoreApi.Api.Middleware
 {
     public class AuditMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<AuditMiddleware> _logger;
-        public AuditMiddleware(RequestDelegate next, ILogger<AuditMiddleware> logger)
+
+        public AuditMiddleware(RequestDelegate next)
         {
             _next = next;
-            _logger = logger;
         }
 
-        public async Task Invoke(HttpContext context,IRepository<AuditLog> _Repo)
+        public async Task Invoke(HttpContext context)
         {
-            DateTime StartAt = DateTime.UtcNow;
+            var stopwatch = Stopwatch.StartNew();
             await _next(context);
-            DateTime EndAt = DateTime.UtcNow;
-            TimeSpan Duration = EndAt - StartAt;
+            stopwatch.Stop();
 
-            
-            if (context.Request.Method != "GET")
+            var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Anonymous";
+            var ipAddress = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                ?? context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+
+            if (context.Response.StatusCode == 401 || context.Response.StatusCode >= 400)
             {
-                var userId = context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                var ipAddress = context.Request.Headers["X-Forwarded-For"].FirstOrDefault();
-
-                if (string.IsNullOrEmpty(ipAddress))
-                {
-                    ipAddress = context.Connection.RemoteIpAddress?.ToString();
-                }
-
-
-                AuditLog log = new()
-                {
-                    UserId = userId ?? "Anonymous",
-                    Method = context.Request.Method,
-                    Endpoint = context.Request.Path,
-                    IpAddress = ipAddress,
-                    StatusCode = context.Response.StatusCode,
-
-                };
-
-                await _Repo.Add(log);  
-            }
-            
-            if(context.Response.StatusCode == 401 || context.Response.StatusCode == 400)
-                _logger.LogWarning("Request {method} {path} responded {status}  time: {Duration} seconds",
-                context.Request.Method,
-                context.Request.Path,
-                context.Response.StatusCode, Duration.Seconds);
-            else
-                _logger.LogInformation(
-                    "Request {method} {path} responded {status}  time: {Duration} seconds",
+                Log.Warning(
+                    "HTTP {Method} {Path} responded {StatusCode} in {ElapsedMs}ms | User: {UserId} | IP: {IpAddress}",
                     context.Request.Method,
                     context.Request.Path,
-                    context.Response.StatusCode, Duration.Seconds);
+                    context.Response.StatusCode,
+                    stopwatch.ElapsedMilliseconds,
+                    userId,
+                    ipAddress);
+            }
+            else if (context.Request.Method != "GET")
+            {
+                Log.Information(
+                    "HTTP {Method} {Path} responded {StatusCode} in {ElapsedMs}ms | User: {UserId} | IP: {IpAddress}",
+                    context.Request.Method,
+                    context.Request.Path,
+                    context.Response.StatusCode,
+                    stopwatch.ElapsedMilliseconds,
+                    userId,
+                    ipAddress);
+            }
         }
-
     }
 }

@@ -4,8 +4,5 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Query
 {
-    public class GetReturnByIdRequest : IRequest<Result<ReturnModel>>
-    {
-        public int Id { get; set; }
-    }
+    public record GetReturnByIdRequest(int Id) : IRequest<Result<ReturnModel>>;
 }

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using BookingSystem.Core.common;
+using StoreSystem.Core.common;
 
 namespace StoreApi.Api.Hubs
 {

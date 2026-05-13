@@ -5,7 +5,7 @@ using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
-using BookingSystem.Core.common;
+
 using StoreSystem.Application.Interface;
 using StoreApi.Api.Contract.Product;
 using Asp.Versioning;
@@ -49,7 +49,7 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _mediator.Send(new GetProductByIdRequest { Id = id });
+            var result = await _mediator.Send(new GetProductByIdRequest(id));
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 

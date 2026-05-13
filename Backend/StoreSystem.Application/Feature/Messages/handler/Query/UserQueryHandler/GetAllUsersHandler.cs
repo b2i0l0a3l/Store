@@ -15,17 +15,17 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query.UserQueryHandle
     public class GetAllUsersHandler : IRequestHandler<GetAllUsersRequest, Result<IEnumerable<UserModel>>>
     {
         private readonly IRepository<User> _Repo;
-        private readonly UserManager<User> _UserManager;
-        public  GetAllUsersHandler(IRepository<User> Repo, UserManager<User> UserManager)
-        {
-            _Repo = Repo;
-            _UserManager = UserManager;
-        }
+        public GetAllUsersHandler(IRepository<User> Repo) => _Repo = Repo;
         public async Task<Result<IEnumerable<UserModel>>> Handle(GetAllUsersRequest request, CancellationToken cancellationToken)
         {
-            Result<IEnumerable<User>?> Users = await _Repo.All();
-            if (!Users.IsSuccess || Users.Value == null) return Users.Error!;
-            return Users.Value.Select(x => new UserModel() { Email = x.Email ?? x.UserName!, FullName = x.FullName, Role = x.Role, UserId = x.Id }).ToList();
+            return await _Repo.All(
+                projection: x => new UserModel
+                {
+                    UserId = x.Id,
+                    Email = x.Email ?? x.UserName!,
+                    FullName = x.FullName,
+                    Role = x.Role
+                });
         }
     }
 }

@@ -26,7 +26,14 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Logout
             if (user == null)
                 return Errors.UserNotFoundError;
 
-            Result<RefreshToken?> tokensResult = await _repo.GetByCondition(x => x.TokenId == request.TokenId);
+            var tokensResult = await _repo.GetByCondition(
+                x => x.TokenId == request.TokenId,
+                projection: x => new RefreshToken
+                {
+                    Id = x.Id,
+                    TokenId = x.TokenId,
+                    RefreshTokenRevokedAt = x.RefreshTokenRevokedAt
+                });
 
             if (tokensResult.Value == null)
                 return new Error("RefreshTokenNotFoundError", Core.enums.ErrorType.General, "Refresh Token Not Found");

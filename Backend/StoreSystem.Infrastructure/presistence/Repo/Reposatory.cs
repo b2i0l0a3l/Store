@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using StoreSystem.Core.common;
 using Microsoft.EntityFrameworkCore;
-
-using StoreSystem.Infrastructure.Persistence;
-using Microsoft.Extensions.Logging;
-using StoreSystem.Core.interfaces;
+using StoreSystem.Core.common;
 using StoreSystem.Core.enums;
+using StoreSystem.Core.interfaces;
 
 namespace StoreSystem.Infrastructure.Persistence.Repo
 {
@@ -17,37 +10,42 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
     {
         protected readonly AppDbContext _Context;
         protected DbSet<T> _Set;
+
         public Repository(AppDbContext context)
         {
             _Context = context;
             _Set = _Context.Set<T>();
         }
 
-        public async Task<Result<T>> Add(T Entity)
+        // ─── Write Operations ────────────────────────────────────────────────
+
+        public async Task<Result<int>> Add(T Entity)
         {
             try
             {
                 await _Set.AddAsync(Entity);
                 await _Context.SaveChangesAsync();
-                return Entity;
+                var idProp = typeof(T).GetProperty("Id");
+                int id = idProp != null ? (int)(idProp.GetValue(Entity) ?? 0) : 0;
+                return id;
             }
             catch
             {
-                return new Error("AddFailed", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
+                return new Error("AddFailed", ErrorType.Failure, "A database error occurred.");
             }
         }
 
-        public async Task<Result<IEnumerable<T>>> AddRange(IEnumerable<T> entities)
+        public async Task<Result> AddRange(IEnumerable<T> entities)
         {
             try
             {
                 await _Set.AddRangeAsync(entities);
                 await _Context.SaveChangesAsync();
-                return Result<IEnumerable<T>>.Success(entities);
+                return Result.Success();
             }
             catch
             {
-                return new Error("AddRangeFailed", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred during bulk insert.");
+                return new Error("AddRangeFailed", ErrorType.Failure, "A database error occurred during bulk insert.");
             }
         }
 
@@ -55,64 +53,15 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
         {
             try
             {
-                var result = await findAsync(Id);
-                if (result == null) return new Error("DeleteFaild",StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");;
-                _Set.Remove(result);
+                var entity = await _Set.FindAsync(Id);
+                if (entity == null) return new Error("DeleteFailed", ErrorType.NotFound, "Entity Not Found");
+                _Set.Remove(entity);
                 await _Context.SaveChangesAsync();
                 return true;
-            }catch
-            {
-                return new Error("DeleteFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
             }
-        }
-
-        public async Task<Result<PagedResult<T>?>> GetAll(int pageNumber , int pageSize)
-        {
-            try
+            catch
             {
-                int TotoalItems = await _Set.CountAsync();
-                if (TotoalItems <= 0) return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");
-                
-                List<T> items = await _Set.AsNoTracking()
-                .Skip((pageNumber - 1) * pageSize).
-                Take(pageSize).ToListAsync();
-                
-                return new PagedResult<T>
-                {
-                    Items = items,
-                    TotalItems = TotoalItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize
-                };
-            }catch
-            {
-                return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
-            }
-        }
-
-        public async Task<Result<T?>> GetByCondition(Expression<Func<T, bool>> exp)
-        {
-            try
-            {
-                var result = await _Set.FirstOrDefaultAsync(exp);
-                if (result == null) return new Error("GetFaild",StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");
-                return result;
-            }catch
-            {
-                return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
-            }
-        }
-
-        public async Task<Result<T?>> GetById(int Id)
-        {
-            try
-            {
-                var result = await findAsync(Id);
-                if (result == null) return new Error("GetByIdFaild",StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");;
-                return result;
-            }catch(Exception ex)
-            {
-                return new Error("GetByIdFaild",ErrorType.General,ex.Message);;
+                return new Error("DeleteFailed", ErrorType.Failure, "A database error occurred.");
             }
         }
 
@@ -120,57 +69,129 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
         {
             try
             {
-                var result = await findAsync(Id);
-                if (result == null) return new Error("UpdateFaild", StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found"); ;
-                UpdateAction(result);
+                var entity = await _Set.FindAsync(Id);
+                if (entity == null) return new Error("UpdateFailed", ErrorType.NotFound, "Entity Not Found");
+                UpdateAction(entity);
                 await _Context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
-                return new Error("UpdateFaild", ErrorType.General, ex.Message); ;
+                return new Error("UpdateFailed", ErrorType.General, ex.Message);
             }
         }
-      
-        private async Task<T?> findAsync(int Id)
-        => await _Set.FindAsync(Id);
 
-        public async Task<Result<PagedResult<T>?>> GetAllById(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate )
+        // ─── Single-Entity Queries ───────────────────────────────────────────
+
+        public async Task<Result<TResult>> GetById<TResult>(int Id, Expression<Func<T, TResult>> projection)
         {
             try
             {
-                int TotoalItems = await _Set.CountAsync();
-                if (TotoalItems <= 0) return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.NotFound, "Entity Not Found");
+                var result = await _Set.AsNoTracking()
+                    .Where(e => EF.Property<int>(e, "Id") == Id)
+                    .Select(projection)
+                    .FirstOrDefaultAsync();
 
-                List<T> items = await _Set.AsNoTracking().Where(predicate)
-                .Skip((pageNumber - 1) * pageSize).
-                Take(pageSize).OrderDescending().ToListAsync();
-
-                return new PagedResult<T>
-                {
-                    Items = items,
-                    TotalItems = TotoalItems,
-                    PageNumber = pageNumber,
-                    PageSize = pageSize
-                };
+                if (result == null) return new Error("NotFound", ErrorType.NotFound, "Entity Not Found");
+                return Result<TResult>.Success(result);
             }
-            catch
+            catch (Exception ex)
             {
-                return new Error("GetFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
+                return new Error("GetByIdFailed", ErrorType.General, ex.Message);
             }
         }
 
-        public async  Task<Result<IEnumerable<T>?>> All()
+        public async Task<Result<TResult>> GetByCondition<TResult>(Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> projection)
         {
-             try
+            try
             {
-                List<T> items = await _Set.AsNoTracking().ToListAsync();
-                if (items.Count <= 0) return Errors.DataNotFoundError;
-                return items;   
+                var result = await _Set.AsNoTracking()
+                    .Where(predicate)
+                    .Select(projection)
+                    .FirstOrDefaultAsync();
+
+                if (result == null) return new Error("NotFound", ErrorType.NotFound, "Entity Not Found");
+                return Result<TResult>.Success(result);
             }
             catch
             {
-                return new Error("AllFaild", StoreSystem.Core.enums.ErrorType.Failure, "A database error occurred.");
+                return new Error("GetFailed", ErrorType.Failure, "A database error occurred.");
+            }
+        }
+
+        // ─── Paged Queries ───────────────────────────────────────────────────
+
+        public async Task<Result<PagedResult<TResult>>> GetAll<TResult>(int pageNumber, int pageSize, Expression<Func<T, TResult>> projection)
+        {
+            try
+            {
+                int totalItems = await _Set.CountAsync();
+                if (totalItems <= 0) return new Error("NotFound", ErrorType.NotFound, "No records found.");
+
+                List<TResult> items = await _Set.AsNoTracking()
+                    .Select(projection)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Result<PagedResult<TResult>>.Success(new PagedResult<TResult>
+                {
+                    Items = items,
+                    TotalItems = totalItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                });
+            }
+            catch
+            {
+                return new Error("GetFailed", ErrorType.Failure, "A database error occurred.");
+            }
+        }
+
+        public async Task<Result<PagedResult<TResult>>> GetAllById<TResult>(int pageNumber, int pageSize, Expression<Func<T, bool>> predicate, Expression<Func<T, TResult>> projection)
+        {
+            try
+            {
+                int totalItems = await _Set.Where(predicate).CountAsync();
+                if (totalItems <= 0) return new Error("NotFound", ErrorType.NotFound, "No records found.");
+
+                List<TResult> items = await _Set.AsNoTracking()
+                    .Where(predicate)
+                    .Select(projection)
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return Result<PagedResult<TResult>>.Success(new PagedResult<TResult>
+                {
+                    Items = items,
+                    TotalItems = totalItems,
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                });
+            }
+            catch
+            {
+                return new Error("GetFailed", ErrorType.Failure, "A database error occurred.");
+            }
+        }
+
+        // ─── Full-List Query ─────────────────────────────────────────────────
+
+        public async Task<Result<IEnumerable<TResult>>> All<TResult>(Expression<Func<T, TResult>> projection)
+        {
+            try
+            {
+                List<TResult> items = await _Set.AsNoTracking()
+                    .Select(projection)
+                    .ToListAsync();
+
+                if (items.Count == 0) return new Error("NotFound", ErrorType.NotFound, "No records found.");
+                return Result<IEnumerable<TResult>>.Success(items);
+            }
+            catch
+            {
+                return new Error("AllFailed", ErrorType.Failure, "A database error occurred.");
             }
         }
     }

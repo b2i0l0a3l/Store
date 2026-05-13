@@ -4,8 +4,5 @@ using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Query
 {
-    public class GetSupplierByIdRequest : IRequest<Result<SupplierModel>>
-    {
-        public int Id { get; set; }
-    }
+    public record GetSupplierByIdRequest(int Id) : IRequest<Result<SupplierModel>>;
 }

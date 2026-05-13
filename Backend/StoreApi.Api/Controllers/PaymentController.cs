@@ -6,7 +6,7 @@ using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
-using BookingSystem.Core.common;
+
 
 namespace StoreApi.Api.Controllers
 {
@@ -48,7 +48,7 @@ namespace StoreApi.Api.Controllers
         [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _mediator.Send(new GetPaymentByIdRequest { Id = id });
+            var result = await _mediator.Send(new GetPaymentByIdRequest(id));
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 

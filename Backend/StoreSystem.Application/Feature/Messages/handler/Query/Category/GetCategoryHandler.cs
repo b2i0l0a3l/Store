@@ -10,24 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetCategoryHandler : IRequestHandler<GetCategoriesRequest, Result<PagedResult<CategoryModel>>>
     {
         private readonly IRepository<Category> _Repo;
-        public GetCategoryHandler(IRepository<Category> Repo)
-        {
-            _Repo = Repo;
-        }
+        public GetCategoryHandler(IRepository<Category> Repo) => _Repo = Repo;
+
         public async Task<Result<PagedResult<CategoryModel>>> Handle(GetCategoriesRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<Category>?> result = await _Repo.GetAll(request.PageNumber, request.PageSize);
-            if (!result.IsSuccess) return result.Error!;
-
-            PagedResult<CategoryModel> records = new()
-            {
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Items = result.Value!.Items.Select(x => CategoryModel.FromEntity(x)),
-                TotalItems = result.Value.TotalItems,
-            };
-
-            return records;
+            return await _Repo.GetAll(request.PageNumber, request.PageSize,
+                projection: c => new CategoryModel(c.Id, c.Name));
         }
     }
 }

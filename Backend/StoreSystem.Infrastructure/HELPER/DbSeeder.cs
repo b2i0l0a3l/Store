@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BookingSystem.Core.common;
+using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using StoreSystem.Core.Entities;

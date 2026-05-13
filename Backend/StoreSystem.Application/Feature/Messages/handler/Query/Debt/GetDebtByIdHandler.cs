@@ -10,17 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetDebtByIdHandler : IRequestHandler<GetDebtByIdRequest, Result<DebtModel>>
     {
         private readonly IRepository<Debt> _Repo;
-        public GetDebtByIdHandler(IRepository<Debt> repo)
-        {
-            _Repo = repo;        }
+        public GetDebtByIdHandler(IRepository<Debt> repo) => _Repo = repo;
 
         public async Task<Result<DebtModel>> Handle(GetDebtByIdRequest request, CancellationToken cancellationToken)
         {
-            var result = await _Repo.GetById(request.Id);
-            if (!result.IsSuccess || result.Value == null)
-                return new Error("NotFound", Core.enums.ErrorType.General, $"Debt with Id {request.Id} not found");
-
-            return DebtModel.FromEntity(result.Value);
+            return await _Repo.GetById(request.Id,
+                projection: d => new DebtModel(d.Id, d.OrderId, d.ClientId, d.Remaining, d.CreatedAt, d.UpdatedAt));
         }
     }
 }

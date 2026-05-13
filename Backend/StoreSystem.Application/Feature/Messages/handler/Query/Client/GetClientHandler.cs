@@ -10,24 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetClientHandler : IRequestHandler<GetClientsRequest, Result<PagedResult<ClientModel>>>
     {
         private readonly IRepository<Client> _Repo;
-        public GetClientHandler(IRepository<Client> Repo)
-        {
-            _Repo = Repo;
-        }
+        public GetClientHandler(IRepository<Client> Repo) => _Repo = Repo;
+
         public async Task<Result<PagedResult<ClientModel>>> Handle(GetClientsRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<Client>?> result = await _Repo.GetAll(request.PageNumber, request.PageSize);
-            if (!result.IsSuccess) return result.Error!;
-
-            PagedResult<ClientModel> records = new()
-            {
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Items = result.Value!.Items.Select(x => ClientModel.FromEntity(x)),
-                TotalItems = result.Value.TotalItems,
-            };
-
-            return records;
+            return await _Repo.GetAll(request.PageNumber, request.PageSize,
+                projection: c => new ClientModel(c.Id, c.Name, c.PhoneNumber, c.Address));
         }
     }
 }

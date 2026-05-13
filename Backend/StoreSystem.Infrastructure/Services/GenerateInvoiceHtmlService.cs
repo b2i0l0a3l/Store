@@ -1,19 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using StoreSystem.Application.Interface;
 using StoreSystem.Core.interfaces.functions;
 using StoreSystem.Core.Models.Invoice;
 
-namespace StoreSystem.Application.shared
+namespace StoreSystem.Infrastructure.Services
 {
     public class GenerateInvoiceHtmlService : IGenerateInvoiceHtml
     {
         private IGenerateQrCode _GenerateQrCode;
         private IInvoiceProcedure _Invoice;
-        public GenerateInvoiceHtmlService(IInvoiceProcedure Invoice,IGenerateQrCode GenerateQrCode)
+        public GenerateInvoiceHtmlService(IInvoiceProcedure Invoice, IGenerateQrCode GenerateQrCode)
         {
             _GenerateQrCode = GenerateQrCode;
             _Invoice = Invoice;

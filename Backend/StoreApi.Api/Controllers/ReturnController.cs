@@ -44,7 +44,7 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _mediator.Send(new GetReturnByIdRequest { Id = id });
+            var result = await _mediator.Send(new GetReturnByIdRequest(id));
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 

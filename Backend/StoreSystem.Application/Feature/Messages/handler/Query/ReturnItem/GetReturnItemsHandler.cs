@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Query;
 using StoreSystem.Core.common;
@@ -15,25 +10,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
     public class GetReturnItemsHandler : IRequestHandler<GetReturnItemsRequest, Result<PagedResult<ReturnItemModel>>>
     {
         private readonly IRepository<ReturnItem> _Repo;
-        public GetReturnItemsHandler(IRepository<ReturnItem> repo)
-        {
-            _Repo = repo;
-        }
+        public GetReturnItemsHandler(IRepository<ReturnItem> Repo) => _Repo = Repo;
 
         public async Task<Result<PagedResult<ReturnItemModel>>> Handle(GetReturnItemsRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<ReturnItem>?> result = await _Repo.GetAll(request.PageNumber, request.PageSize);
-            if (!result.IsSuccess) return result.Error!;
-
-            PagedResult<ReturnItemModel> records = new()
-            {
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize,
-                Items = result.Value!.Items.Select(x => ReturnItemModel.FromEntity(x)),
-                TotalItems = result.Value.TotalItems,
-            };
-
-            return records;
+            return await _Repo.GetAll(request.PageNumber, request.PageSize,
+                projection: ri => new ReturnItemModel(ri.Id, ri.ReturnId, ri.ProductId, ri.Quantity, ri.Price, ri.CreatedAt));
         }
     }
 }

@@ -34,7 +34,17 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
 
             if (string.IsNullOrEmpty(request.TokenId)) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Token Id is Required!");
 
-            Result<RefreshToken?> result  = await _Repo.GetByCondition(x=>x.TokenId == request.TokenId);
+            var result = await _Repo.GetByCondition(
+                x => x.TokenId == request.TokenId,
+                projection: x => new RefreshToken
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    TokenId = x.TokenId,
+                    RefreshTokenHash = x.RefreshTokenHash,
+                    RefreshTokenExpiresAt = x.RefreshTokenExpiresAt,
+                    RefreshTokenRevokedAt = x.RefreshTokenRevokedAt
+                });
 
             if (result.Value == null) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Refresh Token Not found!");
 
@@ -52,13 +62,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
                 return new Error("RefreshTokenERROR", Core.enums.ErrorType.General, "Invalid refresh token");
  
             string userRole = _UManager.GetRolesAsync(user).Result.FirstOrDefault() ?? "Staff";
-            List<Claim> claims = new()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email!),
-                new Claim("TokenId", refreshToken.TokenId),
-                new Claim("FullName", user.FullName),
-            };
+           
+            List<Claim> claims = AddClaims(user,refreshToken);
+
             var roles = await _UManager.GetRolesAsync(user);
             if (roles.Any())
                 {
@@ -71,8 +77,6 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
                 {
                     claims.Add(new Claim(ClaimTypes.Role, "Staff"));
                 }
-            if (user.ImagePath != null)
-                claims.Add(new Claim("ImagePath", user.ImagePath));
            
             string newAccessToken = _GenerateJwtToken.Generate(claims);
             string newRefreshToken = _GenerateRefreshToken.Generate(64);
@@ -90,6 +94,19 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
                 RefreshToken = newRefreshToken
             };
             return model;
+    }
+
+    private List<Claim> AddClaims(User user,RefreshToken refreshToken)
+    {
+        List<Claim> claims = new()
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim("TokenId", refreshToken.TokenId),
+            new Claim("FullName", user.FullName),
+        };
+        
+        return claims;
     }
     }
 }

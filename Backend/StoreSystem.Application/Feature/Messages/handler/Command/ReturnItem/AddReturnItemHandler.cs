@@ -3,13 +3,12 @@ using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
-using StoreSystem.Core.Models;
 using StoreSystem.Application.Interface;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command
 {
-    public class AddReturnItemHandler : IRequestHandler<AddReturnItemRequest, Result<ReturnItemModel>>
+    public class AddReturnItemHandler : IRequestHandler<AddReturnItemRequest, Result<int>>
     {
         private readonly IRepository<ReturnItem> _Repo;
         private readonly IBackgroundTaskQueue _taskQueue;
@@ -20,7 +19,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
             _taskQueue = taskQueue;
         }
 
-        public async Task<Result<ReturnItemModel>> Handle(AddReturnItemRequest request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(AddReturnItemRequest request, CancellationToken cancellationToken)
         {
             var returnItem = new ReturnItem
             {
@@ -43,7 +42,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command
                 }
             });
 
-            return ReturnItemModel.FromEntity(result.Value!);
+            return result;
         }
     }
 }
