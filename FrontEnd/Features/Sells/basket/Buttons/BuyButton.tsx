@@ -4,6 +4,7 @@ import { CartItem, useStore } from "@/Features/Sells/store/store";
 import { useProductStore } from "@/Features/Products/store/product";
 import { useState, useMemo, useCallback } from "react";
 import { buy } from "@/Features/Orders/api/orderApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { db } from "@/util/db";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
@@ -63,6 +64,7 @@ export default function BuyButton() {
           })),
         );
         toast.success(res.message || "تم الشراء بنجاح");
+        invalidateCache("orders", "products", "dashboard", "clients");
       } else {
         useStore.getState().copy(copy);
         toast.error(res.message || "فشل في الشراء");

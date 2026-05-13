@@ -1,5 +1,6 @@
 "use client";
 import { deleteProduct } from "@/Features/Products/api/productApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback, useState } from "react";
@@ -32,6 +33,7 @@ const DeleteProductButton = memo(function DeleteProductButton({
       },
       onSuccess: () => {
         useProductStore.getState().recordDelete(dataId);
+        invalidateCache("products", "dashboard");
       }
     });
     setIsDeleting(false);

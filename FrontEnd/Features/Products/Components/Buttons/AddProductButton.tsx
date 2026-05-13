@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { useState, useCallback } from "react";
 import ProductModal from "../Modal/ProductModal";
 import { addProduct } from "@/Features/Products/api/productApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { category } from "@/Features/Categories/types";
 import { useProductStore } from "@/Features/Products/store/product";
 import { product } from "../../types";
@@ -49,6 +50,7 @@ export default function AddProductButton({
       const res = await addProduct(payload);
       if (res.succeeded) {
         recordAdd(formData);
+        invalidateCache("products", "dashboard");
         setOpenModal(false);
       }
     },

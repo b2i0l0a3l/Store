@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import SidebarProvider from "../../components/side-bar/SidebarProvider";
 import TopBar from "../../components/top-bar/TopBar";
 
@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "My Store",
-  description: "  description: Verwalten sie dein Geschaft.",
+  title: "StoreOS — Point of Sale",
+  description:
+    "Manage your store: sell products, track inventory, manage clients, and analyse revenue — all in one place.",
   manifest: "/manifest.json",
 };
 

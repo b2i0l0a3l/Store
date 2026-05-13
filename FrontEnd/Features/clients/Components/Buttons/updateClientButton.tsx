@@ -4,6 +4,7 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { memo, useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { updateClient } from "@/Features/clients/api/clientApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { useClientStore } from "@/Features/clients/store/client";
 import { toast } from "@/store/useToastStore";
 import { client } from "../../types";
@@ -37,6 +38,7 @@ const UpdateClientButton = memo(function UpdateClientButton({
         },
         onSuccess: () => {
           recordUpdate({ id: data.id, name, phoneNumber, address });
+          invalidateCache("clients", "dashboard");
           setOpen(false);
         }
       });

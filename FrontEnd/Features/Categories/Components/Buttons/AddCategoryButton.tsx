@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { useState, useCallback } from "react";
 import CategoryModal from "../Modal/CategoryModal";
 import { addCategory } from "@/Features/Categories/api/categoryApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { useCategoryStore } from "@/Features/Categories/store/category";
 import { toast } from "@/store/useToastStore";
 import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
@@ -32,6 +33,7 @@ export default function AddCategoryButton() {
         },
         onSuccess: (data) => {
           if (data) recordAdd(data);
+          invalidateCache("categories", "dashboard");
           setOpenModal(false);
         }
       });

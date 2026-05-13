@@ -7,7 +7,7 @@ export async function getCategories(): Promise<category[]> {
     const result = await fetchApi<{ value: category[] }>(
       `/Category/GetAllCategories`,
       {
-        cache: "no-store",
+        next: { tags: ["categories"] },
       },
     );
 

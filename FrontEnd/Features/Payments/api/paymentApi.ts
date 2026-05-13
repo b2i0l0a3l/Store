@@ -4,7 +4,9 @@ import { MyResponse } from "@/util/types";
 
 export async function GetPayments(): Promise<Payment[]> {
   try {
-    const data = await fetchApi<MyResponse<Payment[]>>("/Payment/All");
+    const data = await fetchApi<MyResponse<Payment[]>>("/Payment/All", {
+      next: { tags: ["payments"] },
+    });
     return data.value?.value ?? [];
   } catch (error) {
     console.error("Error fetching payments:", error);

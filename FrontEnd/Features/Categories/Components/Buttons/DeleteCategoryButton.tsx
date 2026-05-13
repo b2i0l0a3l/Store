@@ -1,5 +1,6 @@
 "use client";
 import { deleteCategory } from "@/Features/Categories/api/categoryApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback, useState } from "react";
@@ -32,6 +33,7 @@ const DeleteCategoryButton = memo(function DeleteCategoryButton({
       },
       onSuccess: () => {
         useCategoryStore.getState().recordDelete(dataId);
+        invalidateCache("categories", "dashboard");
       }
     });
     setIsDeleting(false);

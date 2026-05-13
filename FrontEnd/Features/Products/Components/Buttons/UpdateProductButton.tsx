@@ -4,6 +4,7 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { memo, useState, useCallback } from "react";
 import ProductModal from "../Modal/ProductModal";
 import { updateProduct } from "@/Features/Products/api/productApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { useProductStore } from "@/Features/Products/store/product";
 import { category } from "@/Features/Categories/types";
 import { product } from "@/Features/Products/types";
@@ -52,6 +53,7 @@ const UpdateProductButton = memo(function UpdateProductButton({
       const res = await updateProduct(payload);
       if (res.succeeded) {
         useProductStore.getState().recordUpdate({ ...data, ...formData });
+        invalidateCache("products", "dashboard");
         toast.success(res.message || "تم تعديل المنتج بنجاح");
         setOpen(false);
       } else {

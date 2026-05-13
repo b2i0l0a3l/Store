@@ -4,6 +4,7 @@ import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { memo, useState, useCallback } from "react";
 import CategoryModal from "../Modal/CategoryModal";
 import { updateCategory } from "@/Features/Categories/api/categoryApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { useCategoryStore } from "@/Features/Categories/store/category";
 import { toast } from "@/store/useToastStore";
 import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
@@ -32,6 +33,7 @@ const UpdateCategoryButton = memo(function UpdateCategoryButton({
           useCategoryStore
             .getState()
             .recordUpdate({ id: data.id, name, totalCount: data.totalCount });
+          invalidateCache("categories", "dashboard");
           setOpen(false);
         }
       });

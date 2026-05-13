@@ -37,46 +37,17 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                 {
                     return Errors.UserNotFoundError;
                 }
-                
+
                 bool result = await _UManager.CheckPasswordAsync(user, request.Password);
                 if (!result) return Errors.InvalidCredError;
 
                 string TokenId = _RefreshToken.Generate(16);
                 var roles = await _UManager.GetRolesAsync(user);
-                List<Claim> Claims = new()
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email!),
-                    new Claim("TokenId", TokenId),
-                    new Claim("FullName", user.FullName),
-                };
-
-                if (roles.Any())
-                {
-                    foreach (var role in roles)
-                    {
-                        Claims.Add(new Claim(ClaimTypes.Role, role));
-                    }
-                }
-                else
-                {
-                    Claims.Add(new Claim(ClaimTypes.Role, "Staff"));
-                }
-                if (user.ImagePath != null)
-                    Claims.Add(new Claim("ImagePath", user.ImagePath));
+                List<Claim> Claims = GetClaims(user, roles);
                 
-                var newRefreshToken = _RefreshToken.Generate(64);
-                RefreshToken refreshToken = new()
-                {
-                    UserId = user.Id,
-                    TokenId = TokenId,
-                    RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken),
-                    RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(30),
-                    RefreshTokenRevokedAt = null
-                };
-
-                await _Repo.Add(refreshToken);
-
+                
+                string newRefreshToken = _RefreshToken.Generate(64);
+                await AddRefreshTokenToDb(user, TokenId, newRefreshToken);
 
                 TokenModel model = new()
                 {
@@ -84,11 +55,52 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Login
                     RefreshToken = newRefreshToken
                 };
                 return model;
-            }catch
-            {
-                return new Error("LoginError",Core.enums.ErrorType.Failure, "An error occurred during login.");
             }
-            
+            catch
+            {
+                return new Error("LoginError", Core.enums.ErrorType.Failure, "An error occurred during login.");
+            }
+
         }
+        private List<Claim> GetClaims(User user, IList<string> roles)
+        {
+            List<Claim> Claims = new()
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim("FullName", user.FullName),
+            };
+
+            if (roles.Any())
+            {
+                foreach (var role in roles)
+                {
+                    Claims.Add(new Claim(ClaimTypes.Role, role));
+                }
+            }
+            else
+            {
+                Claims.Add(new Claim(ClaimTypes.Role, "Staff"));
+            }
+            if (user.ImagePath != null)
+                Claims.Add(new Claim("ImagePath", user.ImagePath));
+
+            return Claims;
+        }
+
+        private async Task AddRefreshTokenToDb(User user, string TokenId, string newRefreshToken)
+        {
+            RefreshToken refreshToken = new()
+            {
+                UserId = user.Id,
+                TokenId = TokenId,
+                RefreshTokenHash = BCrypt.Net.BCrypt.HashPassword(newRefreshToken),
+                RefreshTokenExpiresAt = DateTime.UtcNow.AddDays(30),
+                RefreshTokenRevokedAt = null
+            };
+
+            await _Repo.Add(refreshToken);
+        }
+   
     }
 }

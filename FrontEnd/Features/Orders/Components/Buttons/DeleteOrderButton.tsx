@@ -4,6 +4,7 @@ import { useOrderStore } from "../../store/order";
 import { useState } from "react";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
 import { deleteOrder } from "../../api/orderApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { toast } from "@/store/useToastStore";
 import { db } from "@/util/db";
 import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
@@ -27,6 +28,7 @@ export default function DeleteOrderButton({ id }: { id: number }) {
       },
       onSuccess: () => {
         useOrderStore.getState().recordDelete(id);
+        invalidateCache("orders", "products", "dashboard", "clients");
       },
       onError: () => {
         useOrderStore.getState().deletedOrderIds.delete(id);

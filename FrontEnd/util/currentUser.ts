@@ -15,8 +15,12 @@ export async function CurrentUser(): Promise<user | null> {
   const token = await getAccessToken();
 
   if (token === null || token === undefined) return null;
-  const decoded = decodeJwt<JwtPayload>(token);
-
+  let decoded;
+  try {
+    decoded = decodeJwt<JwtPayload>(token);
+  } catch (error) {
+    return null;
+  }
   const email =
     decoded[
       "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
@@ -35,7 +39,12 @@ export async function CurrentUser(): Promise<user | null> {
 export async function CurrentTokenId(): Promise<string | undefined> {
   const token = await getAccessToken();
   if (token === null || token === undefined) return undefined;
-  const decoded = decodeJwt<JwtPayload>(token);
+  let decoded;
+  try {
+    decoded = decodeJwt<JwtPayload>(token);
+  } catch (error) {
+    return undefined;
+  }
   const tokenId = decoded["TokenId"];
   return tokenId;
 }

@@ -13,7 +13,7 @@ export async function buy(body: any): Promise<MyResponse<string>> {
 export async function getOrders(): Promise<order[]> {
   try {
     const result = await fetchApi<{ value: order[] }>(`/Order/All`, {
-      cache: "no-store",
+      next: { tags: ["orders"] },
     });
 
     if (!result.succeeded || !result.value) {
@@ -30,7 +30,7 @@ export async function getOrders(): Promise<order[]> {
 export async function getOrderById(id: number): Promise<order | null> {
   try {
     const result = await fetchApi<order>(`/Order/GetById/${id}`, {
-      cache: "no-store",
+      next: { tags: ["orders"] },
     });
 
     if (!result.succeeded || !result.value) {
@@ -54,7 +54,7 @@ export async function getOrderItems(id: number): Promise<OrderItem[] | null> {
     const result = await fetchApi<OrderItem[]>(
       `/Order/GetOrderItemsByOrderId?OrderId=${id}`,
       {
-        cache: "no-store",
+        next: { tags: ["orders"] },
       },
     );
 

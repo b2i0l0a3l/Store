@@ -5,7 +5,7 @@ import { MyResponse } from "@/util/types";
 export async function getClients(): Promise<client[]> {
   try {
     const result = await fetchApi<{ value: client[] }>(`/Client/GetAll`, {
-      cache: "no-store",
+      next: { tags: ["clients"] },
     });
 
     if (!result.succeeded || !result.value) {

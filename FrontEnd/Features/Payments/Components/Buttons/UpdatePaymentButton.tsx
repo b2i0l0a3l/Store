@@ -4,6 +4,7 @@ import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import PaymentModal from "../Modal/PaymentModal";
 import { UpdatePayment } from "@/Features/Payments/api/paymentApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
 import { toast } from "@/store/useToastStore";
 import { Payment } from "@/Features/Payments/types";
@@ -41,6 +42,7 @@ function UpdatePaymentButton({ data }: { data: Payment }) {
         },
         onSuccess: () => {
           recordUpdate({ ...data, debtId: debtId, amount, paymentMethod, notes });
+          invalidateCache("payments", "debts", "dashboard");
           setOpen(false);
         }
       });

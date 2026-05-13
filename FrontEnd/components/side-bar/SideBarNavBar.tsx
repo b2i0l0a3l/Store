@@ -86,27 +86,27 @@ export default function SideBarNavBar({
   });
 
   return (
-    <nav className="flex-1 px-4 py-8 overflow-y-auto custom-scrollbar">
-      <ul className="flex flex-col gap-3 w-full">
+    <nav className="flex-1 px-3 py-6 overflow-y-auto custom-scrollbar">
+      <ul className="flex flex-col gap-1.5 w-full">
         {links.map((link) => {
           const isActive = CurrentPath === link.Path;
           const IconComponent = link.icon || HomeIcon;
           return (
             <li key={link.name}>
               <Link href={link.Path} onClick={onClose}>
-                <div
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-300 ease-in-out
-                    ${
-                      isActive
-                        ? "bg-linear-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/30"
-                        : "text-slate-300 hover:text-white hover:bg-slate-700/50"
-                    }`}
-                >
-                  <IconComponent className="w-5 h-5 shrink-0" />
-                  <span className="font-medium text-sm">{link.name}</span>
-                  {isActive && (
-                    <div className="ml-auto w-2 h-2 bg-white rounded-full"></div>
-                  )}
+                  <div
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 ease-in-out
+                      ${
+                        isActive
+                          ? "bg-linear-to-r from-blue-600/90 to-cyan-600/90 text-white shadow-md shadow-blue-500/20"
+                          : "text-slate-400 hover:text-white hover:bg-slate-800/60"
+                      }`}
+                  >
+                    <IconComponent className="w-4 h-4 shrink-0" />
+                    <span className="font-medium text-[13px]">{link.name}</span>
+                    {isActive && (
+                      <div className="ml-auto w-1.5 h-1.5 bg-white rounded-full"></div>
+                    )}
                 </div>
               </Link>
             </li>

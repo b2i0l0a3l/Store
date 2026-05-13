@@ -60,7 +60,7 @@ export default function ProductSection({
       })
       .map((c) => updatedProducts[c.id] || c);
   }, [
-    data,
+    actualData,
     search,
     updatedProducts,
     deletedProductIds,

@@ -8,7 +8,7 @@ function ItemRow<T> (
         {columns.map((col: Column<T>) => (
           <td
             key={String(col.key)}
-            className="px-5 py-4 text-slate-300 whitespace-nowrap"
+            className="px-4 py-2.5 text-sm text-slate-300 whitespace-nowrap"
           >
             {col.render ? col.render(row) : String((row as any)[col.key] ?? "")}
           </td>

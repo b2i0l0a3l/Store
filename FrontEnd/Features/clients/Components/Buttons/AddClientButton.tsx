@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/24/solid";
 import { useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { addClient } from "@/Features/clients/api/clientApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { toast } from "@/store/useToastStore";
 import { client } from "../../types";
 import { useClientStore } from "@/Features/clients/store/client";
@@ -36,6 +37,7 @@ export default function AddClientButton() {
         },
         onSuccess: (data) => {
           if (data) recordAdd(data);
+          invalidateCache("clients", "dashboard");
           setOpenModal(false);
         }
       });

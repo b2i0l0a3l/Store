@@ -1,5 +1,6 @@
 "use client";
 import { deleteClient } from "@/Features/clients/api/clientApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback, useState } from "react";
@@ -34,6 +35,7 @@ const DeleteClientButton = memo(function DeleteClientButton({
       },
       onSuccess: () => {
         recordDelete(dataId);
+        invalidateCache("clients", "dashboard");
       }
     });
     setIsDeleting(false);

@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import {
   getProducts,
   addProduct,
@@ -13,13 +14,28 @@ export async function fetchProducts(): Promise<product[]> {
 }
 
 export async function createProductAction(productData: any) {
-  return addProduct(productData);
+  const res = await addProduct(productData);
+  if (res.succeeded) {
+    revalidateTag("products", "max");
+    revalidateTag("dashboard", "max");
+  }
+  return res;
 }
 
 export async function updateProductAction(productData: any) {
-  return updateProduct(productData);
+  const res = await updateProduct(productData);
+  if (res.succeeded) {
+    revalidateTag("products", "max");
+    revalidateTag("dashboard", "max");
+  }
+  return res;
 }
 
 export async function deleteProductAction(id: number) {
-  return deleteProduct({ id });
+  const res = await deleteProduct({ id });
+  if (res.succeeded) {
+    revalidateTag("products", "max");
+    revalidateTag("dashboard", "max");
+  }
+  return res;
 }

@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { DeletePayment } from "@/Features/Payments/api/paymentApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
 import { toast } from "@/store/useToastStore";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
@@ -29,6 +30,7 @@ function DeletePaymentButton({ id }: { id: number }) {
       },
       onSuccess: () => {
         recordDelete(id);
+        invalidateCache("payments", "debts", "dashboard");
       }
     });
     setIsDeleting(false);

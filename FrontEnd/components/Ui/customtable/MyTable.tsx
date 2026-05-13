@@ -39,16 +39,16 @@ export default function MyTable<T>({
   }, [data, currentPage, pageSize]);
 
   return (
-    <div className="w-full min-h-[60vh] flex flex-col rounded-2xl overflow-hidden border border-slate-700/50 bg-slate-800/60 backdrop-blur-xl shadow-2xl">
+    <div className="w-full min-h-[40vh] flex flex-col rounded-2xl overflow-hidden border border-white/5 bg-slate-900/60 shadow-lg">
       <div className="flex-1 overflow-x-auto">
         <Suspense fallback={<Loading />}>
           <table className="w-full h-full text-sm text-left">
             <thead>
-              <tr className="bg-slate-900/80 border-b border-slate-700/60">
+              <tr className="bg-[#0a1120] border-b border-white/10">
                 {columns.map((col) => (
                   <th
                     key={String(col.key)}
-                    className="px-5 py-4 text-xs font-semibold uppercase tracking-wider text-slate-400"
+                    className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-slate-400"
                   >
                     {col.label}
                   </th>

@@ -4,6 +4,7 @@ import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { CurrencyDollarIcon } from "@heroicons/react/24/outline";
 import PaymentModal from "../Modal/PaymentModal";
 import { pay } from "@/Features/Debts/api/paymentApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { useDebtStore } from "@/Features/Debts/store/debt";
 import { toast } from "@/store/useToastStore";
 import { db } from "@/util/db";
@@ -32,6 +33,7 @@ function PaymentButton({
       },
       onSuccess: () => {
         debtStore.recordUpdate({ ...data, id: debtId });
+        invalidateCache("debts", "payments", "dashboard");
         setOpen(false);
       }
     });

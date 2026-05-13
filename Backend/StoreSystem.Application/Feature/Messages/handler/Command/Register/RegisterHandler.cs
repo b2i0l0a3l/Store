@@ -46,9 +46,11 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
                 {
                     return new Error("CreateUserError", Core.enums.ErrorType.General, string.Join(", ", result.Errors.Select(x => x.Description)));
                 }
-                var RoleResult = await _UserManager.AddToRoleAsync(user, Roles.Staff);
+                var RoleResult = await _UserManager.AddToRoleAsync(user, Roles.User);
                 if (!RoleResult.Succeeded)
                 {
+                    await _UserManager.DeleteAsync(user);
+
                     return new Error("CreateUserRoleError", Core.enums.ErrorType.General, string.Join(", ", RoleResult.Errors.Select(x => x.Description)));
                 }
                 return new RegisterModel()

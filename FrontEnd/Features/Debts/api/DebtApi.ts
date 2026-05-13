@@ -9,6 +9,7 @@ export async function GetDebts() {
       error: string | null;
     }>("/Debt/All", {
       method: "GET",
+      next: { tags: ["debts"] },
     });
     return response.value?.value || [];
   } catch (error) {

@@ -43,123 +43,43 @@ export default function TopBarClient({ user }: TopBarClientProps) {
   return (
     <header
       id="top-bar"
-      className="hidden md:flex items-center justify-between sticky top-0 z-30 px-6 py-3 
-        bg-slate-900/80 backdrop-blur-xl border-b border-slate-700/50"
+      className="hidden md:flex items-center justify-between sticky top-0 z-30 px-5 py-2.5 bg-[#0a1120]/95 backdrop-blur-md border-b border-white/5 shadow-sm"
     >
-      <div className="flex items-center gap-3">
-        <div
-          style={{
-            width: "4px",
-            height: "24px",
-            borderRadius: "9999px",
-            background: "linear-gradient(to bottom, #3b82f6, #22d3ee)",
-          }}
-        />
-        <h2
-          style={{
-            fontSize: "1.25rem",
-            fontWeight: 700,
-            color: "white",
-            letterSpacing: "-0.01em",
-            margin: 0,
-          }}
-        >
+      <div className="flex items-center gap-2.5">
+        <div className="w-1 h-5 rounded-full bg-gradient-to-b from-blue-500 to-cyan-400" />
+        <h2 className="text-xl font-bold text-white tracking-tight m-0">
           {pageMeta.title}
         </h2>
       </div>
 
       {user && (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <NotificationBell />
 
           <div className="flex items-center gap-3">
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                gap: "1px",
-              }}
-            >
-              <span
-                style={{
-                  fontSize: "0.875rem",
-                  fontWeight: 600,
-                  color: "white",
-                  lineHeight: 1.3,
-                }}
-              >
+            <div className="flex flex-col items-end gap-0.5">
+              <span className="text-[13px] font-semibold text-white leading-none">
                 {user.fullName || user.email}
               </span>
-              <span
-                style={{
-                  fontSize: "0.7rem",
-                  fontWeight: 500,
-                  color: "#94a3b8",
-                  textTransform: "capitalize",
-                  lineHeight: 1.3,
-                }}
-              >
+              <span className="text-[11px] font-medium text-slate-400 capitalize leading-none">
                 {user.role}
               </span>
             </div>
 
-            <div
-              style={{
-                position: "relative",
-                width: "40px",
-                height: "40px",
-                borderRadius: "50%",
-                background: "linear-gradient(135deg, #3b82f6, #06b6d4)",
-                padding: "2px",
-                flexShrink: 0,
-              }}
-            >
+            <div className="relative w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 p-[2px] shrink-0 shadow-sm">
               {imageUrl ? (
                 <img
                   src={imageUrl}
                   alt={user.fullName || "User avatar"}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    border: "2px solid #0f172a",
-                  }}
+                  className="w-full h-full rounded-full object-cover border-[1.5px] border-slate-900"
                 />
               ) : (
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "#1e293b",
-                    border: "2px solid #0f172a",
-                    color: "#93c5fd",
-                    fontSize: "0.8rem",
-                    fontWeight: 700,
-                    letterSpacing: "0.05em",
-                  }}
-                >
+                <div className="w-full h-full rounded-full flex items-center justify-center bg-slate-800 border-[1.5px] border-slate-900 text-blue-300 text-xs font-bold tracking-wide">
                   {initials}
                 </div>
               )}
 
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: "1px",
-                  right: "1px",
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "50%",
-                  background: "#22c55e",
-                  border: "2px solid #0f172a",
-                }}
-              />
+              <div className="absolute bottom-[1px] right-[1px] w-2.5 h-2.5 rounded-full bg-green-500 border-2 border-slate-900" />
             </div>
           </div>
         </div>

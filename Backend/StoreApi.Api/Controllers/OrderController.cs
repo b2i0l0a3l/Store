@@ -48,7 +48,6 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize(Roles = Roles.Admin)]
 
         public async Task<IActionResult> GetById(int id,[FromServices] IAuthorizationService authorizationService)
         {
@@ -60,6 +59,7 @@ namespace StoreApi.Api.Controllers
             {
                 return Forbid();
             }
+            
             var result = await _mediator.Send(new GetOrderByIdRequest { Id = id });
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }

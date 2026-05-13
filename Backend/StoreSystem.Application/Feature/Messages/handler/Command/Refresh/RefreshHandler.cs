@@ -63,20 +63,8 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
  
             string userRole = _UManager.GetRolesAsync(user).Result.FirstOrDefault() ?? "Staff";
            
-            List<Claim> claims = AddClaims(user,refreshToken);
-
-            var roles = await _UManager.GetRolesAsync(user);
-            if (roles.Any())
-                {
-                    foreach (var role in roles)
-                    {
-                        claims.Add(new Claim(ClaimTypes.Role, role));
-                    }
-                }
-                else
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, "Staff"));
-                }
+            List<Claim> claims = await AddClaims(user,refreshToken);
+            
            
             string newAccessToken = _GenerateJwtToken.Generate(claims);
             string newRefreshToken = _GenerateRefreshToken.Generate(64);
@@ -96,7 +84,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             return model;
     }
 
-    private List<Claim> AddClaims(User user,RefreshToken refreshToken)
+    private async Task<List<Claim>> AddClaims(User user,RefreshToken refreshToken)
     {
         List<Claim> claims = new()
         {
@@ -105,7 +93,18 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
             new Claim("TokenId", refreshToken.TokenId),
             new Claim("FullName", user.FullName),
         };
-        
+        var roles = await _UManager.GetRolesAsync(user);
+        if (roles.Any())
+        {
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+        }
+        else
+        {
+            claims.Add(new Claim(ClaimTypes.Role, "Staff"));
+        }
         return claims;
     }
     }

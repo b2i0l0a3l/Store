@@ -17,7 +17,7 @@ namespace StoreSystem.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("ProductVersion", "8.0.27")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -154,38 +154,6 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("StoreSystem.Core.Entities.AuditLog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Endpoint")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("IpAddress")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Method")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("StatusCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("AuditLogs");
-                });
-
             modelBuilder.Entity("StoreSystem.Core.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -201,7 +169,11 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Category_Name");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.Client", b =>
@@ -213,7 +185,8 @@ namespace StoreSystem.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -276,14 +249,15 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.ToTable("Debts", t =>
                         {
-                            t.HasCheckConstraint("CK_Debt_Amount", "Amount >= 0");
+                            t.HasCheckConstraint("CK_Debt_Remaining", "\"Remaining\" >= 0");
                         });
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.Invoice", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int?>("ClientId")
                         .HasColumnType("integer");
@@ -292,16 +266,19 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("numeric");
+                        .HasColumnType("numeric(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId")
                         .HasDatabaseName("IX_Invoice_ClientId");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Invoice_CreatedAt");
+
                     b.ToTable("Invoices", t =>
                         {
-                            t.HasCheckConstraint("CK_Invoice_TotalAmount", "Total >= 0");
+                            t.HasCheckConstraint("CK_Invoice_TotalAmount", "\"Total\" >= 0");
                         });
                 });
 
@@ -315,23 +292,30 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.Property<string>("InvoiceId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("price")
                         .HasColumnType("integer");
 
                     b.Property<string>("productName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("quantity")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InvoiceId");
+                    b.HasIndex("InvoiceId")
+                        .HasDatabaseName("IX_InvoiceItem_InvoiceId");
 
-                    b.ToTable("InvoiceItems");
+                    b.ToTable("InvoiceItems", t =>
+                        {
+                            t.HasCheckConstraint("CK_InvoiceItem_Price", "price >= 0");
+
+                            t.HasCheckConstraint("CK_InvoiceItem_Quantity", "quantity > 0");
+                        });
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.Notifications", b =>
@@ -346,26 +330,41 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsRead")
-                        .HasColumnType("boolean");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("RelatedEntityId")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("RelatedEntityType")
-                        .HasColumnType("text");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Notifications_CreatedAt");
+
+                    b.HasIndex("IsRead")
+                        .HasDatabaseName("IX_Notifications_IsRead");
+
+                    b.HasIndex("Type")
+                        .HasDatabaseName("IX_Notifications_Type");
 
                     b.ToTable("Notifications");
                 });
@@ -401,12 +400,15 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasIndex("ClientId")
                         .HasDatabaseName("IX_Order_ClientId");
 
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Order_CreatedAt");
+
                     b.HasIndex("OrderStatus")
                         .HasDatabaseName("IX_Order_OrderStatus");
 
                     b.ToTable("Orders", t =>
                         {
-                            t.HasCheckConstraint("CK_Order_TotalAmount", "Total >= 0");
+                            t.HasCheckConstraint("CK_Order_TotalAmount", "\"Total\" >= 0");
                         });
                 });
 
@@ -435,11 +437,18 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId")
+                        .HasDatabaseName("IX_OrderItem_OrderId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("IX_OrderItem_ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", t =>
+                        {
+                            t.HasCheckConstraint("CK_OrderItem_Price", "\"Price\" >= 0");
+
+                            t.HasCheckConstraint("CK_OrderItem_Quantity", "\"Quantity\" > 0");
+                        });
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.Payment", b =>
@@ -457,7 +466,8 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("PaidAt")
                         .HasColumnType("timestamp with time zone");
@@ -470,12 +480,15 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasIndex("DebtID")
                         .HasDatabaseName("IX_Payment_DebtID");
 
+                    b.HasIndex("PaidAt")
+                        .HasDatabaseName("IX_Payment_PaidAt");
+
                     b.HasIndex("PaymentMethod")
                         .HasDatabaseName("IX_Payment_PaymentMethod");
 
                     b.ToTable("Payments", t =>
                         {
-                            t.HasCheckConstraint("CK_Payment_Amount", "Amount >= 0");
+                            t.HasCheckConstraint("CK_Payment_Amount", "\"Amount\" >= 0");
                         });
                 });
 
@@ -488,7 +501,8 @@ namespace StoreSystem.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BarCode")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
@@ -500,7 +514,8 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ImagePath")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -517,9 +532,11 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.HasIndex("BarCode")
                         .IsUnique()
-                        .HasDatabaseName("IX_Product_BarCode");
+                        .HasDatabaseName("IX_Product_BarCode")
+                        .HasFilter("\"BarCode\" IS NOT NULL");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId")
+                        .HasDatabaseName("IX_Product_CategoryId");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -527,9 +544,11 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.ToTable("Products", t =>
                         {
-                            t.HasCheckConstraint("CK_Product_Price", "Price >= 0");
+                            t.HasCheckConstraint("CK_Product_Cost", "\"Cost\" >= 0");
 
-                            t.HasCheckConstraint("CK_Product_Quantity", "Quantity >= 0");
+                            t.HasCheckConstraint("CK_Product_Price", "\"Price\" >= 0");
+
+                            t.HasCheckConstraint("CK_Product_Quantity", "\"Quantity\" >= 0");
                         });
                 });
 
@@ -545,18 +564,21 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RefreshTokenHash")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime?>("RefreshTokenRevokedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("TokenId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
 
                     b.HasKey("Id");
 
@@ -564,7 +586,8 @@ namespace StoreSystem.Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_RefreshToken_TokenId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("IX_RefreshToken_UserId");
 
                     b.ToTable("RefreshToken");
                 });
@@ -595,7 +618,10 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasIndex("OrderId")
                         .HasDatabaseName("IX_Return_OrderId");
 
-                    b.ToTable("Returns");
+                    b.ToTable("Returns", t =>
+                        {
+                            t.HasCheckConstraint("CK_Return_TotalRefund", "\"TotalRefund\" >= 0");
+                        });
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.ReturnItem", b =>
@@ -623,11 +649,18 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("IX_ReturnItem_ProductId");
 
-                    b.HasIndex("ReturnId");
+                    b.HasIndex("ReturnId")
+                        .HasDatabaseName("IX_ReturnItem_ReturnId");
 
-                    b.ToTable("ReturnItems");
+                    b.ToTable("ReturnItems", t =>
+                        {
+                            t.HasCheckConstraint("CK_ReturnItem_Price", "\"Price\" >= 0");
+
+                            t.HasCheckConstraint("CK_ReturnItem_Quantity", "\"Quantity\" > 0");
+                        });
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.Supplier", b =>
@@ -648,6 +681,10 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("character varying(10)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("IX_Supplier_Name");
 
                     b.ToTable("Suppliers");
                 });
@@ -677,11 +714,21 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductId")
+                        .HasDatabaseName("IX_SupplierProduct_ProductId");
 
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("SupplierId")
+                        .HasDatabaseName("IX_SupplierProduct_SupplierId");
 
-                    b.ToTable("SupplierProducts");
+                    b.HasIndex("SupplierId", "ProductId", "CreatedAt")
+                        .HasDatabaseName("IX_SupplierProduct_Supplier_Product_Date");
+
+                    b.ToTable("SupplierProducts", t =>
+                        {
+                            t.HasCheckConstraint("CK_SupplierProduct_CostPrice", "\"CostPrice\" >= 0");
+
+                            t.HasCheckConstraint("CK_SupplierProduct_Quantity", "\"Quantity\" > 0");
+                        });
                 });
 
             modelBuilder.Entity("StoreSystem.Core.Entities.User", b =>
@@ -709,7 +756,8 @@ namespace StoreSystem.Infrastructure.Migrations
                         .HasColumnType("character varying(30)");
 
                     b.Property<string>("ImagePath")
-                        .HasColumnType("text");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -736,7 +784,8 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
@@ -816,7 +865,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Client", "Client")
                         .WithMany("Debts")
                         .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StoreSystem.Core.Entities.Debt", null)
@@ -826,7 +875,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StoreSystem.Core.Entities.Product", null)
@@ -842,7 +891,8 @@ namespace StoreSystem.Infrastructure.Migrations
                 {
                     b.HasOne("StoreSystem.Core.Entities.Client", "Client")
                         .WithMany("Invoices")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Client");
                 });
@@ -862,7 +912,8 @@ namespace StoreSystem.Infrastructure.Migrations
                 {
                     b.HasOne("StoreSystem.Core.Entities.Client", "Client")
                         .WithMany("Orders")
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Client");
                 });
@@ -878,7 +929,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -891,7 +942,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Debt", "Debt")
                         .WithMany()
                         .HasForeignKey("DebtID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Debt");
@@ -902,7 +953,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");
@@ -924,7 +975,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -935,7 +986,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StoreSystem.Core.Entities.Return", "Return")
@@ -954,7 +1005,7 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.HasOne("StoreSystem.Core.Entities.Product", "Product")
                         .WithMany("SupplierProducts")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("StoreSystem.Core.Entities.Supplier", "Supplier")

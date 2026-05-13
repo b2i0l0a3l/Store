@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidateTag } from "next/cache";
 import {
   getDashboardSummary,
   getClientRanking,
@@ -45,5 +46,9 @@ export async function fetchUsers() {
 }
 
 export async function changeUserRoleAction(userId: string, role: string) {
-  return changeUserRole(userId, role);
+  const res = await changeUserRole(userId, role);
+  if (res.succeeded) {
+    revalidateTag("users", "max");
+  }
+  return res;
 }

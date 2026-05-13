@@ -5,7 +5,7 @@ import { MyResponse } from "@/util/types";
 export async function getProducts(): Promise<product[]> {
   try {
     const result = await fetchApi<{ value: product[] }>(`/Product/All`, {
-      cache: "no-store",
+      next: { tags: ["products"] },
     });
 
     if (!result.succeeded || !result.value) {

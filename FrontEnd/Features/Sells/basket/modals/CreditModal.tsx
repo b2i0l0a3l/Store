@@ -7,6 +7,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { CartItem, useStore } from "../../store/store";
 import { buy } from "@/Features/Orders/api/orderApi";
+import { invalidateCache } from "@/util/Api/revalidate";
 import { useProductStore } from "@/Features/Products/store/product";
 import { getClients } from "@/Features/clients/api/clientApi";
 import { client } from "@/Features/clients/types";
@@ -85,6 +86,7 @@ function CreditModal({
         );
         clearCart();
         toast.success(res.message || "تم تسجيل الدين بنجاح");
+        invalidateCache("orders", "products", "dashboard", "clients", "debts");
       } else {
         toast.error(res.message || "حدث خطأ أثناء تسجيل الدين");
       }

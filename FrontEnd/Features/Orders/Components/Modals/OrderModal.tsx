@@ -33,10 +33,8 @@ export default function OrderModal({
           if (orderItemsData) {
             setOrderItems(orderItemsData);
             // Save to local DB for offline access
-            // Delete old items for this order first
-            const existingIds = await db.orderItems.where('orderId').equals(OrderId).primaryKeys();
-            await db.orderItems.bulkDelete(existingIds);
-            await db.orderItems.bulkAdd(orderItemsData);
+            // Put items will update existing items or insert new ones
+            await db.orderItems.bulkPut(orderItemsData);
           } else {
             setOrderItems([]);
           }

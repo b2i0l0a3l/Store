@@ -16,23 +16,23 @@ export default function Sidebar({ isOpen, onClose, userRole }: SidebarProps) {
     <>
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-40 bg-slate-950/80 md:hidden"
           onClick={onClose}
         />
       )}
 
       <aside
-        className={`fixed top-0 left-0 z-50 flex flex-col h-dvh w-64 bg-linear-to-b from-slate-900 to-slate-800 shadow-2xl
+        className={`fixed top-0 left-0 z-50 flex flex-col h-dvh w-56 bg-gradient-to-b from-[#0a1120] to-[#03060f] border-r border-white/5 shadow-2xl
           transition-transform duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0`}
       >
-        <div className="flex items-center justify-between gap-3 px-6 py-8 border-b border-slate-700">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-linear-to-br from-blue-500 to-cyan-500 rounded-lg">
-              <ShoppingCartIcon className="w-6 h-6 text-white" />
+        <div className="flex items-center justify-between gap-3 px-5 py-6 border-b border-white/10">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-linear-to-br from-blue-500 to-cyan-500 rounded-lg">
+              <ShoppingCartIcon className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-xl font-bold text-white">Store</h1>
+            <h1 className="text-lg font-bold text-white">Store</h1>
           </div>
           {/* Close button — mobile only */}
           <button
@@ -46,7 +46,7 @@ export default function Sidebar({ isOpen, onClose, userRole }: SidebarProps) {
 
         <SideBarNavBar onClose={onClose} userRole={userRole} />
 
-        <div className="p-4 border-t border-slate-700">
+        <div className="p-3 border-t border-white/10">
           <LogoutBtn />
         </div>
       </aside>

@@ -4,8 +4,7 @@ import { decodeJwt } from "jose";
 import { CurrentTokenId } from "./util/currentUser";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const ROLE_CLAIM =
-  "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
+const ROLE_CLAIM = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role";
 
 const routePermissions = [
   { path: "/Dashboard", allowedRoles: ["Admin"] },
@@ -15,6 +14,7 @@ const routePermissions = [
   { path: "/Orders", allowedRoles: ["Admin", "Staff"] },
   { path: "/Debts", allowedRoles: ["Admin"] },
   { path: "/Payments", allowedRoles: ["Admin"] },
+  { path: "/unauthorized", allowedRoles: ["User", "Admin", "Staff"] },
   { path: "/", allowedRoles: ["Admin", "Staff"], exact: true },
 ];
 
@@ -32,11 +32,7 @@ function isTokenExpired(token: string): boolean {
 function getEmailFromToken(token: string): string | null {
   try {
     const decoded = decodeJwt(token);
-    return (
-      (decoded[
-        "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
-      ] as string) || null
-    );
+    return (decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"] as string) || null;
   } catch {
     return null;
   }
@@ -49,22 +45,25 @@ function getRoleAccessRedirect(token: string, pathname: string): string | null {
 
     let isAllowed = false;
     if (pathname === "/") {
-      isAllowed =
-        routePermissions
-          .find((r) => r.path === "/")
-          ?.allowedRoles?.includes(role) ?? false;
+      isAllowed = routePermissions.find((r) => r.path === "/")?.allowedRoles?.includes(role) ?? false;
     } else {
-      const permission = routePermissions.find(
-        (r) => !r.exact && pathname.startsWith(r.path),
-      );
+      const permission = routePermissions.find((r) => !r.exact && pathname.startsWith(r.path));
       if (permission) {
         isAllowed = permission.allowedRoles?.includes(role) ?? false;
       } else {
         isAllowed = true;
       }
     }
+    
     if (!isAllowed) {
-      const fallbackPath = role === "Admin" ? "/Dashboard" : "/";
+      let fallbackPath;
+      if (role === "User") {
+        fallbackPath = "/unauthorized";
+      } else if (role === "Admin") {
+        fallbackPath = "/Dashboard";
+      } else {
+        fallbackPath = "/";
+      }
       if (pathname !== fallbackPath) return fallbackPath;
     }
     return null;
@@ -76,20 +75,25 @@ function getRoleAccessRedirect(token: string, pathname: string): string | null {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const accessToken = request.cookies.get("accessToken")?.value;
-  const TokenID = await CurrentTokenId();
   const refreshToken = request.cookies.get("refreshToken")?.value;
+  
+  const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/landing";
 
-  if (pathname === "/login" || pathname === "/register") {
-    if (accessToken && refreshToken) {
-      request.cookies.clear();
-    }
-  }
-
+  // 1. No tokens
   if (!accessToken || !refreshToken) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    if (isAuthPage) {
+      return NextResponse.next(); // Allow viewing auth pages
+    }
+    return NextResponse.redirect(new URL("/landing", request.url));
   }
 
+  // 2. Tokens exist and are valid
   if (!isTokenExpired(accessToken)) {
+    if (isAuthPage) {
+      // Logged in users shouldn't see landing/login/register, redirect to app
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+
     const redirectPath = getRoleAccessRedirect(accessToken, pathname);
     if (redirectPath) {
       return NextResponse.redirect(new URL(redirectPath, request.url));
@@ -97,12 +101,18 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // 3. Token is expired, try to refresh
   const email = getEmailFromToken(accessToken);
   if (!email) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    if (isAuthPage) return NextResponse.next();
+    const response = NextResponse.redirect(new URL("/landing", request.url));
+    response.cookies.delete("accessToken");
+    response.cookies.delete("refreshToken");
+    return response;
   }
 
   try {
+    const TokenID = await CurrentTokenId();
     const refreshResponse = await fetch(`${API_URL}/Auth/Refresh`, {
       method: "POST",
       headers: {
@@ -113,7 +123,8 @@ export async function proxy(request: NextRequest) {
     });
 
     if (!refreshResponse.ok) {
-      const response = NextResponse.redirect(new URL("/login", request.url));
+      if (isAuthPage) return NextResponse.next();
+      const response = NextResponse.redirect(new URL("/landing", request.url));
       response.cookies.delete("accessToken");
       response.cookies.delete("refreshToken");
       return response;
@@ -121,6 +132,13 @@ export async function proxy(request: NextRequest) {
 
     const data = await refreshResponse.json();
     const newAccessToken = data.accessToken;
+
+    if (isAuthPage) {
+       const response = NextResponse.redirect(new URL("/", request.url));
+       response.cookies.set("accessToken", newAccessToken, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 7 });
+       response.cookies.set("refreshToken", data.refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax", path: "/", maxAge: 60 * 60 * 24 * 7 });
+       return response;
+    }
 
     const redirectPath = getRoleAccessRedirect(newAccessToken, pathname);
     let finalResponse = NextResponse.next();
@@ -147,7 +165,8 @@ export async function proxy(request: NextRequest) {
     return finalResponse;
   } catch (error) {
     console.error("Proxy refresh error:", error);
-    const response = NextResponse.redirect(new URL("/login", request.url));
+    if (isAuthPage) return NextResponse.next();
+    const response = NextResponse.redirect(new URL("/landing", request.url));
     response.cookies.delete("accessToken");
     response.cookies.delete("refreshToken");
     return response;
@@ -155,5 +174,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|login|register).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
