@@ -29,15 +29,14 @@ namespace StoreSystem.Tests.Features.Category
 
             _repositoryMock
                 .Setup(x => x.Add(It.IsAny<CategoryEntity>()))
-                .ReturnsAsync(Result<CategoryEntity>.Success(category));
+                .ReturnsAsync(Result<int>.Success(category.Id));
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
-            result.Value.Should().NotBeNull();
-            result.Value!.Name.Should().Be(request.Name);
+            result.Value.Should().Be(category.Id);
 
             _repositoryMock.Verify(
                 x => x.Add(It.Is<CategoryEntity>(c => c.Name == request.Name)),
@@ -53,7 +52,7 @@ namespace StoreSystem.Tests.Features.Category
 
             _repositoryMock
                 .Setup(x => x.Add(It.IsAny<CategoryEntity>()))
-                .ReturnsAsync((Result<CategoryEntity>)error);
+                .ReturnsAsync(new Error("TestError", ErrorType.General, "Failed to add category"));
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);

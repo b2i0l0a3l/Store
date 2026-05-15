@@ -9,13 +9,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetCategoryHandler : IRequestHandler<GetCategoriesRequest, Result<PagedResult<CategoryModel>>>
     {
-        private readonly IRepository<Category> _Repo;
-        public GetCategoryHandler(IRepository<Category> Repo) => _Repo = Repo;
+        private readonly IQueryService<Category> _query;
+        public GetCategoryHandler(IQueryService<Category> query) => _query = query;
 
         public async Task<Result<PagedResult<CategoryModel>>> Handle(GetCategoriesRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetAll(request.PageNumber, request.PageSize,
-                projection: c => new CategoryModel(c.Id, c.Name));
+            return await _query.GetPaged(request.PageNumber, request.PageSize, c => new CategoryModel(c.Id, c.Name));
         }
     }
 }

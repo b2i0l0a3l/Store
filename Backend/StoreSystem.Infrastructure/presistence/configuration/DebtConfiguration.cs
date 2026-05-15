@@ -20,6 +20,12 @@ namespace StoreSystem.Infrastructure.presistence.configuration
             builder.HasIndex(d => d.OrderId)
                 .HasDatabaseName("IX_Debt_OrderId");
 
+            builder.HasIndex(d => d.Remaining)
+                .HasDatabaseName("IX_Debt_Remaining");
+
+            builder.HasIndex(d => d.CreatedAt)
+                .HasDatabaseName("IX_Debt_CreatedAt");
+
             // Relationships
             builder.HasOne(d => d.Client)
                 .WithMany(c => c.Debts)

@@ -24,6 +24,10 @@ namespace StoreSystem.Infrastructure.presistence.configuration
                 .HasDatabaseName("IX_Client_Name")
                 .IsUnique();
 
+            builder.HasIndex(c => c.PhoneNumber)
+                .HasDatabaseName("IX_Client_PhoneNumber")
+                .HasFilter("\"PhoneNumber\" IS NOT NULL");
+
 
             builder.HasMany(c => c.Orders)
                 .WithOne(o => o.Client)

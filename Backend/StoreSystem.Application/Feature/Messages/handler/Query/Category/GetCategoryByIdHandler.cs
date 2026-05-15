@@ -9,13 +9,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetCategoryByIdHandler : IRequestHandler<GetCategoryByIdRequest, Result<CategoryModel>>
     {
-        private readonly IRepository<Category> _Repo;
-        public GetCategoryByIdHandler(IRepository<Category> repo) => _Repo = repo;
+        private readonly IQueryService<Category> _query;
+        public GetCategoryByIdHandler(IQueryService<Category> query) => _query = query;
 
         public async Task<Result<CategoryModel>> Handle(GetCategoryByIdRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetById(request.Id,
-                projection: c => new CategoryModel(c.Id, c.Name));
+            return await _query.FindById(request.Id, c => new CategoryModel(c.Id, c.Name));
         }
     }
 }

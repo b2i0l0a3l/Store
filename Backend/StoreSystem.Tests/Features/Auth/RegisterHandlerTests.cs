@@ -5,7 +5,7 @@ using StoreSystem.Application.Feature.Messages.handler.Command.Register;
 using StoreSystem.Application.Feature.Messages.Request.Command.Register;
 using StoreSystem.Application.Interface;
 using StoreSystem.Core.Entities;
-using BookingSystem.Core.common;
+using StoreSystem.Core.common;
 
 namespace StoreSystem.Tests.Features.Auth
 {

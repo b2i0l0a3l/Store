@@ -42,7 +42,7 @@ namespace StoreApi.Api.Controllers
                     Status = StatusCodes.Status500InternalServerError,
                     Title = "Internal Server Error",
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-                    Detail = result.Error.Description
+                    Detail = "An unexpected error occurred. Please try again later."
                 }),
                 _ => StatusCode(StatusCodes.Status500InternalServerError, new ProblemDetails
                 {

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class InvoiceItem
+    public class InvoiceItem : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        
         public string InvoiceId { get; set; } = string.Empty;
         public string productName { get; set; } = string.Empty;
         public int quantity { get; set; }

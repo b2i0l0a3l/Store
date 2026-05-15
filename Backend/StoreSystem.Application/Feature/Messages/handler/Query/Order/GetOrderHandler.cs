@@ -9,12 +9,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query.Order
 {
     public class GetOrderHandler : IRequestHandler<GetOrdersRequest, Result<PagedResult<OrderModel>>>
     {
-        private readonly IRepository<OrderEntity> _Repo;
-        public GetOrderHandler(IRepository<OrderEntity> Repo) => _Repo = Repo;
+        private readonly IQueryService<OrderEntity> _query;
+        public GetOrderHandler(IQueryService<OrderEntity> query) => _query = query;
 
         public async Task<Result<PagedResult<OrderModel>>> Handle(GetOrdersRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetAll(request.PageNumber, request.PageSize,
+            return await _query.GetPaged(request.PageNumber, request.PageSize,
                 projection: o => new OrderModel(o.Id, o.ClientId ?? 0, o.Total, o.OrderStatus, o.OrderType, o.CreatedAt, o.UpdatedAt));
         }
     }

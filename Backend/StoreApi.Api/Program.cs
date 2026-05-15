@@ -57,7 +57,7 @@ try
 
     builder.Services.AddApiServices(builder.Configuration);
 
-
+ 
     builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("AdminAndStaff", policy =>

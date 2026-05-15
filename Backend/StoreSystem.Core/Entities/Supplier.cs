@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Supplier
+    public class Supplier : BaseEntity
     {
-        public int Id { get; set; }
+        
         [MaxLength(30)]
         [Required]
         public string Name { get; set; } = string.Empty;

@@ -1,6 +1,7 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Net;
@@ -12,10 +13,12 @@ namespace StoreApi.Api.Middleware
     public class GlobalExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<GlobalExceptionMiddleware> _logger;
 
-        public GlobalExceptionMiddleware(RequestDelegate next)
+        public GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -26,6 +29,7 @@ namespace StoreApi.Api.Middleware
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An unhandled exception has occurred while executing the request.");
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -57,7 +61,7 @@ namespace StoreApi.Api.Middleware
                 var problemDetails = new ProblemDetails
                 {
                     Status = (int)HttpStatusCode.InternalServerError,
-                    Detail = exception.Message 
+                    Detail = "An unexpected error occurred. Please try again later." 
                 };
 
                 return context.Response.WriteAsync(JsonSerializer.Serialize(problemDetails));

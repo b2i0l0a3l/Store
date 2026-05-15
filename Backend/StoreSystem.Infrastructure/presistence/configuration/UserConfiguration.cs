@@ -17,6 +17,21 @@ namespace StoreSystem.Infrastructure.presistence.configuration
 
             builder.Property(u => u.ImagePath)
                 .HasMaxLength(500);
+
+            builder.HasIndex(u => u.Email)
+                .HasDatabaseName("IX_User_Email")
+                .IsUnique();
+
+            builder.HasIndex(u => u.NormalizedEmail)
+                .HasDatabaseName("IX_User_NormalizedEmail")
+                .IsUnique();
+
+            builder.HasIndex(u => u.UserName)
+                .HasDatabaseName("IX_User_UserName")
+                .IsUnique();
+
+            builder.HasIndex(u => u.Role)
+                .HasDatabaseName("IX_User_Role");
         }
     }
 }

@@ -7,9 +7,9 @@ using StoreSystem.Core.enums;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Payment
+    public class Payment : BaseEntity
     {
-        public int Id { get; set; }
+        
         public DateTime PaidAt { get; set; } = DateTime.UtcNow;
         public int DebtID { get; set; }
         [Column(TypeName = "numeric(18,2)")]

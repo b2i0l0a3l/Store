@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Category
+    public class Category : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        
         [Required]
         [MaxLength(20)]
         public string Name { get; set; } = string.Empty;

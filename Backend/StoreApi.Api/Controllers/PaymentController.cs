@@ -39,7 +39,7 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> All()
         {
             var result = await _mediator.Send(new GetAllPaymentsRequest());
-            return Ok(result);
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
         [HttpGet("GetById/{id}")]

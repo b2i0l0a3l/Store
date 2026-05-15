@@ -7,7 +7,7 @@ interface OfflineMutationOptions<T, P> {
   apiCall: (payload: P) => Promise<{ succeeded: boolean; message?: string; value?: T }>;
   onSuccess?: (data?: T) => void;
   onError?: (error: string) => void;
-  localDbUpdate?: () => Promise<void>; // Optional: to eagerly update IndexedDB table
+  localDbUpdate?: () => Promise<void>; 
 }
 
 export async function executeOfflineMutation<T, P>({

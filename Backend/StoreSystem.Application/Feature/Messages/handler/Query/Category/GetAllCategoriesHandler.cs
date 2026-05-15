@@ -9,15 +9,14 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesRequest, Result<IEnumerable<CategoryModel>>>
     {
-        private readonly IRepository<Category> _repo;
-
-        public GetAllCategoriesHandler(IRepository<Category> repo) => _repo = repo;
+        private readonly IQueryService<Category> _query;
+        public GetAllCategoriesHandler(IQueryService<Category> query) => _query = query;
 
         public async Task<Result<IEnumerable<CategoryModel>>> Handle(GetAllCategoriesRequest request, CancellationToken cancellationToken)
         {
-            // Projecting directly from SQL to CategoryModel DTO
-            return await _repo.All(
-                projection: c => new CategoryModel(c.Id, c.Name));
+            var result = await _query.GetAll(c => new CategoryModel(c.Id, c.Name));
+            if (!result.IsSuccess) return result.Error!;
+            return Result<IEnumerable<CategoryModel>>.Success(result.Value!);
         }
     }
 }

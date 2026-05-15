@@ -9,13 +9,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetClientByIdHandler : IRequestHandler<GetClientByIdRequest, Result<ClientModel>>
     {
-        private readonly IRepository<Client> _Repo;
-        public GetClientByIdHandler(IRepository<Client> repo) => _Repo = repo;
+        private readonly IQueryService<Client> _query;
+        public GetClientByIdHandler(IQueryService<Client> query) => _query = query;
 
         public async Task<Result<ClientModel>> Handle(GetClientByIdRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetById(request.Id,
-                projection: c => new ClientModel(c.Id, c.Name, c.PhoneNumber, c.Address));
+            return await _query.FindById(request.Id, c => new ClientModel(c.Id, c.Name!, c.PhoneNumber, c.Address));
         }
     }
 }

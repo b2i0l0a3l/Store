@@ -41,10 +41,8 @@ export function useSyncUplink() {
       }
     };
 
-    // Initial check
     processQueue();
 
-    // Listen for online event to process queue
     window.addEventListener('online', processQueue);
 
     return () => {

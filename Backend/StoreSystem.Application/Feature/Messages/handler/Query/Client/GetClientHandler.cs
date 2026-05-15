@@ -9,13 +9,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetClientHandler : IRequestHandler<GetClientsRequest, Result<PagedResult<ClientModel>>>
     {
-        private readonly IRepository<Client> _Repo;
-        public GetClientHandler(IRepository<Client> Repo) => _Repo = Repo;
+        private readonly IQueryService<Client> _query;
+        public GetClientHandler(IQueryService<Client> query) => _query = query;
 
         public async Task<Result<PagedResult<ClientModel>>> Handle(GetClientsRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetAll(request.PageNumber, request.PageSize,
-                projection: c => new ClientModel(c.Id, c.Name, c.PhoneNumber, c.Address));
+            return await _query.GetPaged(request.PageNumber, request.PageSize, c => new ClientModel(c.Id, c.Name!, c.PhoneNumber, c.Address));
         }
     }
 }

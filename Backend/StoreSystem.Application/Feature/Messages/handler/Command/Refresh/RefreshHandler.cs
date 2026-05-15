@@ -20,12 +20,14 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
         private readonly IGenerateJwtToken _GenerateJwtToken;
         private readonly UserManager<User> _UManager;
         private readonly IRepository<RefreshToken> _Repo;
-        public RefreshHandler(IRepository<RefreshToken> rep,IGenerateJwtToken GenerateJwtToken,UserManager<User> UManager,IGenerateToken GenerateRefreshToken)
+        private readonly IQueryService<RefreshToken> _query;
+        public RefreshHandler(IRepository<RefreshToken> rep,IGenerateJwtToken GenerateJwtToken,UserManager<User> UManager,IGenerateToken GenerateRefreshToken, IQueryService<RefreshToken> query)
         {
             _GenerateRefreshToken = GenerateRefreshToken;
             _UManager = UManager;
             _GenerateJwtToken = GenerateJwtToken;
             _Repo = rep;
+            _query = query;
         } 
         public async Task<Result<TokenModel>> Handle(RefreshRequest request, CancellationToken cancellationToken)
         {
@@ -34,7 +36,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Refresh
 
             if (string.IsNullOrEmpty(request.TokenId)) return new Error("RefreshTokenError", Core.enums.ErrorType.General, "Token Id is Required!");
 
-            var result = await _Repo.GetByCondition(
+            var result = await _query.FindOne(
                 x => x.TokenId == request.TokenId,
                 projection: x => new RefreshToken
                 {

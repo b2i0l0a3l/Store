@@ -9,13 +9,13 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetPaymentByIdHandler : IRequestHandler<GetPaymentByIdRequest, Result<PaymentModel>>
     {
-        private readonly IRepository<Payment> _Repo;
-        public GetPaymentByIdHandler(IRepository<Payment> repo) => _Repo = repo;
+        private readonly IQueryService<Payment> _query;
+        public GetPaymentByIdHandler(IQueryService<Payment> query) => _query = query;
 
         public async Task<Result<PaymentModel>> Handle(GetPaymentByIdRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetById(request.Id,
-                projection: p => new PaymentModel(p.Id, p.DebtID, p.Amount, p.PaidAt));
+            return await _query.FindById(request.Id,
+                p => new PaymentModel(p.Id, p.DebtID, p.Amount, p.PaidAt));
         }
     }
 }

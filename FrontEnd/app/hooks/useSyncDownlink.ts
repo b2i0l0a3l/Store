@@ -12,7 +12,6 @@ export function useSyncDownlink() {
     const syncData = async () => {
       if (navigator.onLine) {
         try {
-          // Fetch from server
           const [products, categories, clients, orders, debts, payments] = await Promise.all([
             getProducts(),
             getCategories(),
@@ -39,10 +38,8 @@ export function useSyncDownlink() {
       }
     };
 
-    // Initial sync
     syncData();
 
-    // Listen for online event to sync again
     window.addEventListener('online', syncData);
 
     return () => {

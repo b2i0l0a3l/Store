@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class OrderItem
+    public class OrderItem : BaseEntity
     {
-        public int Id { get; set; }
+        
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         [Range(0, int.MaxValue, ErrorMessage = "Price Must be greather than 0")]

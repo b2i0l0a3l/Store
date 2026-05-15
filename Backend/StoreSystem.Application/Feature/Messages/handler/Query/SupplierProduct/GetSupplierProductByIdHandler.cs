@@ -9,13 +9,13 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetSupplierProductByIdHandler : IRequestHandler<GetSupplierProductByIdRequest, Result<SupplierProductModel>>
     {
-        private readonly IRepository<SupplierProductEntity> _Repo;
-        public GetSupplierProductByIdHandler(IRepository<SupplierProductEntity> repo) => _Repo = repo;
+        private readonly IQueryService<SupplierProductEntity> _query;
+        public GetSupplierProductByIdHandler(IQueryService<SupplierProductEntity> query) => _query = query;
 
         public async Task<Result<SupplierProductModel>> Handle(GetSupplierProductByIdRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetById(request.Id,
-                projection: sp => new SupplierProductModel(sp.Id, sp.ProductId, sp.SupplierId, sp.Quantity, sp.CostPrice, sp.CreatedAt));
+            return await _query.FindById(request.Id,
+                sp => new SupplierProductModel(sp.Id, sp.ProductId, sp.SupplierId, sp.Quantity, sp.CostPrice, sp.CreatedAt));
         }
     }
 }

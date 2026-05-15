@@ -19,6 +19,7 @@ namespace StoreSystem.Tests.Features.Auth
         private readonly Mock<IGenerateJwtToken> _jwtTokenMock;
         private readonly Mock<IGenerateToken> _refreshTokenGenMock;
         private readonly Mock<IRepository<RefreshToken>> _refreshTokenRepoMock;
+        private readonly Mock<IQueryService<RefreshToken>> _queryMock;
         private readonly RefreshHandler _handler;
 
         public RefreshHandlerTests()
@@ -30,12 +31,14 @@ namespace StoreSystem.Tests.Features.Auth
             _jwtTokenMock = new Mock<IGenerateJwtToken>();
             _refreshTokenGenMock = new Mock<IGenerateToken>();
             _refreshTokenRepoMock = new Mock<IRepository<RefreshToken>>();
+            _queryMock = new Mock<IQueryService<RefreshToken>>();
 
             _handler = new RefreshHandler(
                 _refreshTokenRepoMock.Object,
                 _jwtTokenMock.Object,
                 _userManagerMock.Object,
-                _refreshTokenGenMock.Object);
+                _refreshTokenGenMock.Object,
+                _queryMock.Object);
         }
 
         [Fact]
@@ -62,9 +65,9 @@ namespace StoreSystem.Tests.Features.Auth
             _userManagerMock.Setup(x => x.FindByEmailAsync(request.Email)).ReturnsAsync(user);
             _userManagerMock.Setup(x => x.GetRolesAsync(user)).ReturnsAsync(["Staff"]);
 
-            _refreshTokenRepoMock
-                .Setup(x => x.GetByCondition(It.IsAny<Expression<Func<RefreshToken, bool>>>()))
-                .ReturnsAsync(Result<RefreshToken?>.Success(refreshTokenEntity));
+            _queryMock
+                .Setup(x => x.FindOne(It.IsAny<Expression<Func<RefreshToken, bool>>>(), It.IsAny<Expression<Func<RefreshToken, RefreshToken>>>()))
+                .ReturnsAsync(Result<RefreshToken>.Success(refreshTokenEntity));
 
             _refreshTokenGenMock.Setup(x => x.Generate(It.IsAny<int>())).Returns("new-refresh-token");
             _jwtTokenMock.Setup(x => x.Generate(It.IsAny<IEnumerable<Claim>>())).Returns("new-jwt-token");
@@ -101,9 +104,9 @@ namespace StoreSystem.Tests.Features.Auth
 
             _userManagerMock.Setup(x => x.FindByEmailAsync(request.Email)).ReturnsAsync(user);
 
-            _refreshTokenRepoMock
-                .Setup(x => x.GetByCondition(It.IsAny<Expression<Func<RefreshToken, bool>>>()))
-                .ReturnsAsync(Result<RefreshToken?>.Success(refreshTokenEntity));
+            _queryMock
+                .Setup(x => x.FindOne(It.IsAny<Expression<Func<RefreshToken, bool>>>(), It.IsAny<Expression<Func<RefreshToken, RefreshToken>>>()))
+                .ReturnsAsync(Result<RefreshToken>.Success(refreshTokenEntity));
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);

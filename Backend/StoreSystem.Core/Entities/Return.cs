@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Return
+    public class Return : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        
         [Required]
         public int OrderId { get; set; }
         [Column(TypeName = "numeric(18,2)")]

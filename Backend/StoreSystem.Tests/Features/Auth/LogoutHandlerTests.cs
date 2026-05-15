@@ -14,6 +14,7 @@ namespace StoreSystem.Tests.Features.Auth
     {
         private readonly Mock<UserManager<User>> _userManagerMock;
         private readonly Mock<IRepository<RefreshToken>> _refreshTokenRepoMock;
+        private readonly Mock<IQueryService<RefreshToken>> _queryMock;
         private readonly LogoutHandler _handler;
 
         public LogoutHandlerTests()
@@ -23,7 +24,8 @@ namespace StoreSystem.Tests.Features.Auth
                 store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
             _refreshTokenRepoMock = new Mock<IRepository<RefreshToken>>();
-            _handler = new LogoutHandler(_userManagerMock.Object, _refreshTokenRepoMock.Object);
+            _queryMock = new Mock<IQueryService<RefreshToken>>();
+            _handler = new LogoutHandler(_userManagerMock.Object, _refreshTokenRepoMock.Object, _queryMock.Object);
         }
 
         [Fact]
@@ -36,9 +38,9 @@ namespace StoreSystem.Tests.Features.Auth
 
             _userManagerMock.Setup(x => x.FindByEmailAsync(request.Email)).ReturnsAsync(user);
 
-            _refreshTokenRepoMock
-                .Setup(x => x.GetByCondition(It.IsAny<Expression<Func<RefreshToken, bool>>>()))
-                .ReturnsAsync(Result<RefreshToken?>.Success(refreshToken));
+            _queryMock
+                .Setup(x => x.FindOne(It.IsAny<Expression<Func<RefreshToken, bool>>>(), It.IsAny<Expression<Func<RefreshToken, RefreshToken>>>()))
+                .ReturnsAsync(Result<RefreshToken>.Success(refreshToken));
 
             _refreshTokenRepoMock
                 .Setup(x => x.Update(It.IsAny<int>(), It.IsAny<Action<RefreshToken>>()))

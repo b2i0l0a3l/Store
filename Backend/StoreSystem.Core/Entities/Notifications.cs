@@ -6,9 +6,9 @@ using StoreSystem.Core.enums;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Notifications
+    public class Notifications : BaseEntity
     {
-        public int Id { get; set; }
+        
         
         public string Title { get; set; } = string.Empty;
         

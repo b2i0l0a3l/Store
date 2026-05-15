@@ -23,6 +23,9 @@ namespace StoreSystem.Infrastructure.presistence.configuration
             builder.HasIndex(r => r.OrderId)
                 .HasDatabaseName("IX_Return_OrderId");
 
+            builder.HasIndex(r => r.CreatedAt)
+                .HasDatabaseName("IX_Return_CreatedAt");
+
             // Relationships
             builder.HasOne(r => r.Order)
                 .WithMany()

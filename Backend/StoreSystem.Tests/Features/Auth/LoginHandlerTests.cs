@@ -53,7 +53,7 @@ namespace StoreSystem.Tests.Features.Auth
             _jwtTokenMock.Setup(x => x.Generate(It.IsAny<IEnumerable<Claim>>())).Returns("jwt-token");
             _refreshTokenRepoMock
                 .Setup(x => x.Add(It.IsAny<RefreshToken>()))
-                .ReturnsAsync(Result<RefreshToken>.Success(new RefreshToken()));
+                .ReturnsAsync(Result<int>.Success(1));
 
             // Act
             var result = await _handler.Handle(request, CancellationToken.None);

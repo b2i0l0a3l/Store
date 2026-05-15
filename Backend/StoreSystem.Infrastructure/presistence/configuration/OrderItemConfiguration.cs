@@ -23,6 +23,9 @@ namespace StoreSystem.Infrastructure.presistence.configuration
             builder.HasIndex(oi => oi.ProductId)
                 .HasDatabaseName("IX_OrderItem_ProductId");
 
+            builder.HasIndex(oi => new { oi.OrderId, oi.ProductId })
+                .HasDatabaseName("IX_OrderItem_OrderId_ProductId");
+
             // Relationships
             builder.HasOne(oi => oi.Order)
                 .WithMany()

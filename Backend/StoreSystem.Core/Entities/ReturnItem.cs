@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class ReturnItem
+    public class ReturnItem : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        
         public int ReturnId { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }

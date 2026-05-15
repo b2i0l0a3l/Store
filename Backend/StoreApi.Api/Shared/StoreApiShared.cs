@@ -24,7 +24,7 @@ namespace StoreApi.Api.Shared
             {
                 options.AddPolicy("Allow", policy =>
                 {
-                    policy.WithOrigins("https://store-three-self.vercel.app", "http://localhost:5107", "http://localhost:3000", "http://127.0.0.1:5500", "http://localhost:5500")
+                    policy.WithOrigins("https://store-three-self.vercel.app", "http://localhost:5107", "http://localhost:3000", "http://127.0.0.1:3000", "http://192.168.1.2:3000", "http://127.0.0.1:5500", "http://localhost:5500")
                         .AllowAnyHeader()
                         .AllowAnyMethod()
                         .AllowCredentials();

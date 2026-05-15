@@ -9,13 +9,13 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetReturnItemByIdHandler : IRequestHandler<GetReturnItemByIdRequest, Result<ReturnItemModel>>
     {
-        private readonly IRepository<ReturnItem> _Repo;
-        public GetReturnItemByIdHandler(IRepository<ReturnItem> repo) => _Repo = repo;
+        private readonly IQueryService<ReturnItem> _query;
+        public GetReturnItemByIdHandler(IQueryService<ReturnItem> query) => _query = query;
 
         public async Task<Result<ReturnItemModel>> Handle(GetReturnItemByIdRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetById(request.Id,
-                projection: ri => new ReturnItemModel(ri.Id, ri.ReturnId, ri.ProductId, ri.Quantity, ri.Price, ri.CreatedAt));
+            return await _query.FindById(request.Id,
+                ri => new ReturnItemModel(ri.Id, ri.ReturnId, ri.ProductId, ri.Quantity, ri.Price, ri.CreatedAt));
         }
     }
 }

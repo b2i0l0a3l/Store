@@ -9,16 +9,13 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetReturnsHandler : IRequestHandler<GetReturnsRequest, Result<PagedResult<ReturnModel>>>
     {
-        private readonly IRepository<Return> _Repo;
-        public GetReturnsHandler(IRepository<Return> repo) => _Repo = repo;
+        private readonly IQueryService<Return> _query;
+        public GetReturnsHandler(IQueryService<Return> query) => _query = query;
 
         public async Task<Result<PagedResult<ReturnModel>>> Handle(GetReturnsRequest request, CancellationToken cancellationToken)
         {
-            Result<PagedResult<ReturnModel>?> pagedResult = await _Repo.GetAll(request.PageNumber, request.PageSize,
-                projection: r => new ReturnModel(r.Id, r.OrderId, r.TotalRefund, r.CreatedAt));
-            if (!pagedResult.IsSuccess || pagedResult.Value == null)
-                return pagedResult.Error!;
-            return pagedResult!;
+            return await _query.GetPaged(request.PageNumber, request.PageSize,
+                r => new ReturnModel(r.Id, r.OrderId, r.TotalRefund, r.CreatedAt));
         }
     }
 }

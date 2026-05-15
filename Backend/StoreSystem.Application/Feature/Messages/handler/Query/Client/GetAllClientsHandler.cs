@@ -9,13 +9,14 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetAllClientsHandler : IRequestHandler<GetAllClientsRequest, Result<IEnumerable<ClientModel>>>
     {
-        private readonly IRepository<Client> _repo;
-        public GetAllClientsHandler(IRepository<Client> repo) => _repo = repo;
+        private readonly IQueryService<Client> _query;
+        public GetAllClientsHandler(IQueryService<Client> query) => _query = query;
 
         public async Task<Result<IEnumerable<ClientModel>>> Handle(GetAllClientsRequest request, CancellationToken cancellationToken)
         {
-            return await _repo.All(
-                projection: c => new ClientModel(c.Id, c.Name, c.PhoneNumber, c.Address));
+            var result = await _query.GetAll(c => new ClientModel(c.Id, c.Name!, c.PhoneNumber, c.Address));
+            if (!result.IsSuccess) return result.Error!;
+            return Result<IEnumerable<ClientModel>>.Success(result.Value!);
         }
     }
 }

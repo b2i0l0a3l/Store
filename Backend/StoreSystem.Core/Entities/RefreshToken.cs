@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class RefreshToken
+    public class RefreshToken : BaseEntity
     {
-        public int Id { get; set; }
+        
         public string UserId { get; set; } = string.Empty;
         public string TokenId { get; set; } = string.Empty;
         public string? RefreshTokenHash { get; set; }

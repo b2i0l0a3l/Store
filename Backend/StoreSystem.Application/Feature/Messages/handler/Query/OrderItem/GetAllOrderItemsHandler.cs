@@ -9,13 +9,14 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetAllOrderItemsHandler : IRequestHandler<GetAllOrderItemsRequest, Result<IEnumerable<OrderItemModel>>>
     {
-        private readonly IRepository<OrderItem> _repo;
-        public GetAllOrderItemsHandler(IRepository<OrderItem> repo) => _repo = repo;
+        private readonly IQueryService<OrderItem> _query;
+        public GetAllOrderItemsHandler(IQueryService<OrderItem> query) => _query = query;
 
         public async Task<Result<IEnumerable<OrderItemModel>>> Handle(GetAllOrderItemsRequest request, CancellationToken cancellationToken)
         {
-            return await _repo.All(
-                projection: oi => new OrderItemModel(oi.Id, oi.ProductId, oi.Price, oi.Quantity));
+            var result = await _query.GetAll(oi => new OrderItemModel(oi.Id, oi.ProductId, oi.Price, oi.Quantity));
+            if (!result.IsSuccess) return result.Error!;
+            return Result<IEnumerable<OrderItemModel>>.Success(result.Value!);
         }
     }
 }

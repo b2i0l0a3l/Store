@@ -9,13 +9,13 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetDebtHandler : IRequestHandler<GetDebtsRequest, Result<PagedResult<DebtModel>>>
     {
-        private readonly IRepository<Debt> _Repo;
-        public GetDebtHandler(IRepository<Debt> Repo) => _Repo = Repo;
+        private readonly IQueryService<Debt> _query;
+        public GetDebtHandler(IQueryService<Debt> query) => _query = query;
 
         public async Task<Result<PagedResult<DebtModel>>> Handle(GetDebtsRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetAll(request.PageNumber, request.PageSize,
-                projection: d => new DebtModel(d.Id, d.OrderId, d.ClientId, d.Remaining, d.CreatedAt, d.UpdatedAt));
+            return await _query.GetPaged(request.PageNumber, request.PageSize,
+                d => new DebtModel(d.Id, d.OrderId, d.ClientId, d.Remaining, d.CreatedAt, d.UpdatedAt));
         }
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace StoreSystem.Core.Entities
 {
-    public class SupplierProduct
+    public class SupplierProduct : BaseEntity
     {
-        public int Id { get; set; }
+        
         public int ProductId { get; set; }
         public int SupplierId { get; set; }
         public int Quantity { get; set; }

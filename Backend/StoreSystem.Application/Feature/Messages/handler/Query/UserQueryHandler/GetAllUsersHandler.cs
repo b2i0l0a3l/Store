@@ -14,18 +14,16 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query.UserQueryHandle
 {
     public class GetAllUsersHandler : IRequestHandler<GetAllUsersRequest, Result<IEnumerable<UserModel>>>
     {
-        private readonly IRepository<User> _Repo;
-        public GetAllUsersHandler(IRepository<User> Repo) => _Repo = Repo;
+        private readonly IUserRepository _UserRepo;
+        public GetAllUsersHandler(IUserRepository UserRepo)
+        {
+            _UserRepo = UserRepo;
+        }
         public async Task<Result<IEnumerable<UserModel>>> Handle(GetAllUsersRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.All(
-                projection: x => new UserModel
-                {
-                    UserId = x.Id,
-                    Email = x.Email ?? x.UserName!,
-                    FullName = x.FullName,
-                    Role = x.Role
-                });
+            Result<IEnumerable<UserModel>> users = await _UserRepo.GetAllUsers();
+            return users;
         }
+
     }
 }

@@ -15,10 +15,12 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Logout
     {
         private readonly UserManager<User> _user;
         private readonly IRepository<RefreshToken> _repo;
-        public LogoutHandler(UserManager<User> user, IRepository<RefreshToken> repo)
+        private readonly IQueryService<RefreshToken> _query;
+        public LogoutHandler(UserManager<User> user, IRepository<RefreshToken> repo, IQueryService<RefreshToken> query)
         {
             _user = user;
             _repo = repo;
+            _query = query;
         }
         public async Task<Result> Handle(LogoutRequest request, CancellationToken cancellationToken)
         {
@@ -26,7 +28,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Logout
             if (user == null)
                 return Errors.UserNotFoundError;
 
-            var tokensResult = await _repo.GetByCondition(
+            var tokensResult = await _query.FindOne(
                 x => x.TokenId == request.TokenId,
                 projection: x => new RefreshToken
                 {

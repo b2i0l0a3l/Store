@@ -9,13 +9,13 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
 {
     public class GetSupplierHandler : IRequestHandler<GetSuppliersRequest, Result<PagedResult<SupplierModel>>>
     {
-        private readonly IRepository<Supplier> _Repo;
-        public GetSupplierHandler(IRepository<Supplier> Repo) => _Repo = Repo;
+        private readonly IQueryService<Supplier> _query;
+        public GetSupplierHandler(IQueryService<Supplier> query) => _query = query;
 
         public async Task<Result<PagedResult<SupplierModel>>> Handle(GetSuppliersRequest request, CancellationToken cancellationToken)
         {
-            return await _Repo.GetAll(request.PageNumber, request.PageSize,
-                projection: s => new SupplierModel(s.Id, s.Name, s.PhoneNumber));
+            return await _query.GetPaged(request.PageNumber, request.PageSize,
+                s => new SupplierModel(s.Id, s.Name, s.PhoneNumber));
         }
     }
 }

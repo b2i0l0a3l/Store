@@ -39,6 +39,8 @@ namespace StoreSystem.Infrastructure.shared
             .AddDefaultTokenProviders();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IQueryService<>), typeof(QueryService<>));
+            services.AddScoped<IUserRepository, StoreSystem.Infrastructure.presistence.Repo.UserRepository>();
 
             services.AddScoped<IGenerateJwtToken, GenerateJwtToken>();
             services.AddScoped<IGenerateToken, GenerateRefreshToken>();

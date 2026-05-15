@@ -7,9 +7,9 @@ using StoreSystem.Core.enums;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Debt
+    public class Debt : BaseEntity
     {
-        public int Id { get; set; }
+        
         public int OrderId { get; set; }
         public int ClientId { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

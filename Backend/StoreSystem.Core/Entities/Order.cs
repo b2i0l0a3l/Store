@@ -8,10 +8,10 @@ using StoreSystem.Core.enums;
 
 namespace StoreSystem.Core.Entities
 {
-    public class Order
+    public class Order : BaseEntity
     {
         [Key]
-        public int Id { get; set; }
+        
         public enOrderStatus OrderStatus { get; set; } = enOrderStatus.NotPaid;
         public enOrderType OrderType { get; set; } = enOrderType.Sell;
         public DateTime CreatedAt { get; set; }
