@@ -40,6 +40,11 @@ export async function login(body: LoginRequest): Promise<AuthResponse> {
       body: JSON.stringify(body),
     });
     const data = await response.json();
+
+    if (!response.ok) {
+      return { isSuccess: false, message: data.detail || "Login failed" };
+    }
+
     return {
       isSuccess: true,
       accessToken: data.accessToken,
@@ -58,6 +63,16 @@ export async function register(formData: FormData): Promise<AuthResponse> {
       method: "POST",
       body: formData,
     });
+
+    if (!response.ok) {
+      try {
+        const data = await response.json();
+        return { isSuccess: false, message: data.detail || "Registration failed" };
+      } catch {
+        return { isSuccess: false, message: "Registration failed" };
+      }
+    }
+
     const data = await response.json();
     return { isSuccess: true, message: "Register successful" };
   } catch (error) {
