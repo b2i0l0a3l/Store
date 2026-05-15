@@ -13,7 +13,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![.NET](https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+![.NET](https://img.shields.io/badge/.NET-8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![xUnit](https://img.shields.io/badge/xUnit-Tests_19_Passed-brightgreen?style=for-the-badge&logo=dotnet&logoColor=white)
@@ -139,15 +139,15 @@ The **Store Management System** is a robust, highly scalable web application des
 | **SignalR Client (`@microsoft/signalr`)** | Real-time WebSockets communication |
 | **Recharts** | Interactive data visualization and charts |
 
-### Backend (.NET 10 Web API)
+### Backend (.NET 8 Web API)
 
 | Technology / Pattern | Purpose |
 |----------------------|---------|
-| **.NET 10** | High-performance backend framework |
+| **.NET 8** | High-performance backend framework |
 | **Clean Architecture** | Separation of concerns (Core, Application, Infrastructure, API) |
 | **CQRS (MediatR)** | Command Query Responsibility Segregation for decoupled logic |
 | **PostgreSQL** | Primary relational database |
-| **EF Core 10 & Dapper** | Dual ORM strategy: EF for CRUD, Dapper for complex query performance |
+| **EF Core 8 & Dapper** | Dual ORM strategy: EF for CRUD, Dapper for complex query performance |
 | **ASP.NET Identity** | User and Role management |
 | **JWT Bearer Key** | Secure authentication and authorization |
 | **FluentValidation** | Strongly-typed request validation |
@@ -166,7 +166,7 @@ graph TD
         UI <--> State
     end
 
-    subgraph Backend [Backend: .NET 10 Clean Architecture]
+    subgraph Backend [Backend: .NET 8.0 Clean Architecture]
         API[StoreApi.Api Layer<br/>Controllers, SignalR Hubs]
         App[Application Layer<br/>CQRS Handlers, DTOs, Validation]
         Domain[Core Layer<br/>Entities, Interfaces]
@@ -234,7 +234,7 @@ dotnet test --verbosity normal
 | Requirements | Version |
 |--------------|---------|
 | Node.js | `>= 18.x` |
-| .NET SDK | `10.0` |
+| .NET SDK | `8.0` |
 | PostgreSQL | `>= 14` |
 
 ### 1️⃣ Backend Setup
