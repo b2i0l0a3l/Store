@@ -4,7 +4,7 @@ import { MyResponse } from "@/util/types";
 
 export async function getProducts(): Promise<product[]> {
   try {
-    const result = await fetchApi<{ value: product[] }>(`/Product/All`, {
+    const result = await fetchApi<product[]>(`/Product/All`, {
       next: { tags: ["products"] },
     });
 
@@ -12,7 +12,7 @@ export async function getProducts(): Promise<product[]> {
       return [];
     }
 
-    return result.value.value || [];
+    return result.value || [];
   } catch (error) {
     console.error(error);
     return [];
