@@ -2,6 +2,11 @@
 
 # 🏪 Store Management System (POS)
 
+<div align="center">
+  <a href="README.md"><img src="https://img.shields.io/badge/Language-English-blue?style=for-the-badge" alt="English"/></a>
+  <a href="README.de.md"><img src="https://img.shields.io/badge/Language-Deutsch-red?style=for-the-badge" alt="Deutsch"/></a>
+</div>
+
 ### نظام إدارة المتاجر ونقاط البيع المتكامل
 
 <p align="center">
