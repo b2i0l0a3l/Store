@@ -37,6 +37,7 @@ export default async function MarketingLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+      
         <SidebarProvider topBar={<TopBar />} userRole={user?.role}>
           {children}
         </SidebarProvider>
