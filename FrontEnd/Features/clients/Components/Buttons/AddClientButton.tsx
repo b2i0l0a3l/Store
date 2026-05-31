@@ -5,10 +5,10 @@ import { useState, useCallback } from "react";
 import ClientModal from "../Modal/clientModal";
 import { addClient } from "@/Features/clients/api/clientApi";
 import { invalidateCache } from "@/util/Api/revalidate";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { client } from "../../types";
 import { useClientStore } from "@/Features/clients/store/client";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 import { db } from "@/util/db";
 
 export default function AddClientButton() {

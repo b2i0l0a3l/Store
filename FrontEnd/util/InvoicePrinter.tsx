@@ -3,7 +3,7 @@ import React, { useRef, useState, useCallback } from "react";
 import { useReactToPrint } from "react-to-print";
 import { fetchApi } from "./Api/Api";
 import { useStore } from "../Features/Sells/store/store";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 
 interface Props {
   clientId?: number;

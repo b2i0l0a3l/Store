@@ -3,7 +3,7 @@ import CustomModal from "@/components/Ui/Modal/Modal";
 import OrderItemTable from "../../OrderItem/Components/Table/OrderItemTable";
 import { getOrderItems } from "../../api/orderApi";
 import { OrderItem } from "../../OrderItem/types";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { db } from "@/util/db";
 
 export default function OrderModal({

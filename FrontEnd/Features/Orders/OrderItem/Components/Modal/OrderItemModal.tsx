@@ -3,7 +3,7 @@ import CustomModal from "@/components/Ui/Modal/Modal";
 import { OrderItem } from "../../types";
 import { updateOrderItem } from "../../Api/OrderItemApi";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { useOrderItemStore } from "../../store/orderItem";
 
 export default function OrderItemModal({

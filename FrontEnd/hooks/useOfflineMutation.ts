@@ -1,13 +1,15 @@
-import { db, SyncOperation } from '../../util/db';
-import { toast } from '../../store/useToastStore';
+import { db, SyncOperation } from "../util/db";
+import { toast } from "./useToastStore";
 
 interface OfflineMutationOptions<T, P> {
-  type: SyncOperation['type'];
+  type: SyncOperation["type"];
   payload: P;
-  apiCall: (payload: P) => Promise<{ succeeded: boolean; message?: string; value?: T }>;
+  apiCall: (
+    payload: P,
+  ) => Promise<{ succeeded: boolean; message?: string; value?: T }>;
   onSuccess?: (data?: T) => void;
   onError?: (error: string) => void;
-  localDbUpdate?: () => Promise<void>; 
+  localDbUpdate?: () => Promise<void>;
 }
 
 export async function executeOfflineMutation<T, P>({
@@ -16,7 +18,7 @@ export async function executeOfflineMutation<T, P>({
   apiCall,
   onSuccess,
   onError,
-  localDbUpdate
+  localDbUpdate,
 }: OfflineMutationOptions<T, P>) {
   try {
     if (!navigator.onLine) {
@@ -24,9 +26,9 @@ export async function executeOfflineMutation<T, P>({
         type,
         payload,
         createdAt: new Date(),
-        status: 'pending'
+        status: "pending",
       });
-      
+
       if (localDbUpdate) {
         await localDbUpdate();
       }

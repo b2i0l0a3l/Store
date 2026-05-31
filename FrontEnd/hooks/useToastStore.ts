@@ -22,7 +22,6 @@ export const useToastStore = create<ToastStore>((set) => ({
     const id = Math.random().toString(36).substring(2, 9);
     set((state) => ({ toasts: [...state.toasts, { ...toast, id }] }));
 
-    // Auto-remove after duration (default 3 seconds)
     if (toast.duration !== 0) {
       setTimeout(() => {
         set((state) => ({

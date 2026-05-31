@@ -5,9 +5,9 @@ import { useState } from "react";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
 import { deleteOrder } from "../../api/orderApi";
 import { invalidateCache } from "@/util/Api/revalidate";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { db } from "@/util/db";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 
 export default function DeleteOrderButton({ id }: { id: number }) {
   const [isModalOpen, setIsModalOpen] = useState(false);

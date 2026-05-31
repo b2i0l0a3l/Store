@@ -6,9 +6,9 @@ import PaymentModal from "../Modal/PaymentModal";
 import { pay } from "@/Features/Debts/api/paymentApi";
 import { invalidateCache } from "@/util/Api/revalidate";
 import { useDebtStore } from "@/Features/Debts/store/debt";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { db } from "@/util/db";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 
 function PaymentButton({
   debtId,

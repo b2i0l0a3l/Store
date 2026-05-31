@@ -6,8 +6,8 @@ import CategoryModal from "../Modal/CategoryModal";
 import { addCategory } from "@/Features/Categories/api/categoryApi";
 import { invalidateCache } from "@/util/Api/revalidate";
 import { useCategoryStore } from "@/Features/Categories/store/category";
-import { toast } from "@/store/useToastStore";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { toast } from "@/hooks/useToastStore";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 import { db } from "@/util/db";
 
 export default function AddCategoryButton() {

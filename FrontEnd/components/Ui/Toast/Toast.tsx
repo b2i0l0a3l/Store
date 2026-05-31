@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ToastMessage, useToastStore } from "@/store/useToastStore";
+import { ToastMessage, useToastStore } from "@/hooks/useToastStore";
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,

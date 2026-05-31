@@ -6,10 +6,10 @@ import PaymentModal from "../Modal/PaymentModal";
 import { UpdatePayment } from "@/Features/Payments/api/paymentApi";
 import { invalidateCache } from "@/util/Api/revalidate";
 import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { Payment } from "@/Features/Payments/types";
 import { db } from "@/util/db";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 
 function UpdatePaymentButton({ data }: { data: Payment }) {
   const [open, setOpen] = useState(false);

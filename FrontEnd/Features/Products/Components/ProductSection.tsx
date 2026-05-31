@@ -11,7 +11,7 @@ import { useProductStore } from "@/Features/Products/store/product";
 import CustomFilter from "@/components/Ui/Filter/CustomFilter";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
-import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
+import { useSyncToLocalDb } from "@/hooks/useSyncToLocalDb";
 
 export default function ProductSection({
   data,
@@ -21,7 +21,7 @@ export default function ProductSection({
   categories: category[];
 }) {
   const [search, setSearch] = useState("");
-  
+
   useSyncToLocalDb(data, db.products);
   const [selectedCategory, setSelectedCategory] = useState<{
     value: string | number;

@@ -3,10 +3,10 @@ import * as signalR from "@microsoft/signalr";
 import {
   useNotificationStore,
   AppNotification,
-} from "@/store/useNotificationStore";
-import { getAccessToken } from "../(auth)/util/session";
-import { useToastStore } from "@/store/useToastStore";
-import { fetchApi } from "../../util/Api/Api";
+} from "@/hooks/useNotificationStore";
+import { getAccessToken } from "../app/(auth)/util/session";
+import { useToastStore } from "@/hooks/useToastStore";
+import { fetchApi } from "../util/Api/Api";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api/v1", "");
 

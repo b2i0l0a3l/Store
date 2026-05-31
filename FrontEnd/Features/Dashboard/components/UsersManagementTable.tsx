@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { UserModel } from "../types";
 import { changeUserRoleAction } from "../api/dashboardActions";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { ShieldCheckIcon } from "@heroicons/react/24/solid";
 import MyTable, { Column } from "@/components/Ui/customtable/MyTable";
 

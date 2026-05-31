@@ -5,9 +5,9 @@ import CustomButton from "@/components/Ui/buttons/CustomButton";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { memo, useCallback, useState } from "react";
 import { useProductStore } from "@/Features/Products/store/product";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import ConfirmDeleteModal from "@/components/Ui/Modal/ConfirmDeleteModal";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 import { db } from "@/util/db";
 
 const DeleteProductButton = memo(function DeleteProductButton({

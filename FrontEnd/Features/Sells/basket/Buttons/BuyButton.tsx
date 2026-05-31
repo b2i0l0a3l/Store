@@ -8,7 +8,7 @@ import { invalidateCache } from "@/util/Api/revalidate";
 import { db } from "@/util/db";
 import { ShoppingBagIcon } from "@heroicons/react/24/solid";
 import CustomButton from "@/components/Ui/buttons/CustomButton";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 
 export default function BuyButton() {
   const [loading, setLoading] = useState(false);

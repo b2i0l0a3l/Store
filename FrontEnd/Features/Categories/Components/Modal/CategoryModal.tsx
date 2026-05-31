@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import CustomModal from "@/components/Ui/Modal/Modal";
 import { category } from "@/Features/Categories/types";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 
 export default function CategoryModal({
   title,

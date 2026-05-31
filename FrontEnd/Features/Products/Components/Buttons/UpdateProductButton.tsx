@@ -8,8 +8,8 @@ import { invalidateCache } from "@/util/Api/revalidate";
 import { useProductStore } from "@/Features/Products/store/product";
 import { category } from "@/Features/Categories/types";
 import { product } from "@/Features/Products/types";
-import { toast } from "@/store/useToastStore";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { toast } from "@/hooks/useToastStore";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 import { db } from "@/util/db";
 
 const UpdateProductButton = memo(function UpdateProductButton({

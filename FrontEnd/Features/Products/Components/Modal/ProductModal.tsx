@@ -3,7 +3,7 @@ import CustomModal from "@/components/Ui/Modal/Modal";
 import { category } from "@/Features/Categories/types";
 import { product } from "@/Features/Products/types";
 import CustomComboBox from "@/components/Ui/inputs/CustomComboBox";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 
 export default function ProductModal({
   title,

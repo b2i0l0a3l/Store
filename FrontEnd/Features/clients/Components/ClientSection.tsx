@@ -9,11 +9,11 @@ import { useClientStore } from "@/Features/clients/store/client";
 import { client } from "@/Features/clients/types";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
-import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
+import { useSyncToLocalDb } from "@/hooks/useSyncToLocalDb";
 
 export default function ClientSection({ data }: { data: client[] }) {
   const [search, setSearch] = useState("");
-  
+
   useSyncToLocalDb(data, db.clients);
 
   const handleSearch = useCallback((value: string) => {

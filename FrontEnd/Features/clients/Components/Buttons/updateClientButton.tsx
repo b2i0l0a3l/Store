@@ -6,9 +6,9 @@ import ClientModal from "../Modal/clientModal";
 import { updateClient } from "@/Features/clients/api/clientApi";
 import { invalidateCache } from "@/util/Api/revalidate";
 import { useClientStore } from "@/Features/clients/store/client";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { client } from "../../types";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 import { db } from "@/util/db";
 
 const UpdateClientButton = memo(function UpdateClientButton({

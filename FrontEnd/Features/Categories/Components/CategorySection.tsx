@@ -9,11 +9,11 @@ import AddCategoryButton from "./Buttons/AddCategoryButton";
 import { useCategoryStore } from "@/Features/Categories/store/category";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
-import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
+import { useSyncToLocalDb } from "@/hooks/useSyncToLocalDb";
 
 export default function CategorySection({ data }: { data: category[] }) {
   const [search, setSearch] = useState("");
-  
+
   useSyncToLocalDb(data, db.categories);
 
   const handleSearch = useCallback((value: string) => {

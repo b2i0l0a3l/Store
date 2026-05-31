@@ -5,7 +5,7 @@ import { clearTokens } from "@/app/(auth)/util/session";
 import CustomButton from "../Ui/buttons/CustomButton";
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 
 export default function LogoutBtn() {
   const router = useRouter();

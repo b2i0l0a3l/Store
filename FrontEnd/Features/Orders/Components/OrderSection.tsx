@@ -10,7 +10,7 @@ import { useOrderStore } from "@/Features/Orders/store/order";
 import CustomFilter from "@/components/Ui/Filter/CustomFilter";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
-import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
+import { useSyncToLocalDb } from "@/hooks/useSyncToLocalDb";
 
 function OrderSection({ data }: { data: order[] }) {
   useSyncToLocalDb(data, db.orders);

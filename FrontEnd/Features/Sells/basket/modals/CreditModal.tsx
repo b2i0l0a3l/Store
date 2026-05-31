@@ -11,7 +11,7 @@ import { invalidateCache } from "@/util/Api/revalidate";
 import { useProductStore } from "@/Features/Products/store/product";
 import { getClients } from "@/Features/clients/api/clientApi";
 import { client } from "@/Features/clients/types";
-import { toast } from "@/store/useToastStore";
+import { toast } from "@/hooks/useToastStore";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
 

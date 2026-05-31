@@ -1,6 +1,6 @@
 "use client";
 
-import { useToastStore } from "@/store/useToastStore";
+import { useToastStore } from "@/hooks/useToastStore";
 import Toast from "./Toast";
 import { useEffect, useState } from "react";
 

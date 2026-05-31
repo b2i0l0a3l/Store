@@ -79,18 +79,15 @@ export async function proxy(request: NextRequest) {
   
   const isAuthPage = pathname === "/login" || pathname === "/register" || pathname === "/landing";
 
-  // 1. No tokens
   if (!accessToken || !refreshToken) {
     if (isAuthPage) {
-      return NextResponse.next(); // Allow viewing auth pages
+      return NextResponse.next(); 
     }
     return NextResponse.redirect(new URL("/landing", request.url));
   }
 
-  // 2. Tokens exist and are valid
   if (!isTokenExpired(accessToken)) {
     if (isAuthPage) {
-      // Logged in users shouldn't see landing/login/register, redirect to app
       return NextResponse.redirect(new URL("/", request.url));
     }
 
@@ -101,7 +98,6 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 3. Token is expired, try to refresh
   const email = getEmailFromToken(accessToken);
   if (!email) {
     if (isAuthPage) return NextResponse.next();

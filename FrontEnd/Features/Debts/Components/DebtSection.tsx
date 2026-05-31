@@ -8,13 +8,13 @@ import DebtTable from "./Table/DebtTable";
 import { Debt } from "../types";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
-import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
+import { useSyncToLocalDb } from "@/hooks/useSyncToLocalDb";
 
 function DebtSection({ data }: { data: Debt[] }) {
   const [search, setSearch] = useState("");
-  
+
   useSyncToLocalDb(data, db.debts);
-  
+
   const localDebts = useLiveQuery(() => db.debts.toArray()) || [];
   const actualData = localDebts.length > 0 ? localDebts : data;
 

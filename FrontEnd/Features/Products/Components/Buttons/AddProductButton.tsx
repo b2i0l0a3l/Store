@@ -8,7 +8,7 @@ import { invalidateCache } from "@/util/Api/revalidate";
 import { category } from "@/Features/Categories/types";
 import { useProductStore } from "@/Features/Products/store/product";
 import { product } from "../../types";
-import { executeOfflineMutation } from "@/app/hooks/useOfflineMutation";
+import { executeOfflineMutation } from "@/hooks/useOfflineMutation";
 import { db } from "@/util/db";
 
 export default function AddProductButton({
@@ -35,10 +35,10 @@ export default function AddProductButton({
           }
         });
         await db.syncQueue.add({
-          type: 'ADD_PRODUCT',
+          type: "ADD_PRODUCT",
           payload: serialized,
           createdAt: new Date(),
-          status: 'pending'
+          status: "pending",
         });
         // Add to local DB for instant feedback
         await db.products.add(formData);

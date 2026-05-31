@@ -8,11 +8,11 @@ import { usePaymentStore } from "@/Features/Payments/store/paymentStore";
 import { useCallback, useMemo, useState } from "react";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/util/db";
-import { useSyncToLocalDb } from "@/app/hooks/useSyncToLocalDb";
+import { useSyncToLocalDb } from "@/hooks/useSyncToLocalDb";
 
 export default function PaymentSection({ data }: { data: Payment[] }) {
   const [search, setSearch] = useState("");
-  
+
   useSyncToLocalDb(data, db.payments);
 
   const handleSearch = useCallback((value: string) => {

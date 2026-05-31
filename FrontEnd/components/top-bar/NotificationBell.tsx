@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import { BellIcon } from "@heroicons/react/24/outline";
-import { useSignalR } from "@/app/hooks/useSignalR";
-import { useNotificationStore } from "@/store/useNotificationStore";
+import { useSignalR } from "@/hooks/useSignalR";
+import { useNotificationStore } from "@/hooks/useNotificationStore";
 import { fetchApi } from "@/util/Api/Api";
 
 export default function NotificationBell() {
