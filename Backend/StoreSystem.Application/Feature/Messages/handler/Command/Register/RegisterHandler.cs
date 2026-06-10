@@ -8,6 +8,7 @@ using StoreSystem.Application.Feature.Messages.Request.Command.Register;
 using StoreSystem.Application.Interface;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
+using StoreSystem.Core.interfaces;
 using StoreSystem.Core.Models;
 
 namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
@@ -15,9 +16,9 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
     public class RegisterHandler : IRequestHandler<RegisterRequest, Result<RegisterModel>>
     {
         private readonly UserManager<User> _UserManager;
-        private readonly IUploadImage _Upload;
+        private readonly IAppwriteStorageService _Upload;
 
-        public RegisterHandler(UserManager<User> UserManager,IUploadImage Upload)
+        public RegisterHandler(UserManager<User> UserManager,IAppwriteStorageService Upload)
         {
             _UserManager = UserManager;
             _Upload = Upload;
@@ -29,18 +30,25 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
             {
                 if (await _UserManager.FindByEmailAsync(request.Email) != null)
                     return Errors.EmailAlreadyExistsError;
-                if (request.Image != null){
-                    using Stream stream = request.Image.OpenReadStream();
-                    var fileName = request.Image.FileName;
-                    request.ImagePath = await _Upload.Upload(stream, fileName, "UserImages");
-                }
-                User user = new()
+               
+               User user = new()
                 {
                     FullName = request.FullName,
                     UserName = request.Email,
                     Email = request.Email,
                     ImagePath = request.ImagePath ?? null
                 };
+                if (request.Image != null){
+                  
+                    var imageResult = await _Upload.UploadImageAsync(request.Image);
+                    if (imageResult != null)
+                    {
+
+                        user.ImagePath = imageResult.ImageUrl;
+                        user.FileId = imageResult.FileId;
+                    }
+                }
+                
                 var result = await _UserManager.CreateAsync(user, request.Password);
                 if (!result.Succeeded)
                 {

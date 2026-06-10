@@ -2,10 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Application.Feature.Messages.Request.Query;
-using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using StoreSystem.Application.Feature.Messages.Request.Query.Order;
-using StoreSystem.Application.Feature.Messages.Request.Command.Order;
 using Microsoft.AspNetCore.Authorization;
 using Asp.Versioning;
 
@@ -86,8 +84,17 @@ namespace StoreApi.Api.Controllers
 
         [HttpGet("GetOrderItemsByOrderId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetOrderItemsByOrderId([FromQuery] GetOrderItemsByOrderIdRequest req)
+        public async Task<IActionResult> GetOrderItemsByOrderId([FromQuery] GetOrderItemsByOrderIdRequest req, [FromServices] IAuthorizationService authorizationService)
         {
+            var authResult = await authorizationService.AuthorizeAsync(
+            User,
+            req.OrderId,
+            "ViewerOrderOrAdmin");
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+            
             var result = await _mediator.Send(req);
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }

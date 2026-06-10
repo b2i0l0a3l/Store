@@ -23,6 +23,7 @@ using StoreSystem.Infrastructure.presistence.database.functions.PaymentFunctions
 using StoreSystem.Infrastructure.presistence.database.procedures.invoiceProcedure;
 using StoreSystem.Application.Interface;
 using StoreSystem.Infrastructure.Services;
+using Appwrite; 
 
 namespace StoreSystem.Infrastructure.shared
 {
@@ -59,7 +60,6 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IUpdateOrderProcedure, UpdateOrder>();
 
             // Functions
-            services.AddScoped<IGetProductPaginationFucntion, GetProductPagination>();
             services.AddScoped<IGetAllProductsFunction, GetAllProducts>();
             services.AddScoped<ISearchProduct, SearchProductFunction>();
             services.AddScoped<IGetOrderItemPaginationFunction, GetOrderItemByOrderIdFunction>();
@@ -83,6 +83,17 @@ namespace StoreSystem.Infrastructure.shared
             services.AddScoped<IFnCashVsDebtRatioFunction, FnCashVsDebtRatioFunction>();
 
             services.AddScoped<ILowStockChecker, LowStockChecker>();
+
+
+
+            var appwriteClient = new Appwrite.Client()
+                .SetEndpoint(configuration["AppwriteSettings_Endpoint"]!)
+                .SetProject(configuration["AppwriteSettings_ProjectId"]!)
+                .SetKey(configuration["AppwriteSettings_ApiKey"]!);
+
+            services.AddSingleton(appwriteClient);
+            services.AddScoped<IAppwriteStorageService, AppwriteStorageService>();
+            services.AddScoped<ICompressImage, CompressImageService>();
         }
     }
 }

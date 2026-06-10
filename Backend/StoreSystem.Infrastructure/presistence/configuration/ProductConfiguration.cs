@@ -31,6 +31,11 @@ namespace StoreSystem.Infrastructure.presistence.configuration
             builder.Property(p => p.ImagePath)
                 .HasMaxLength(500);
 
+            builder.Property(p => p.FileId)
+                .HasMaxLength(100);
+            builder.Property(p => p.Description)
+                .HasMaxLength(500);
+
             builder.HasIndex(p => p.BarCode)
                 .HasDatabaseName("IX_Product_BarCode")
                 .IsUnique()
@@ -39,11 +44,13 @@ namespace StoreSystem.Infrastructure.presistence.configuration
             builder.HasIndex(p => p.Name)
                 .HasDatabaseName("IX_Product_Name")
                 .IsUnique();
+                
+            builder.HasIndex(p => p.CreatedAt)
+                .HasDatabaseName("IX_Product_CreatedAt");
 
             builder.HasIndex(p => p.CategoryId)
                 .HasDatabaseName("IX_Product_CategoryId");
 
-            // Relationships
             builder.HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)

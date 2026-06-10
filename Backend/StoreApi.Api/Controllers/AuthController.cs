@@ -11,7 +11,6 @@ using StoreSystem.Application.Interface;
 using StoreApi.Api.Contract;
 using Asp.Versioning;
 using StoreSystem.Core.interfaces;
-using StoreApi.Api.Utils;
 
 namespace StoreApi.Api.Controllers
 {
@@ -30,17 +29,12 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Register([FromForm] RegisterContract req)
         {
-            IFileData? fileData = null;
-            if (req.Image != null && req.Image.Length != 0)
-            {
-                fileData = new FormFileData(req.Image);
-            }
+
             RegisterRequest request = new()
             {
                 Email = req.Email,
                 FullName = req.FullName,
                 Password = req.Password,
-                Image = fileData
             };
 
             var result = await _mediator.Send(request);

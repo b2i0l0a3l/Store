@@ -3,16 +3,16 @@ using Microsoft.AspNetCore.Identity;
 using Moq;
 using StoreSystem.Application.Feature.Messages.handler.Command.Register;
 using StoreSystem.Application.Feature.Messages.Request.Command.Register;
-using StoreSystem.Application.Interface;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.common;
+using StoreSystem.Core.interfaces;
 
 namespace StoreSystem.Tests.Features.Auth
 {
     public class RegisterHandlerTests
     {
         private readonly Mock<UserManager<User>> _userManagerMock;
-        private readonly Mock<IUploadImage> _uploadImageMock;
+        private readonly Mock<IAppwriteStorageService> _uploadImageMock;
         private readonly RegisterHandler _handler;
 
         public RegisterHandlerTests()
@@ -21,7 +21,7 @@ namespace StoreSystem.Tests.Features.Auth
             _userManagerMock = new Mock<UserManager<User>>(
                 store.Object, null!, null!, null!, null!, null!, null!, null!, null!);
 
-            _uploadImageMock = new Mock<IUploadImage>();
+            _uploadImageMock = new Mock<IAppwriteStorageService>();
             _handler = new RegisterHandler(_userManagerMock.Object, _uploadImageMock.Object);
         }
 

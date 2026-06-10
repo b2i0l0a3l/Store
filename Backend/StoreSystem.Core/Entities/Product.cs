@@ -9,10 +9,12 @@ namespace StoreSystem.Core.Entities
 {
     public class Product : BaseEntity
     {
-        
+
         [MaxLength(50)]
         [Required]
         public string Name { get; set; } = string.Empty;
+        public string? FileId {get;set;} = string.Empty;
+        public string? Description { get; set; } = string.Empty;
         [Column(TypeName = "numeric(18,2)")]
         public decimal Price { get; set; } 
         [Column(TypeName = "numeric(18,2)")]

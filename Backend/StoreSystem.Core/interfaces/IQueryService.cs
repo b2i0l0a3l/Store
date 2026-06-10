@@ -16,7 +16,8 @@ namespace StoreSystem.Core.interfaces
             int pageNumber,
             int pageSize,
             Expression<Func<T, TResult>> projection,
-            Expression<Func<T, bool>>? filter = null);
+            Expression<Func<T, bool>>? filter = null,
+            Expression<Func<T, object>>? orderBy = null);
 
         Task<Result<IReadOnlyList<TResult>>> GetAll<TResult>(
             Expression<Func<T, TResult>> projection,

@@ -62,12 +62,15 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             int pageNumber,
             int pageSize,
             Expression<Func<T, TResult>> projection,
-            Expression<Func<T, bool>>? filter = null)
+            Expression<Func<T, bool>>? filter = null,Expression<Func<T, object>>? orderBy = null)
         {
             try
             {
                 var source = filter is not null ? _query.Where(filter) : _query;
-
+                if (orderBy is not null)
+                {
+                    source = source.OrderByDescending(orderBy);
+                }                
                 var totalItems = await source.CountAsync();
                 if (totalItems == 0)
                     return new Error("NotFound", ErrorType.NotFound, "No records found.");

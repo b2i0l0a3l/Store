@@ -2,13 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Application.Feature.Messages.Request.Query;
-using StoreSystem.Core.Models;
 using StoreSystem.Core.common;
 using Microsoft.AspNetCore.Authorization;
 
 using StoreSystem.Application.Interface;
-using StoreApi.Api.Contract.Product;
 using Asp.Versioning;
+using StoreSystem.Application.Feature.Messages.Request.Query.Product;
 
 namespace StoreApi.Api.Controllers
 {
@@ -18,13 +17,11 @@ namespace StoreApi.Api.Controllers
     [Authorize]
     public class ProductController : ApiControllerBase
     {
-        private IUploadImage _UploadImage;
         private readonly IMediator _mediator;
 
-        public ProductController(IMediator mediator,IUploadImage UploadImage)
+        public ProductController(IMediator mediator)
         {
             _mediator = mediator;
-            _UploadImage = UploadImage;
         }
 
         [HttpGet("GetAll")]
@@ -58,25 +55,10 @@ namespace StoreApi.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize(Roles = Roles.Admin)]
-        public async Task<IActionResult> Add(AddProduct req)
+        public async Task<IActionResult> Add([FromForm] AddProductRequest req)
         {
-            AddProductRequest request = new()
-            {
-                CategoryId = req.CategoryId,
-                CodeBar = req.CodeBar ?? null,
-                Cost = req.Cost,
-                Price = req.Price,
-                Name = req.Name,
-                Quantity = req.Quantity,
-            };
-
-            if (req.ProductImage != null && req.ProductImage.Length != 0)
-            {
-                using var stream = req.ProductImage.OpenReadStream();
-                request.ImagePath = await _UploadImage.Upload(stream, req.ProductImage.FileName,"ProductImages");
-            }
-            
-            var result = await _mediator.Send(request);
+          
+            var result = await _mediator.Send(req);
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
@@ -85,7 +67,7 @@ namespace StoreApi.Api.Controllers
         [Authorize(Roles = Roles.Admin)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update([FromForm] UpdateProduct req)
+        public async Task<IActionResult> Update([FromForm] UpdateProductRequest req)
         {
             UpdateProductRequest request = new()
             {
@@ -96,14 +78,8 @@ namespace StoreApi.Api.Controllers
                 Price = req.Price,
                 Name = req.Name,
                 Quantity = req.Quantity,
+                ProductImage = req.ProductImage
             };
-
-            if (req.ProductImage != null && req.ProductImage.Length != 0)
-            {
-                using var stream = req.ProductImage.OpenReadStream();
-                request.ImagePath = await _UploadImage.Upload(stream, req.ProductImage.FileName, "ProductImages");
-            }
-
             var result = await _mediator.Send(request);
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
@@ -115,6 +91,15 @@ namespace StoreApi.Api.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _mediator.Send(new DeleteProductRequest { Id = id });
+            return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
+        }
+
+        [HttpDelete("Scan")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Scan([FromQuery]GetProductByBarCode req)
+        {
+            var result = await _mediator.Send(req);
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
     }

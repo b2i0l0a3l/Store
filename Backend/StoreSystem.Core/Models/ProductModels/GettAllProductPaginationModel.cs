@@ -10,6 +10,10 @@ namespace StoreSystem.Core.Models
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string CategoryName { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public string Barcode { get; set; } = string.Empty;
+        public string? FileId { get; set; } = string.Empty;
         public int Quantity { get; set; } 
         public decimal Price { get; set; } 
         public decimal Cost { get; set; }

@@ -14,6 +14,7 @@ namespace StoreSystem.Core.Entities
         public string FullName { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
         public string? ImagePath { get; set; }
+        public string? FileId { get; set; }
 
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using StoreSystem.Core.common;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command
@@ -9,8 +10,10 @@ namespace StoreSystem.Application.Feature.Messages.Request.Command
         public decimal Price { get; set; }
         public decimal Cost { get; set; }
         public int CategoryId { get; set; }
-        public string? ImagePath { get; set; }
+        public IFormFile? ProductImage { get; set; }
         public string? CodeBar { get; set; }
         public int Quantity { get; set; }
+        public string? Description { get; set; }
+        
     }
 }

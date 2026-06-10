@@ -526,6 +526,14 @@ namespace StoreSystem.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("FileId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<string>("ImagePath")
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
@@ -550,6 +558,9 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.HasIndex("CategoryId")
                         .HasDatabaseName("IX_Product_CategoryId");
+
+                    b.HasIndex("CreatedAt")
+                        .HasDatabaseName("IX_Product_CreatedAt");
 
                     b.HasIndex("Name")
                         .IsUnique()
@@ -765,6 +776,9 @@ namespace StoreSystem.Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("FileId")
+                        .HasColumnType("text");
 
                     b.Property<string>("FullName")
                         .IsRequired()
