@@ -10,5 +10,7 @@ namespace StoreSystem.Core.interfaces
     public interface IUserRepository
     {
         public Task<Result<IEnumerable<UserModel>>> GetAllUsers();
+        public Task<Result<UserModel>> GetUserById(string id);
+        public Task<Result<bool>> ChangePassword(string userId, string oldPassword, string newPassword);
     }
 }

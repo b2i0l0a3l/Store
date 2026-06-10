@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using StoreSystem.Application.Feature.Messages.Request.Command.Register;
-using StoreSystem.Application.Interface;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 using StoreSystem.Core.interfaces;
@@ -18,7 +14,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
         private readonly UserManager<User> _UserManager;
         private readonly IAppwriteStorageService _Upload;
 
-        public RegisterHandler(UserManager<User> UserManager,IAppwriteStorageService Upload)
+        public RegisterHandler(UserManager<User> UserManager, IAppwriteStorageService Upload)
         {
             _UserManager = UserManager;
             _Upload = Upload;
@@ -30,16 +26,18 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
             {
                 if (await _UserManager.FindByEmailAsync(request.Email) != null)
                     return Errors.EmailAlreadyExistsError;
-               
-               User user = new()
+
+                User user = new()
                 {
                     FullName = request.FullName,
                     UserName = request.Email,
                     Email = request.Email,
                     ImagePath = request.ImagePath ?? null
                 };
-                if (request.Image != null){
-                  
+
+                if (request.Image != null)
+                {
+
                     var imageResult = await _Upload.UploadImageAsync(request.Image);
                     if (imageResult != null)
                     {
@@ -48,10 +46,11 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
                         user.FileId = imageResult.FileId;
                     }
                 }
-                
+
                 var result = await _UserManager.CreateAsync(user, request.Password);
                 if (!result.Succeeded)
                 {
+                    if(user.FileId != null) await DeleteUserImage(user.FileId);
                     return new Error("CreateUserError", Core.enums.ErrorType.General, string.Join(", ", result.Errors.Select(x => x.Description)));
                 }
                 var RoleResult = await _UserManager.AddToRoleAsync(user, Roles.User);
@@ -59,16 +58,24 @@ namespace StoreSystem.Application.Feature.Messages.handler.Command.Register
                 {
                     await _UserManager.DeleteAsync(user);
 
+                    if(user.FileId != null) await DeleteUserImage(user.FileId);
                     return new Error("CreateUserRoleError", Core.enums.ErrorType.General, string.Join(", ", RoleResult.Errors.Select(x => x.Description)));
                 }
                 return new RegisterModel()
                 {
                     Email = user.UserName,
                 };
-            }catch
+            }
+            catch
             {
                 return new Error("CreateUserError", Core.enums.ErrorType.Failure, "Internal server error");
             }
         }
+        private async Task<bool> DeleteUserImage(string FileId)
+        {
+            return await _Upload.DeleteImageAsync(FileId);
+        }
     }
+
 }
+

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using StoreSystem.Application.Feature.Messages.Request.Command.user;
+using StoreSystem.Application.Feature.Messages.Request.Command;
 using StoreSystem.Core.common;
 using StoreSystem.Core.Entities;
 

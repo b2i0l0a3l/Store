@@ -16,6 +16,19 @@ namespace StoreSystem.Infrastructure.Persistence.Repo
             _query = context.Set<T>().AsNoTracking();
         }
 
+        public async Task<Result<TResult>> FindOneSingle<TResult>(Expression<Func<T,bool>> exp, Expression<Func<T, TResult>> projection)
+        {
+            try
+            {
+                var result = await _query.Where(exp).Select(projection).SingleOrDefaultAsync();
+                if (result == null) return Errors.DataNotFoundError;
+                return result;
+                
+            }catch (Exception ex)
+            {
+                return new Error("QueryFailed", ErrorType.General, ex.Message);
+            }
+        }
         public async Task<Result<TResult>> FindById<TResult>(int id, Expression<Func<T, TResult>> projection)
         {
             try

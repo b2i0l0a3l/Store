@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace StoreApi.Api.Authorization
 {
-    public class RoleHandler : AuthorizationHandler<RoleRequirement, int>
+    public class RoleHandler : AuthorizationHandler<RoleRequirement, string>
 
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RoleRequirement requirement, int resource)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, RoleRequirement requirement, string resource)
         {
             if (context.User.IsInRole("Admin"))
             {
@@ -19,8 +19,8 @@ namespace StoreApi.Api.Authorization
             }
 
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (int.TryParse(userId, out int authenticatedStudentId) &&
-                authenticatedStudentId == resource)
+            if (
+                userId == resource)
             {
                 context.Succeed(requirement);
             }

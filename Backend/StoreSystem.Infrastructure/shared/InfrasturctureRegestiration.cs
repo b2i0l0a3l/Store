@@ -32,8 +32,13 @@ namespace StoreSystem.Infrastructure.shared
 
         public static void AddInfrastructurServiceRegistration(this IServiceCollection services, IConfiguration configuration)
         {
+            string? connectionString = configuration.GetConnectionString("MyConn");
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Connection String not found");
+            } 
             services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("MyConn")));
+            options.UseNpgsql(connectionString));
 
             services.AddIdentity<User, Microsoft.AspNetCore.Identity.IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>()

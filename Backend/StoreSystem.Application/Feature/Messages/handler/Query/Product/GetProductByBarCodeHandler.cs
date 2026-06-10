@@ -20,7 +20,7 @@ namespace StoreSystem.Application.Feature.Messages.handler.Query
         }
         public async Task<Result<ProductsModel>> Handle(GetProductByBarCode request, CancellationToken cancellationToken)
         {
-            Result<ProductsModel> result = await _Repo.FindOne(
+            Result<ProductsModel> result = await _Repo.FindOneSingle(
                 x => x.BarCode == request.BarCode,
                 x => new ProductsModel
                 {

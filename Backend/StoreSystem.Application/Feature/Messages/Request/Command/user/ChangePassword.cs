@@ -7,9 +7,10 @@ using StoreSystem.Core.common;
 
 namespace StoreSystem.Application.Feature.Messages.Request.Command
 {
-    public class ChangeUserRoleRequest : IRequest<Result>
+    public class ChangePassword : IRequest<Result<bool>>
     {
         public string UserId { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
+        public string OldPassword { get; set; } = string.Empty;
+        public string NewPassword { get; set; } = string.Empty;
     }
 }

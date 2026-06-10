@@ -4,12 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using StoreSystem.Core.common;
+using StoreSystem.Core.Models.UserModels;
 
-namespace StoreSystem.Application.Feature.Messages.Request.Command
+namespace StoreSystem.Application.Feature.Messages.Request.Query.UserQuery
 {
-    public class ChangeUserRoleRequest : IRequest<Result>
+    public class GetUserInfo : IRequest<Result<UserInfo>>
     {
         public string UserId { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
     }
 }
