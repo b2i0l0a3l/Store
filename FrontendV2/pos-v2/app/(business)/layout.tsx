@@ -4,8 +4,16 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/provider/theme-provider";
-import StoreLayout from "@/components/layout/StoreLayout";
 import { Toaster } from "@/components/ui/sonner";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { AppSidebar } from "@/components/layout/sideBar/app-sidebar";
+import QueryProvider from "@/providers/QueryProvider";
+import { ModeToggle } from "@/components/toggle/mode-toggle";
+import { HeaderSearch } from "@/components/layout/nav-bar/header-search";
+import { Separator } from "@/components/ui/separator";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -43,17 +51,39 @@ export default function BusinessLayout({
     >
       <body className="min-h-full flex flex-col overflow-x-hidden">
         <ClerkProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <StoreLayout>
-              {children}
-              <Toaster/>
-            </StoreLayout>
-          </ThemeProvider>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <TooltipProvider>
+                <SidebarProvider>
+                  <AppSidebar />
+                  <div className="flex-grow flex flex-col min-h-screen w-full">
+                    
+                    <header className="w-full flex h-14 shrink-0 items-center justify-between gap-4 border-b bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md px-4 sticky top-0 z-30 transition-colors duration-300">
+                      <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <SidebarTrigger className="-ml-1 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 rounded-lg" />
+                        <Separator orientation="vertical" className="h-4" />
+                        <Suspense fallback={<Skeleton className="h-4 w-4" />}>  
+                          <HeaderSearch />
+                        </Suspense>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <ModeToggle />
+                      </div>
+                    </header>
+                    <main className="flex-1 w-full relative">
+                      {children}
+                    </main>
+                    <Toaster />
+                  </div>
+                </SidebarProvider>
+              </TooltipProvider>
+            </ThemeProvider>
+          </QueryProvider>
         </ClerkProvider>
       </body>
     </html>

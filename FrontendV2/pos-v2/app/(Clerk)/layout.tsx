@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import NavBar from "@/components/layout/nav-bar/nav-bar";
 import { ThemeProvider } from "@/components/provider/theme-provider";
+import QueryProvider from "@/providers/QueryProvider";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -45,12 +46,12 @@ export default function RootLayout({
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
-            enableSystem  
+            enableSystem
             disableTransitionOnChange
           >
             <div className="flex flex-col">
               <div className="w-full hidden sm:block">
-              <NavBar /> 
+                <NavBar />
               </div>
               {children}
             </div>

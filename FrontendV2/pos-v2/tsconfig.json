@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "providers/QueryProvider.jsx"  ],
   "exclude": ["node_modules"]
 }
