@@ -115,3 +115,4 @@ obj/
 # Publish
 publish/
 
+appsettings.json 
