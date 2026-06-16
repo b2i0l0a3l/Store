@@ -24,7 +24,7 @@ namespace StoreApi.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("Pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAll([FromQuery] GetProductsRequest req)
         {
@@ -94,7 +94,7 @@ namespace StoreApi.Api.Controllers
             return result.IsSuccess ? Ok(result.Value) : HandleFailure(result);
         }
 
-        [HttpDelete("Scan")]
+        [HttpGet("Scan")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Scan([FromQuery]GetProductByBarCode req)

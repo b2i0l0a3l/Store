@@ -5,7 +5,7 @@ import { getProducts } from "../../actions/getProducts";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
-import { Product } from "../../actions/productType";
+import { Product } from "../../types/productType";
 import React from "react";
 import ProductCard from "./ProductCard";
 import { useSearchParams } from "next/navigation";
@@ -19,15 +19,15 @@ export default function ProductInfinit({
   initialProducts,
 }: ProductInfinitProps) {
   const searchParams = useSearchParams();
-
   const category = searchParams.get("category") || "";
   const barcode = searchParams.get("barcode") || "";
   const productName = searchParams.get("productName") || "";
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["infinite-virtual-products",category,barcode,productName],
-      queryFn: ({ pageParam = 1 }) => getProducts(pageParam, 10,category,barcode,productName),
+      queryKey: ["infinite-virtual-products", category, barcode, productName],
+      queryFn: ({ pageParam = 1 }) =>
+        getProducts(pageParam, 10, category, barcode, productName),
       initialPageParam: 1,
       getNextPageParam: (lastPage) => lastPage.NextPage ?? undefined,
       initialData: {
@@ -47,8 +47,17 @@ export default function ProductInfinit({
     ? data.pages.flatMap((page) => page.value)
     : [];
 
-    if(allProducts.length === 0) toast.error("no products found");
-    
+  if (allProducts.length === 0) {
+    toast.error("no products found");
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <span className="text-zinc-500 dark:text-zinc-400">
+          no products found
+        </span>
+      </div>
+    );
+  }
+
   const parentRef = useRef<HTMLDivElement>(null);
 
   const [columns, setColumns] = React.useState(3);
@@ -104,9 +113,10 @@ export default function ProductInfinit({
   return (
     <div className="w-full h-full translate-y-2">
       <div
-        ref={parentRef}  
+        ref={parentRef}
         className="overflow-y-auto h-full scrollbar-hide"
-        style={{ height: "calc(100vh - 80px)",}}>
+        style={{ height: "calc(100vh - 80px)" }}
+      >
         <div
           style={{
             height: `${rowVirtualizer.getTotalSize()}px`,
@@ -133,10 +143,10 @@ export default function ProductInfinit({
                       {isFetchingNextPage ? (
                         <>
                           <span className="size-4 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-                          <span className="font-medium">جاري تحميل المزيد...</span>
+                          <span className="font-medium">loading...</span>
                         </>
                       ) : (
-                        <span className="font-medium">↓ انزل للمزيد</span>
+                        <span className="font-medium">down for more</span>
                       )}
                     </div>
                   ) : (

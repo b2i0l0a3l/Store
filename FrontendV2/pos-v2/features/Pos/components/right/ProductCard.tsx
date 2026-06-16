@@ -1,31 +1,39 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Product } from "../../actions/productType";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Product } from "../../types/productType";
 import Image from "next/image";
 import { useState } from "react";
 import { Package, Plus } from "lucide-react";
 
 function isValidImageUrl(url: string | null | undefined): boolean {
   if (!url) return false;
-  return url.startsWith("http://") || url.startsWith("https://") || url.startsWith("/");
+  return (
+    url.startsWith("http://") ||
+    url.startsWith("https://") ||
+    url.startsWith("/")
+  );
 }
+
+import { usePosStore } from "../../Store/PosCartStore";
 
 export default function ProductCard({ Product }: { Product: Product }) {
   const [imgError, setImgError] = useState(false);
   const showFallback = !isValidImageUrl(Product.imageUrl) || imgError;
+  const { addItem } = usePosStore();
 
   return (
-    <Card className="group relative overflow-hidden cursor-pointer flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-0.5 w-full h-full bg-white dark:bg-zinc-950/80 backdrop-blur-sm border-zinc-200/80 dark:border-zinc-800/80 rounded-xl">
+    <Card
+      onClick={() => addItem(Product)}
+      className="group relative overflow-hidden cursor-pointer flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-0.5 w-full h-full bg-white dark:bg-zinc-950/80 backdrop-blur-sm border-zinc-200/80 dark:border-zinc-800/80 rounded-xl"
+    >
       <div className="relative h-[120px] w-full bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50 overflow-hidden shrink-0">
         {showFallback ? (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-zinc-300 dark:text-zinc-600">
             <Package className="size-10 stroke-[1.5]" />
-            <span className="text-[10px] font-medium tracking-wider uppercase">لا توجد صورة</span>
+            <span className="text-[10px] font-medium tracking-wider uppercase">
+              No Image
+            </span>
           </div>
         ) : (
           <Image
@@ -58,7 +66,6 @@ export default function ProductCard({ Product }: { Product: Product }) {
           <span className="text-xs font-bold ml-0.5">$</span>
         </span>
       </CardContent>
-
     </Card>
   );
 }

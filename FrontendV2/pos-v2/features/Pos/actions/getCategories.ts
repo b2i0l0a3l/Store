@@ -1,9 +1,9 @@
-import { Category } from "./CategoryType";
+import { Category } from "../types/CategoryType";
 
 export async function getCategories() {
     try {
 
-        const response = await fetch(`http://localhost:5107/api/v1/Category/GetAllCategories`, {
+        const response = await fetch(`${process.env.Next_Public_Api_Url}/Category/GetAll`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -16,7 +16,7 @@ export async function getCategories() {
 
         return { isSuccess: true, value: data };
     } catch (e) {
-        console.error(`Product Error : ${e}`);
+        console.error(`Category Error : ${e}`);
         return { isSuccess: false, value: [] };
     }
 }

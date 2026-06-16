@@ -23,7 +23,7 @@ namespace StoreApi.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("GetAll")]
+        [HttpGet("Pagination")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = Roles.Admin)]
         public async Task<IActionResult> GetAll([FromQuery]GetOrdersRequest req)
