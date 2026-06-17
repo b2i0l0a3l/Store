@@ -14,7 +14,7 @@ export async function getProducts(
     if (Category) uri.set("CategoryName", Category);
     if (Barcode) uri.set("BarCode", Barcode);
     if (ProductName) uri.set("ProductName", ProductName);
-    const url = `${process.env.Next_Public_Api_Url}/Product/GetAll?${uri.toString()}`;
+    const url = `${process.env.Next_Public_Api_Url}/Product/Pagination?${uri.toString()}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -30,7 +30,8 @@ export async function getProducts(
     const nextPage =
       r.value.pageNumber < r.value.totalPages
         ? r.value.pageNumber + 1
-        : undefined;
+        : undefined; 
+        console.log(data);
 
     return { isSuccess: true, value: data, NextPage: nextPage };
   } catch (e) {

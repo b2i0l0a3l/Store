@@ -1,10 +1,11 @@
 "use client";
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Product } from "../../types/productType";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Package, Plus } from "lucide-react";
+import React from "react";
 
 function isValidImageUrl(url: string | null | undefined): boolean {
   if (!url) return false;
@@ -17,17 +18,21 @@ function isValidImageUrl(url: string | null | undefined): boolean {
 
 import { usePosStore } from "../../Store/PosCartStore";
 
-export default function ProductCard({ Product }: { Product: Product }) {
+function ProductCard({ Product }: { Product: Product }) {
   const [imgError, setImgError] = useState(false);
   const showFallback = !isValidImageUrl(Product.imageUrl) || imgError;
-  const { addItem } = usePosStore();
+  const addItem = usePosStore((s) => s.addItem);
+
+  const handleAdd = useCallback(() => {
+    addItem(Product);
+  }, [addItem, Product]);
 
   return (
     <Card
-      onClick={() => addItem(Product)}
+      onClick={handleAdd}
       className="group relative overflow-hidden cursor-pointer flex flex-col transition-all duration-300 hover:shadow-lg hover:shadow-primary/10 hover:-translate-y-0.5 w-full h-full bg-white dark:bg-zinc-950/80 backdrop-blur-sm border-zinc-200/80 dark:border-zinc-800/80 rounded-xl"
     >
-      <div className="relative h-[120px] w-full bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50 overflow-hidden shrink-0">
+      <div className="relative h-[120px] w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50 overflow-hidden shrink-0">
         {showFallback ? (
           <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-zinc-300 dark:text-zinc-600">
             <Package className="size-10 stroke-[1.5]" />
@@ -57,11 +62,11 @@ export default function ProductCard({ Product }: { Product: Product }) {
         </div>
       </div>
 
-      <CardContent className="p-3 pb-1.5 flex-grow ">
+      <CardContent className="p-3 pb-1.5 grow ">
         <h3 className="font-semibold text-[13px] leading-snug line-clamp-2 text-zinc-800 dark:text-zinc-200 group-hover:text-primary transition-colors duration-300">
           {Product.name}
         </h3>
-        <span className="text-lg font-black bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+        <span className="text-lg font-black bg-linear-to-r from-primary to-primary/70 bg-clip-text text-transparent">
           {Product.price.toFixed(2)}
           <span className="text-xs font-bold ml-0.5">$</span>
         </span>
@@ -69,3 +74,5 @@ export default function ProductCard({ Product }: { Product: Product }) {
     </Card>
   );
 }
+
+export default React.memo(ProductCard);

@@ -14,6 +14,7 @@ import { HeaderSearch } from "@/components/layout/nav-bar/header-search";
 import { Separator } from "@/components/ui/separator";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import Notifictaion from "@/components/toggle/notifictaion";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -61,7 +62,7 @@ export default function BusinessLayout({
               <TooltipProvider>
                 <SidebarProvider>
                   <AppSidebar />
-                  <div className="flex-grow flex flex-col min-h-screen w-full">
+                  <div className="grow flex flex-col min-h-screen w-full">
                     
                     <header className="w-full flex h-14 shrink-0 items-center justify-between gap-4 border-b bg-white/50 dark:bg-zinc-950/50 backdrop-blur-md px-4 sticky top-0 z-30 transition-colors duration-300">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -73,6 +74,7 @@ export default function BusinessLayout({
                       </div>
                       <div className="flex items-center gap-2">
                         <ModeToggle />
+                        <Notifictaion/>
                       </div>
                     </header>
                     <main className="flex-1 w-full relative">

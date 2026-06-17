@@ -3,7 +3,7 @@ import { Category } from "../types/CategoryType";
 export async function getCategories() {
     try {
 
-        const response = await fetch(`${process.env.Next_Public_Api_Url}/Category/GetAll`, {
+        const response = await fetch(`${process.env.Next_Public_Api_Url}/Category/GetAllCategories`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -12,6 +12,7 @@ export async function getCategories() {
         });
         if(!response.ok) return { isSuccess: false, value: [] };
         const r = await response.json();
+        console.log("Categories",r);
         const data : Category[] = r.value;
 
         return { isSuccess: true, value: data };

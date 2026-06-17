@@ -60,7 +60,7 @@ export function HeaderSearch() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete(searchType);
     router.push(`${pathname}?${params.toString()}`);
-  };
+  }; 
 
   const isSearchablePage = pathname.includes("/pos") || pathname.includes("/product");
 
@@ -79,7 +79,7 @@ export function HeaderSearch() {
       {query && (
         <Button
           onClick={handleClear} 
-          className="absolute right-3 p-1 rounded-full text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 hover:bg-zinc-150 dark:hover:bg-zinc-800 transition-all"
+          className="absolute right-3 p-1 rounded-full cursor-pointer bg-transparent"
         >
           <X className="size-3.5" />
         </Button>
