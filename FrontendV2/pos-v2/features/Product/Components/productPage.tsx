@@ -1,24 +1,14 @@
 import Container from "@/components/layout/container";
-import ProductCard from "./productCard";
+import ProductListClient from "./productListClient";
 
-type Product = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    barCode: string;
-    
+type ProductPageProps = {
+  searchParams: { ProductName?: string };
 }
-export default function ProductPage({product}:{product: Product[]}) {
+
+export default function ProductPage({ searchParams }: ProductPageProps) {
   return (
-    <Container>   
-        <div className="grid grid-cols-4 gap-3">
-        {product.map((item) => ( 
-            <ProductCard key={item.id} product={item}/>
-        ))} 
-        </div>
-      
+    <Container>
+      <ProductListClient searchParams={searchParams} />
     </Container>
   );
 }

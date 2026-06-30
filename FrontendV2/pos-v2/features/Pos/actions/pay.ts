@@ -1,31 +1,28 @@
-import { Product } from "../types/productType";
+"use server";
 
-export enum OrderType {
-    Sell = 0,
-    Debt = 1
-}
-export type Order = { 
-    items: Product[];
-    orderType: OrderType; 
-    clientId?: number;
-}
+import { apiFetch } from "@/lib/api/fetch";
+import { revalidatePath } from "next/cache";
+import type { SellOrderInput } from "../types/orderTypes";
 
-export async function SellOrder(order: Order) {
-    try {
+export async function SellOrder(input: SellOrderInput) {
+  const result = await apiFetch<string>("/Order/sell", {
+    method: "POST",
+    body: JSON.stringify({
+      clientId: input.clientId,
+      orderType: input.orderType,
+      items: input.items.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+    }),
+  });
 
-        const response = await fetch(`${process.env.Next_Public_Api_Url}/Order/SellOrder`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.Api_Key}`
-            },
-            body: JSON.stringify(order),
-        });
-        if(!response.ok) return { isSuccess: false, value: null };
-        const r = await response.json();
-        return { isSuccess: true, value: null };
-    } catch (e) {
-        console.error(`Sell Order Error : ${e}`);
-        return { isSuccess: false, value: null };
-    }
+  if (result.isSuccess) {
+    revalidatePath("/pos");
+    revalidatePath("/orders");
+    revalidatePath("/dashboard");
+  }
+
+  return result;
 }

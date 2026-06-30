@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useMemo, useCallback } from "react";
-import { getProducts } from "../../actions/getProducts";
+import { useEffect, useRef, useMemo } from "react";
+import { getProducts } from "../../actions/getProducts.actions";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useVirtualizer } from "@tanstack/react-virtual";
 
@@ -9,6 +9,7 @@ import { Product } from "../../types/productType";
 import React from "react";
 import ProductCard from "./ProductCard";
 import { useSearchParams } from "next/navigation";
+import EmptyProduct from "./empty-product";
 
 function ProductInfinit() {
   const searchParams = useSearchParams();
@@ -28,13 +29,12 @@ function ProductInfinit() {
       initialPageParam: 1,
       getNextPageParam: (lastPage) => lastPage.NextPage ?? undefined,
       staleTime: 1000 * 60 * 5,
-    });
+    }); 
 
   const allProducts: Product[] = useMemo(
     () => (data ? data.pages.flatMap((page) => page.value) : []),
-    [data]
+    [data],
   );
-  console.log(allProducts);
 
   useEffect(() => {
     const el = parentRef.current;
@@ -56,7 +56,7 @@ function ProductInfinit() {
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, []); 
+  }, []);
 
   const ROW_HEIGHT = 250;
   const rowCount = Math.ceil(allProducts.length / columns);
@@ -81,16 +81,16 @@ function ProductInfinit() {
     ) {
       fetchNextPage();
     }
-  }, [lastVirtualItemIndex, rowCount, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  }, [
+    lastVirtualItemIndex,
+    rowCount,
+    hasNextPage,
+    isFetchingNextPage,
+    fetchNextPage,
+  ]);
 
   if (allProducts.length === 0) {
-    return (
-      <div className="flex items-center justify-center h-[calc(100vh-200px)] w-full">
-        <span className="text-zinc-500 dark:text-zinc-400">
-          No products found
-        </span>
-      </div>
-    );
+    return <EmptyProduct />;
   }
 
   return (

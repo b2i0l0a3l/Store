@@ -1,42 +1,38 @@
-import { Card,CardTitle,CardAction,CardContent,CardDescription,CardHeader,CardFooter } from "@/components/ui/card";
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
-
-type Product = {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    barCode: string;
-    
+type ProductCardProps = {
+  id: number;
+  name: string;
+  price: number;
+  imageUrl?: string;
 }
-export default function ProductCard({product}:{product: Product}) {
-    return <>
-    <Card className="max-w-[200px]">
+
+export default function ProductCard({ id, name, price, imageUrl }: ProductCardProps) {
+  const imageSrc = imageUrl || "/placeholder.svg";
+
+  return (
+    <Link href={`/product/${id}`}>
+      <Card className="max-w-[200px] cursor-pointer hover:shadow-md transition-shadow h-full">
         <CardHeader>
-            <div className="aspect-square w-full flex justify-center items-center">
+          <div className="aspect-square w-full flex justify-center items-center bg-muted rounded-lg overflow-hidden">
             <Image
-                src={product.image} 
-                alt="Next.js" 
-                width={100}
-                height={100}
-                className="object-cover"
-            />  
-            </div>
-            <CardTitle>{product.name}</CardTitle>
+              src={imageSrc}
+              alt={name}
+              width={120}
+              height={120}
+              className="object-cover w-full h-full"
+            />
+          </div>
+          <CardTitle className="truncate">{name}</CardTitle>
         </CardHeader>
         <CardContent>
-            <CardDescription>{product.price}$</CardDescription>
+          <CardDescription>{price.toFixed(2)} $</CardDescription>
         </CardContent>
-        <CardFooter className="flex justify-between">
-            <CardAction className="text-blue-500">Edit</CardAction>
-            <CardAction className="text-red-500">Delete</CardAction>
-        </CardFooter> 
-    </Card>
-    
-    
-    
-    </>
-    ;
-}   
+      </Card>
+    </Link>
+  );
+}

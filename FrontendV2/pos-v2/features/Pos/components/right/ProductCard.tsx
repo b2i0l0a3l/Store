@@ -17,6 +17,7 @@ function isValidImageUrl(url: string | null | undefined): boolean {
 }
 
 import { usePosStore } from "../../Store/PosCartStore";
+import NoImage from "./no-image";
 
 function ProductCard({ Product }: { Product: Product }) {
   const [imgError, setImgError] = useState(false);
@@ -34,12 +35,7 @@ function ProductCard({ Product }: { Product: Product }) {
     >
       <div className="relative h-[120px] w-full bg-linear-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-900/50 overflow-hidden shrink-0">
         {showFallback ? (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-zinc-300 dark:text-zinc-600">
-            <Package className="size-10 stroke-[1.5]" />
-            <span className="text-[10px] font-medium tracking-wider uppercase">
-              No Image
-            </span>
-          </div>
+          <NoImage />
         ) : (
           <Image
             src={Product.imageUrl}
